@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- === strings === -->
+    <string name="app_name">Glosso Studio</string>
+
+    <!-- Navigation / Screen titles -->
+    <string name="title_home">Glosso Studio</string>
+    <string name="title_settings">Ajustes</string>
+    <string name="title_studio">Práctica</string>
+    <string name="title_select_topics">Seleccionar temas</string>
+
+    <!-- Home screen -->
+    <string name="home_mastery_score">Puntaje de dominio</string>
+    <string name="home_study_streak">Racha de estudio</string>
+    <string name="home_streak_days">%d días</string>
+    <string name="home_no_streak">Aún sin racha</string>
+    <string name="home_level_progress">%1$d / %2$d oraciones dominadas</string>
+    <string name="home_download_required">Descarga requerida</string>
+    <string name="home_initial_setup">Configuración inicial</string>
+    <string name="home_setup_description">Glosso Studio necesita descargar el modelo acústico (aprox. 300 MB) para realizar el reconocimiento fonético.</string>
+    <string name="home_download_description">Glosso Studio requiere una descarga única para el plan de estudios de %1$s (aprox. 50–100 MB).</string>
+    <string name="home_wifi_warning">ADVERTENCIA: Si usas datos móviles, pueden aplicarse costos significativos. Recomendamos usar una conexión Wi-Fi.</string>
+    <string name="home_btn_setup">CONFIGURAR AHORA</string>
+    <string name="home_btn_download">DESCARGAR</string>
+    <string name="home_btn_cancel">CANCELAR</string>
+    <string name="home_btn_retry">REINTENTAR</string>
+    <string name="home_download_failed">Error en la descarga</string>
+    <string name="home_reset_confirm_title">¿Reiniciar progreso?</string>
+    <string name="home_reset_confirm_body">Esto borrará tus datos de dominio y reiniciará el plan de estudios. Esta acción no se puede deshacer.</string>
+    <string name="home_btn_reset">REINICIAR</string>
+    <string name="home_downloading_level">Descargando %1$s</string>
+    <string name="home_setting_up_model">Configurando el modelo</string>
+
+    <!-- Studio screen -->
+    <string name="studio_btn_mic">Micrófono</string>
+    <string name="studio_btn_play">Reproducir referencia</string>
+    <string name="studio_btn_play_recorded">Reproducir mi voz</string>
+    <string name="studio_btn_next">Siguiente</string>
+    <string name="studio_btn_done">Listo</string>
+    <string name="studio_accuracy">Precisión: %1$d%%</string>
+    <string name="studio_mastered_label">DOMINADA</string>
+    <string name="studio_review_label">REPASO</string>
+    <string name="studio_batch_complete">¡Lote completado!</string>
+    <string name="studio_batch_progress">%1$d / %2$d dominadas</string>
+    <string name="studio_great_job">¡Buen trabajo! Todas las oraciones dominadas.</string>
+    <string name="studio_next_batch">Siguiente lote</string>
+    <string name="studio_drill_label">PRÁCTICA /%1$s/</string>
+    <string name="studio_model_error">Error del modelo</string>
+    <string name="studio_slow_mode">0.75×</string>
+    <string name="studio_normal_mode">1.0×</string>
+    <string name="studio_voice_1">👩 Vivian</string>
+    <string name="studio_voice_2">👨 Aiden</string>
+    <string name="studio_no_sentences">No hay más oraciones disponibles para este nivel.</string>
+
+    <!-- Topic selection -->
+    <string name="topics_continue_batch">Continuar práctica</string>
+    <string name="topics_sentences_remaining">%1$d oraciones restantes</string>
+    <string name="topics_start_new">Empezar nuevo lote</string>
+    <string name="topics_practice_all">Practicar todos los temas</string>
+    <string name="topics_practice_selected">Practicar %1$d tema(s)</string>
+    <string name="topics_select_prompt">Selecciona temas para practicar, o practica todos.</string>
+
+    <!-- Settings screen -->
+    <string name="settings_section_language">IDIOMA</string>
+    <string name="settings_section_voice">VOZ</string>
+    <string name="settings_section_appearance">APARIENCIA</string>
+    <string name="settings_section_playback">REPRODUCCIÓN</string>
+    <string name="settings_section_learning">APRENDIZAJE</string>
+    <string name="settings_section_data">DATOS</string>
+    <string name="settings_language_label">Idioma de práctica</string>
+    <string name="settings_language_desc">Selecciona el idioma que quieres practicar</string>
+    <string name="settings_voice_label">Voz de referencia</string>
+    <string name="settings_voice_desc">Voz usada para reproducir la pronunciación de referencia</string>
+    <string name="settings_theme_label">Tema</string>
+    <string name="settings_theme_desc">Elige la apariencia de la aplicación</string>
+    <string name="settings_theme_system">Sistema</string>
+    <string name="settings_theme_light">Claro</string>
+    <string name="settings_theme_dark">Oscuro</string>
+    <string name="settings_speed_label">Velocidad de referencia</string>
+    <string name="settings_speed_slow">Lenta (0.75×) — más fácil de seguir</string>
+    <string name="settings_speed_normal">Normal (1.0×)</string>
+    <string name="settings_ipa_label">Mostrar transcripción IPA</string>
+    <string name="settings_ipa_desc">Mostrar los símbolos fonéticos debajo de cada oración</string>
+    <string name="settings_tutorial_label">Ver tutorial de nuevo</string>
+    <string name="settings_tutorial_desc">Consulta otra vez la guía de retroalimentación de pronunciación</string>
+    <string name="settings_reset_label">Reiniciar todo el progreso</string>
+    <string name="settings_reset_desc">Borrar datos de dominio, rachas e historial de lotes</string>
+    <string name="settings_reset_confirm_title">¿Reiniciar progreso?</string>
+    <string name="settings_reset_confirm_body">Esto borrará todos los datos de dominio, rachas e historial de lotes. Esta acción no se puede deshacer.</string>
+    <string name="settings_btn_reset_all">REINICIAR TODO</string>
+    <string name="btn_cancel">CANCELAR</string>
+
+    <!-- Milestones -->
+    <string name="milestone_title">¡Hito alcanzado!</string>
+    <string name="milestone_body">Has dominado %1$d oraciones. ¡Sigue así!</string>
+    <string name="milestone_btn_ok">¡GENIAL!</string>
+
+    <!-- Tutorial -->
+    <string name="tutorial_title">Cómo funciona la retroalimentación</string>
+    <string name="tutorial_btn_got_it">ENTENDIDO</string>
+
+    <!-- Errors -->
+    <string name="error_setup_incomplete">Por favor, completa primero la configuración inicial.</string>
+    <string name="error_analysis_failed">Falló el análisis. Inténtalo de nuevo.</string>
+    <string name="error_recording_failed">Falló la grabación: el audio está vacío.</string>
+
+    <!-- === strings_home === -->
+    <!-- Level names -->
+    <string name="level_beginner">Principiante</string>
+    <string name="level_elementary">Elemental</string>
+    <string name="level_intermediate">Intermedio</string>
+    <string name="level_upper_intermediate">Int. alto</string>
+    <string name="level_advanced">Avanzado</string>
+    <string name="level_mastery">Dominio</string>
+
+    <!-- Home dialogs -->
+    <string name="home_this_level">este nivel</string>
+    <string name="home_setup_required">Se requiere configuración</string>
+    <string name="home_wifi_warning_initial">ADVERTENCIA: Si usas datos móviles, pueden aplicarse costos. Recomendamos usar una conexión Wi-Fi.</string>
+    <string name="home_unknown_setup_error">Ocurrió un error desconocido durante la configuración.</string>
+    <string name="home_preparing_curriculum">Preparando tu plan de estudios…</string>
+    <string name="home_setting_up_recognition">Configurando el modelo de reconocimiento…</string>
+    <string name="home_progress_percent">%1$d%%</string>
+
+    <!-- Language selector -->
+    <string name="home_select_language">Seleccionar idioma</string>
+    <string name="home_language_experimental"> (experimental)</string>
+    <string name="home_language_label">%1$s  %2$s</string>
+    <string name="home_language_label_selected">✓ %1$s</string>
+
+    <!-- Top bar -->
+    <string name="home_title_glosso">GLOSSO</string>
+    <string name="home_cd_language">Idioma</string>
+    <string name="home_cd_settings">Ajustes</string>
+
+    <!-- Stats -->
+    <string name="home_stat_consistency">Constancia</string>
+    <string name="home_stat_days">%1$d días</string>
+    <string name="home_stat_mastery">Puntaje de dominio</string>
+    <string name="home_stat_phrases">%1$d fr.</string>
+    <string name="home_curriculum_progress">PROGRESO DEL PLAN</string>
+
+    <!-- Level card -->
+    <string name="home_level_phrases">%1$d / %2$d frases</string>
+    <string name="home_level_complete">COMPLETO ✓</string>
+    <string name="home_tap_to_setup">TOCA PARA CONFIGURAR</string>
+
+    <!-- Onboarding -->
+    <string name="home_onboarding_welcome_title">Bienvenido a Glosso</string>
+    <string name="home_onboarding_welcome_body">Practica la pronunciación una oración a la vez, totalmente en tu dispositivo — sin cuenta ni conexión a internet.</string>
+    <string name="home_onboarding_how_title">Cómo funciona</string>
+    <string name="home_onboarding_how_body">1. Escucha la voz de referencia\n2. Toca el micrófono y repite la oración\n3. Recibe retroalimentación fonética al instante que te muestra exactamente qué sonidos mejorar</string>
+    <string name="home_onboarding_mastery_title">Sistema de dominio</string>
+    <string name="home_onboarding_mastery_body">Consigue 85%% o más para dominar una oración. Las oraciones que no domines se repiten hasta que lo logres. Completa un lote entero para subir de nivel.</string>
+    <string name="btn_next">SIGUIENTE</string>
+    <string name="btn_lets_go">¡VAMOS!</string>
+    <string name="btn_skip">OMITIR</string>
+
+    <!-- === strings_settings === -->
+    <!-- Settings: Latin experimental dialog -->
+    <string name="settings_latin_warning_title">El latín es experimental</string>
+    <string name="settings_latin_warning_body">El modelo de reconocimiento de fonemas no fue entrenado con latín. La puntuación y la retroalimentación pueden ser menos precisas que en otros idiomas. ¿Deseas continuar?</string>
+    <string name="settings_btn_latin_understand">Entiendo</string>
+
+    <!-- Settings: misc -->
+    <string name="settings_title">AJUSTES</string>
+    <string name="settings_back">Atrás</string>
+
+    <!-- Settings: Learning extras -->
+    <string name="settings_translation_label">Mostrar traducción</string>
+    <string name="settings_translation_desc">Mostrar el significado debajo de cada oración</string>
+
+    <!-- Settings: Legal -->
+    <string name="settings_section_legal">LEGAL</string>
+    <string name="settings_privacy_label">Política de privacidad</string>
+    <string name="settings_privacy_desc">Cómo se manejan tus datos</string>
+    <string name="settings_terms_label">Términos de servicio</string>
+    <string name="settings_terms_desc">Reglas que rigen el uso de la aplicación</string>
+
+    <!-- Settings: About -->
+    <string name="settings_section_about">ACERCA DE</string>
+    <string name="settings_about_label">Acerca de Glosso Studio</string>
+    <string name="settings_about_desc">Versión, créditos y licencias de código abierto</string>
+
+    <!-- Settings: UI language -->
+    <string name="settings_section_ui_language">IDIOMA DE LA APP</string>
+    <string name="settings_ui_language_label">Idioma de la interfaz</string>
+    <string name="settings_ui_language_desc">Idioma usado para menús, botones y mensajes</string>
+    <string name="settings_ui_lang_system">Sistema</string>
+    <string name="settings_ui_lang_en">🇬🇧 English</string>
+    <string name="settings_ui_lang_es">🇪🇸 Español</string>
+    <string name="settings_ui_lang_fr">🇫🇷 Français</string>
+    <string name="settings_ui_lang_de">🇩🇪 Deutsch</string>
+
+    <!-- Reusable button -->
+    <string name="btn_cancel_mixed">Cancelar</string>
+
+    <!-- === strings_studio === -->
+    <!-- Studio: Top bar -->
+    <string name="studio_app_title">GLOSSO STUDIO</string>
+    <string name="studio_level_fallback">Nivel %1$d</string>
+    <string name="studio_cd_how_feedback_works">Cómo funciona la retroalimentación</string>
+    <string name="studio_cd_settings">Ajustes</string>
+
+    <!-- Studio: Level names (English) -->
+    <string name="studio_level_beginner">Principiante</string>
+    <string name="studio_level_elementary">Elemental</string>
+    <string name="studio_level_intermediate">Intermedio</string>
+    <string name="studio_level_upper_int">Int. alto</string>
+    <string name="studio_level_advanced">Avanzado</string>
+    <string name="studio_level_mastery">Dominio</string>
+
+    <!-- Studio: Level names (French, for fr target language) -->
+    <string name="studio_level_fr_beginner">Débutant</string>
+    <string name="studio_level_fr_elementary">Élémentaire</string>
+    <string name="studio_level_fr_intermediate">Intermédiaire</string>
+    <string name="studio_level_fr_upper_int">Inter. sup.</string>
+    <string name="studio_level_fr_advanced">Avancé</string>
+    <string name="studio_level_fr_mastery">Maîtrise</string>
+
+    <!-- Studio: Badges -->
+    <string name="studio_badge_review">REPASO</string>
+    <string name="studio_badge_mastered">DOMINADA</string>
+
+    <!-- Studio: Batch progress / complete -->
+    <string name="studio_batch_progress_label">PROGRESO DEL LOTE</string>
+    <string name="studio_batch_progress_count">%1$d / %2$d</string>
+    <string name="studio_batch_complete_title">¡LOTE COMPLETADO!</string>
+    <string name="studio_batch_complete_body">Dominaste las %1$d oraciones.</string>
+    <string name="studio_needs_practice">NECESITA PRÁCTICA</string>
+    <string name="studio_practice_phoneme">Practica tu sonido /%1$s/</string>
+    <string name="studio_btn_next_batch">SIGUIENTE LOTE</string>
+
+    <!-- Studio: Score -->
+    <string name="studio_accuracy_label">PRECISIÓN</string>
+    <string name="studio_score_percent">%1$d%%</string>
+
+    <!-- Studio: Voice selector -->
+    <string name="studio_voice_1_name">Voz 1</string>
+    <string name="studio_voice_2_name">Voz 2</string>
+
+    <!-- Studio: Playback speed -->
+    <string name="studio_cd_playback_speed">Velocidad de reproducción</string>
+    <string name="studio_speed_slow_short">0.75x</string>
+    <string name="studio_speed_normal_short">1.0x</string>
+
+    <!-- Studio: Controls -->
+    <string name="studio_cd_play_recording">Reproducir grabación</string>
+    <string name="studio_cd_next_sentence">Siguiente oración</string>
+
+    <!-- Studio: Model error -->
+    <string name="studio_model_load_failed">ERROR AL CARGAR EL MODELO</string>
+    <string name="studio_btn_go_to_settings">IR A AJUSTES</string>
+
+    <!-- Studio: Tutorial overlay -->
+    <string name="tutorial_how_to_read_feedback">CÓMO LEER LA RETROALIMENTACIÓN</string>
+    <string name="tutorial_intro">Después de grabar tu voz, Glosso Studio analiza tu pronunciación fonéticamente.</string>
+    <string name="tutorial_mastery_note">Consigue una precisión del 85%% o mayor para DOMINAR una oración y avanzar en el plan de estudios.</string>
+
+    <!-- Feedback guide labels -->
+    <string name="feedback_correct_label">CORRECTO</string>
+    <string name="feedback_correct_desc">Pronunciación perfecta.</string>
+    <string name="feedback_close_label">CERCA</string>
+    <string name="feedback_close_desc">Un poco desviado, sigue practicando.</string>
+    <string name="feedback_missed_label">INCORRECTO</string>
+    <string name="feedback_missed_desc">Pronunciación incorrecta.</string>
+
+    <!-- Milestone dialog (caps variant used by Studio) -->
+    <string name="milestone_caps_title">¡HITO!</string>
+    <string name="milestone_sentences_mastered">¡oraciones dominadas!</string>
+    <string name="milestone_btn_keep_going">¡SIGUE ASÍ!</string>
+
+    <!-- Studio: ViewModel errors / messages -->
+    <string name="studio_err_model_failed_default">No se pudo cargar el modelo acústico.</string>
+    <string name="studio_err_model_redownload_suffix">Vuelve a descargarlo borrando los datos de la app o reinstalándola.</string>
+    <string name="studio_err_load_failed">Falló la carga: %1$s</string>
+    <string name="studio_err_stop_failed">Falló al detener: %1$s</string>
+    <string name="studio_err_start_failed">Falló al iniciar: %1$s</string>
+    <string name="studio_err_recognition_failed_setup">Falló el reconocimiento en el dispositivo. Asegúrate de que la configuración esté completa.</string>
+    <string name="studio_err_no_drill_sentences">No se encontraron oraciones para la práctica de /%1$s/.</string>
+    <string name="studio_err_drill_load_failed">Falló la carga de la práctica: %1$s</string>
+
+    <!-- === strings_about === -->
+    <!-- About screen -->
+    <string name="about_title">ACERCA DE</string>
+    <string name="about_back">Atrás</string>
+    <string name="about_app_logo_desc">Glosso Studio</string>
+    <string name="about_app_name">GLOSSO STUDIO</string>
+    <string name="about_version">v2.0.0</string>
+    <string name="about_tagline">Entrenador de pronunciación de inglés y francés en el dispositivo\nimpulsado por análisis fonético.</string>
+
+    <!-- Section headers -->
+    <string name="about_section_how_it_works">CÓMO FUNCIONA</string>
+    <string name="about_section_features">CARACTERÍSTICAS</string>
+    <string name="about_section_privacy">PRIVACIDAD</string>
+    <string name="about_section_source_code">CÓDIGO FUENTE</string>
+    <string name="about_section_credits">CRÉDITOS</string>
+    <string name="about_section_libraries">BIBLIOTECAS DE CÓDIGO ABIERTO</string>
+
+    <!-- Privacy -->
+    <string name="about_privacy_title">100%% en el dispositivo</string>
+    <string name="about_privacy_body">Todo el análisis fonético se ejecuta completamente en tu dispositivo usando un modelo ONNX local. Tus grabaciones de voz nunca se suben a ningún sitio, no se requiere cuenta y no se recopilan datos de uso.</string>
+
+    <!-- Source code -->
+    <string name="about_source_title">Código abierto — AGPLv3</string>
+    <string name="about_source_body">Glosso Studio es software libre y de código abierto. Eres libre de estudiarlo, modificarlo y redistribuirlo bajo los términos de la GNU Affero General Public License v3.</string>
+    <string name="about_link_source_code">Código fuente</string>
+    <string name="about_link_report_issue">Reportar problema</string>
+
+    <!-- How it works -->
+    <string name="about_step1_title">Escucha la referencia</string>
+    <string name="about_step1_desc">Elige a Vivian o Aiden como tu voz de referencia y escucha la pronunciación correcta.</string>
+    <string name="about_step2_title">Grábate</string>
+    <string name="about_step2_desc">Toca el micrófono y di la oración con claridad.</string>
+    <string name="about_step3_title">Análisis fonético en el dispositivo</string>
+    <string name="about_step3_desc">Tu grabación se convierte en fonemas IPA mediante Allosaurus (inglés) o Wav2Vec2 (francés), que se ejecutan totalmente sin conexión en tu dispositivo.</string>
+    <string name="about_step4_title">Recibe retroalimentación con colores</string>
+    <string name="about_step4_desc">Cada letra se colorea — blanco si es correcta, naranja si está cerca, rojo si es incorrecta — así sabes exactamente qué mejorar.</string>
+    <string name="about_step5_title">Domina el lote</string>
+    <string name="about_step5_desc">Practica en lotes de 10 oraciones. Las oraciones fallidas reaparecen hasta que las 10 alcancen el 85%% de precisión.</string>
+
+    <!-- Feature chips -->
+    <string name="about_feature_offline">Análisis\nsin conexión</string>
+    <string name="about_feature_cefr">6 niveles\nMCER</string>
+    <string name="about_feature_topic">Filtro por\ntema</string>
+    <string name="about_feature_batch">Aprendizaje\npor lotes</string>
+    <string name="about_feature_multilang">Multi-\nidioma</string>
+    <string name="about_feature_mastery">Seguimiento\nde dominio</string>
+
+    <!-- Credits -->
+    <string name="about_credits_intro">Construido sobre los hombros de gigantes.</string>
+    <string name="about_credit_allosaurus_subtitle">Reconocimiento fonético de inglés · GPL-3.0</string>
+    <string name="about_credit_wav2vec2_title">Wav2Vec2 (francés)</string>
+    <string name="about_credit_wav2vec2_subtitle">Reconocimiento de fonemas en francés · Apache-2.0</string>
+    <string name="about_credit_qwen_subtitle">Síntesis de voz de referencia · Apache-2.0</string>
+    <string name="about_credit_aipron_subtitle">Enfoque de puntuación fonética · por Thiagohgl</string>
+    <string name="about_credit_onnx_subtitle">Inferencia de ML en el dispositivo · MIT</string>
+    <string name="about_credit_koin_subtitle">Inyección de dependencias · Apache-2.0</string>
+
+    <!-- Developer card -->
+    <string name="about_team_title">Equipo de Glosso Studio</string>
+    <string name="about_team_subtitle">Aprendices de idiomas creando las herramientas que nos habría gustado tener.</string>
+    <string name="about_link_website">glossostudio.com</string>
+    <string name="about_link_gitlab">GitLab</string>
+
+    <!-- === strings_misc === -->
+    <!-- Topic selection screen -->
+    <string name="topics_title">SELECCIONAR TEMAS</string>
+    <string name="topics_level_fallback">Nivel %1$d</string>
+    <string name="topics_back">Atrás</string>
+    <string name="topics_continue_batch_label">CONTINUAR LOTE  ·  %1$d/%2$d DOMINADAS</string>
+    <string name="topics_practice_all_cta">PRACTICAR TODOS LOS TEMAS</string>
+    <string name="topics_practice_selected_cta">PRACTICAR %1$d TEMAS</string>
+    <string name="topics_select_subtitle">Selecciona uno o más temas para enfocar tu práctica.</string>
+    <string name="topics_mastered_count">%1$d / %2$d dominadas</string>
+
+    <!-- Language selection screen -->
+    <string name="lang_select_title">Elige tu idioma</string>
+    <string name="lang_select_subtitle">Selecciona el idioma que quieres aprender</string>
+    <string name="lang_select_continue">Continuar</string>
+    <string name="lang_select_selected_mark">✓</string>
+    <string name="feedback_hint_missed">Fallaste — intenta pronunciar /%1$s/.</string>
+    <string name="feedback_hint_substitution">Pronunciaste /%1$s/ — se esperaba /%2$s/.</string>
+</resources>

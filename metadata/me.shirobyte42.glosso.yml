@@ -1,0 +1,27 @@
+Categories:
+  - Science & Education
+License: AGPL-3.0-or-later
+AuthorName: ShiroByte42
+SourceCode: https://gitlab.com/shirobyte421/glosso-studio
+IssueTracker: https://gitlab.com/shirobyte421/glosso-studio/-/issues
+
+AutoName: Glosso
+
+RepoType: git
+Repo: https://gitlab.com/shirobyte421/glosso-studio.git
+
+Builds:
+  - versionName: 1.0.7
+    versionCode: 1007
+    commit: 8808584243f9a6c0b512fe23a9462d78b305e5d1
+    subdir: androidApp
+    gradle:
+      - yes
+    prebuild:
+      - rm -rf ../data/*.db
+      - sed -i '/org.gradle.java.home/d' ../gradle.properties
+
+AutoUpdateMode: Version
+UpdateCheckMode: Tags
+CurrentVersion: 1.0.7
+CurrentVersionCode: 1007

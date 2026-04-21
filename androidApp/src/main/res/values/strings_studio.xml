@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Studio: Top bar -->
+    <string name="studio_app_title">GLOSSO STUDIO</string>
+    <string name="studio_level_fallback">Level %1$d</string>
+    <string name="studio_cd_how_feedback_works">How feedback works</string>
+    <string name="studio_cd_settings">Settings</string>
+
+    <!-- Studio: Level names (English) -->
+    <string name="studio_level_beginner">Beginner</string>
+    <string name="studio_level_elementary">Elementary</string>
+    <string name="studio_level_intermediate">Intermediate</string>
+    <string name="studio_level_upper_int">Upper-Int</string>
+    <string name="studio_level_advanced">Advanced</string>
+    <string name="studio_level_mastery">Mastery</string>
+
+    <!-- Studio: Level names (French, for fr target language) -->
+    <string name="studio_level_fr_beginner">Débutant</string>
+    <string name="studio_level_fr_elementary">Élémentaire</string>
+    <string name="studio_level_fr_intermediate">Intermédiaire</string>
+    <string name="studio_level_fr_upper_int">Inter. sup.</string>
+    <string name="studio_level_fr_advanced">Avancé</string>
+    <string name="studio_level_fr_mastery">Maîtrise</string>
+
+    <!-- Studio: Badges -->
+    <string name="studio_badge_review">REVIEW</string>
+    <string name="studio_badge_mastered">MASTERED</string>
+
+    <!-- Studio: Batch progress / complete -->
+    <string name="studio_batch_progress_label">BATCH PROGRESS</string>
+    <string name="studio_batch_progress_count">%1$d / %2$d</string>
+    <string name="studio_batch_complete_title">BATCH COMPLETE!</string>
+    <string name="studio_batch_complete_body">You mastered all %1$d sentences.</string>
+    <string name="studio_needs_practice">NEEDS PRACTICE</string>
+    <string name="studio_practice_phoneme">Practice your /%1$s/ sound</string>
+    <string name="studio_btn_next_batch">NEXT BATCH</string>
+
+    <!-- Studio: Score -->
+    <string name="studio_accuracy_label">ACCURACY</string>
+    <string name="studio_score_percent">%1$d%%</string>
+
+    <!-- Studio: Voice selector -->
+    <string name="studio_voice_1_name">Voice 1</string>
+    <string name="studio_voice_2_name">Voice 2</string>
+
+    <!-- Studio: Playback speed -->
+    <string name="studio_cd_playback_speed">Playback speed</string>
+    <string name="studio_speed_slow_short">0.75x</string>
+    <string name="studio_speed_normal_short">1.0x</string>
+
+    <!-- Studio: Controls -->
+    <string name="studio_cd_play_recording">Play Recording</string>
+    <string name="studio_cd_next_sentence">Next Sentence</string>
+
+    <!-- Studio: Model error -->
+    <string name="studio_model_load_failed">MODEL LOAD FAILED</string>
+    <string name="studio_btn_go_to_settings">GO TO SETTINGS</string>
+
+    <!-- Studio: Tutorial overlay -->
+    <string name="tutorial_how_to_read_feedback">HOW TO READ FEEDBACK</string>
+    <string name="tutorial_intro">After recording your voice, Glosso Studio analyzes your pronunciation phonetically.</string>
+    <string name="tutorial_mastery_note">Achieve 85%% accuracy or higher to MASTER a sentence and progress in the curriculum.</string>
+
+    <!-- Feedback guide labels -->
+    <string name="feedback_correct_label">CORRECT</string>
+    <string name="feedback_correct_desc">Perfect pronunciation.</string>
+    <string name="feedback_close_label">CLOSE</string>
+    <string name="feedback_close_desc">Slightly off, keep practicing.</string>
+    <string name="feedback_missed_label">MISSED</string>
+    <string name="feedback_missed_desc">Incorrect pronunciation.</string>
+    <string name="feedback_hint_missed">Missed — try to pronounce /%1$s/.</string>
+    <string name="feedback_hint_substitution">You pronounced /%1$s/ — expected /%2$s/.</string>
+
+    <!-- Milestone dialog (caps variant used by Studio) -->
+    <string name="milestone_caps_title">MILESTONE!</string>
+    <string name="milestone_sentences_mastered">sentences mastered!</string>
+    <string name="milestone_btn_keep_going">KEEP GOING!</string>
+
+    <!-- Studio: ViewModel errors / messages -->
+    <string name="studio_err_model_failed_default">Acoustic model failed to load.</string>
+    <string name="studio_err_model_redownload_suffix">Re-download by clearing app data or reinstalling.</string>
+    <string name="studio_err_load_failed">Failed to load: %1$s</string>
+    <string name="studio_err_stop_failed">Stop failed: %1$s</string>
+    <string name="studio_err_start_failed">Start failed: %1$s</string>
+    <string name="studio_err_recognition_failed_setup">On-device recognition failed. Please ensure setup is complete.</string>
+    <string name="studio_err_no_drill_sentences">No sentences found for /%1$s/ drill.</string>
+    <string name="studio_err_drill_load_failed">Drill load failed: %1$s</string>
+</resources>
