@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- About screen -->
+    <string name="about_title">ABOUT</string>
+    <string name="about_back">Back</string>
+    <string name="about_app_logo_desc">Glosso Studio</string>
+    <string name="about_app_name">GLOSSO STUDIO</string>
+    <string name="about_version">v2.0.0</string>
+    <string name="about_tagline">On-device English &amp; French pronunciation trainer\npowered by phonetic analysis.</string>
+
+    <!-- Section headers -->
+    <string name="about_section_how_it_works">HOW IT WORKS</string>
+    <string name="about_section_features">FEATURES</string>
+    <string name="about_section_privacy">PRIVACY</string>
+    <string name="about_section_source_code">SOURCE CODE</string>
+    <string name="about_section_credits">CREDITS</string>
+    <string name="about_section_libraries">OPEN SOURCE LIBRARIES</string>
+
+    <!-- Privacy -->
+    <string name="about_privacy_title">100%% On-Device</string>
+    <string name="about_privacy_body">All phonetic analysis runs entirely on your device using a local ONNX model. Your voice recordings are never uploaded anywhere, no account is required, and no usage data is collected.</string>
+
+    <!-- Source code -->
+    <string name="about_source_title">Open Source — AGPLv3</string>
+    <string name="about_source_body">Glosso Studio is free and open-source software. You are free to study, modify, and redistribute it under the terms of the GNU Affero General Public License v3.</string>
+    <string name="about_link_source_code">Source Code</string>
+    <string name="about_link_report_issue">Report Issue</string>
+
+    <!-- How it works -->
+    <string name="about_step1_title">Listen to the reference</string>
+    <string name="about_step1_desc">Choose Vivian or Aiden as your reference voice and listen to the correct pronunciation.</string>
+    <string name="about_step2_title">Record yourself</string>
+    <string name="about_step2_desc">Tap the microphone and speak the sentence clearly.</string>
+    <string name="about_step3_title">On-device phonetic analysis</string>
+    <string name="about_step3_desc">Your recording is converted to IPA phonemes by Allosaurus (English) or Wav2Vec2 (French), running entirely offline on your device.</string>
+    <string name="about_step4_title">Get color-coded feedback</string>
+    <string name="about_step4_desc">Each letter is colored — white for correct, orange for close, red for missed — so you know exactly what to improve.</string>
+    <string name="about_step5_title">Master the batch</string>
+    <string name="about_step5_desc">Practice in batches of 10 sentences. Failed sentences reappear until all 10 reach 85%% accuracy.</string>
+
+    <!-- Feature chips -->
+    <string name="about_feature_offline">Offline\nAnalysis</string>
+    <string name="about_feature_cefr">6 CEFR\nLevels</string>
+    <string name="about_feature_topic">Topic\nFilter</string>
+    <string name="about_feature_batch">Batch\nLearning</string>
+    <string name="about_feature_multilang">Multi-\nLanguage</string>
+    <string name="about_feature_mastery">Mastery\nTracking</string>
+
+    <!-- Credits -->
+    <string name="about_credits_intro">Built on the shoulders of giants.</string>
+    <string name="about_credit_allosaurus_subtitle">English phonetic recognition · GPL-3.0</string>
+    <string name="about_credit_wav2vec2_title">Wav2Vec2 (French)</string>
+    <string name="about_credit_wav2vec2_subtitle">French phoneme recognition · Apache-2.0</string>
+    <string name="about_credit_qwen_subtitle">Reference voice synthesis · Apache-2.0</string>
+    <string name="about_credit_aipron_subtitle">Phonetic scoring approach · by Thiagohgl</string>
+    <string name="about_credit_onnx_subtitle">On-device ML inference · MIT</string>
+    <string name="about_credit_koin_subtitle">Dependency injection · Apache-2.0</string>
+
+    <!-- Developer card -->
+    <string name="about_team_title">Glosso Studio Team</string>
+    <string name="about_team_subtitle">Language learners building the tools we wish existed.</string>
+    <string name="about_link_website">glossostudio.com</string>
+    <string name="about_link_gitlab">GitLab</string>
+</resources>

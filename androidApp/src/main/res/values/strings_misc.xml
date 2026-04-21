@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Topic selection screen -->
+    <string name="topics_title">SELECT TOPICS</string>
+    <string name="topics_level_fallback">Level %1$d</string>
+    <string name="topics_back">Back</string>
+    <string name="topics_continue_batch_label">CONTINUE BATCH  ·  %1$d/%2$d MASTERED</string>
+    <string name="topics_practice_all_cta">PRACTICE ALL TOPICS</string>
+    <string name="topics_practice_selected_cta">PRACTICE %1$d TOPICS</string>
+    <string name="topics_select_subtitle">Select one or more topics to focus your practice.</string>
+    <string name="topics_mastered_count">%1$d / %2$d mastered</string>
+
+    <!-- Language selection screen -->
+    <string name="lang_select_title">Choose Your Language</string>
+    <string name="lang_select_subtitle">Select the language you want to learn</string>
+    <string name="lang_select_continue">Continue</string>
+    <string name="lang_select_selected_mark">✓</string>
+
+</resources>

@@ -1,0 +1,58 @@
+# --- General ---
+.DS_Store
+*.log
+*.tmp
+*.temp
+*.bak
+.env
+.env.*
+
+# --- Android / Gradle ---
+.gradle/
+**/build/
+gradlew.bat
+gradle/wrapper/gradle-wrapper.jar
+local.properties
+.idea/caches
+.idea/libraries
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+captures/
+.externalNativeBuild
+.cxx/
+*.apk
+*.ap_
+*.jks
+*.keystore
+*.dex
+*.class
+bin/
+gen/
+
+# --- Kotlin Multiplatform ---
+.kotlin/
+compose-resources/
+
+# --- IDEs ---
+*.iml
+.idea/
+!.idea/runConfigurations/
+!.idea/icon.png
+!.idea/vcs.xml
+!.idea/copyright/
+*.ipr
+*.iws
+
+# --- Databases ---
+*.db-journal
+*.db-shm
+*.db-wal
+
+# Binaries hosted on GitHub Release assets, not in git
+data/sentences_v11_*.db
+data/sentences_v11_*.db-shm
+data/sentences_v11_*.db-wal
+data/wav2vec2_espeak_cv_ft_int8.onnx
+data/espeak_vocab.json

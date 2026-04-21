@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Level names -->
+    <string name="level_beginner">Beginner</string>
+    <string name="level_elementary">Elementary</string>
+    <string name="level_intermediate">Intermediate</string>
+    <string name="level_upper_intermediate">Upper-Int</string>
+    <string name="level_advanced">Advanced</string>
+    <string name="level_mastery">Mastery</string>
+
+    <!-- Home dialogs -->
+    <string name="home_this_level">this level</string>
+    <string name="home_setup_required">Setup Required</string>
+    <string name="home_wifi_warning_initial">WARNING: If you are using mobile data, costs may apply. We recommend using a Wi-Fi connection.</string>
+    <string name="home_unknown_setup_error">Unknown error occurred during setup.</string>
+    <string name="home_preparing_curriculum">Preparing your curriculum…</string>
+    <string name="home_setting_up_recognition">Setting up the recognition model…</string>
+    <string name="home_progress_percent">%1$d%%</string>
+
+    <!-- Language selector -->
+    <string name="home_select_language">Select Language</string>
+    <string name="home_language_experimental"> (experimental)</string>
+    <string name="home_language_label">%1$s  %2$s</string>
+    <string name="home_language_label_selected">✓ %1$s</string>
+
+    <!-- Top bar -->
+    <string name="home_title_glosso">GLOSSO</string>
+    <string name="home_cd_language">Language</string>
+    <string name="home_cd_settings">Settings</string>
+
+    <!-- Stats -->
+    <string name="home_stat_consistency">Consistency</string>
+    <string name="home_stat_days">%1$d Days</string>
+    <string name="home_stat_mastery">Mastery Score</string>
+    <string name="home_stat_phrases">%1$d Phr.</string>
+    <string name="home_curriculum_progress">CURRICULUM PROGRESS</string>
+
+    <!-- Level card -->
+    <string name="home_level_phrases">%1$d / %2$d phrases</string>
+    <string name="home_level_complete">COMPLETE ✓</string>
+    <string name="home_tap_to_setup">TAP TO SETUP</string>
+
+    <!-- Onboarding -->
+    <string name="home_onboarding_welcome_title">Welcome to Glosso</string>
+    <string name="home_onboarding_welcome_body">Practice pronunciation one sentence at a time, entirely on your device — no account, no internet required.</string>
+    <string name="home_onboarding_how_title">How It Works</string>
+    <string name="home_onboarding_how_body">1. Listen to the reference voice\n2. Tap the mic and repeat the sentence\n3. Get instant phonetic feedback showing exactly which sounds to improve</string>
+    <string name="home_onboarding_mastery_title">Mastery System</string>
+    <string name="home_onboarding_mastery_body">Score 85%% or higher to master a sentence. Sentences you don\'t master are repeated until you do. Complete a full batch to level up.</string>
+    <string name="btn_next">NEXT</string>
+    <string name="btn_lets_go">LET\'S GO</string>
+    <string name="btn_skip">SKIP</string>
+</resources>

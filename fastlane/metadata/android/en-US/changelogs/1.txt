@@ -1,0 +1,6 @@
+2.0.0
+- Multi-language support: English and French
+- Language selection screen at startup
+- Per-language progress isolation
+- French wav2vec2 phonetic model
+- 6 level curriculum for each language

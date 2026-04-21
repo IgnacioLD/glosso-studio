@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Settings: Latin experimental dialog -->
+    <string name="settings_latin_warning_title">Latin is experimental</string>
+    <string name="settings_latin_warning_body">The phoneme recognition model was not trained on Latin. Scoring and feedback may be less accurate than for other languages. Continue?</string>
+    <string name="settings_btn_latin_understand">I understand</string>
+
+    <!-- Settings: misc -->
+    <string name="settings_title">SETTINGS</string>
+    <string name="settings_back">Back</string>
+
+    <!-- Settings: Learning extras -->
+    <string name="settings_translation_label">Show Translation</string>
+    <string name="settings_translation_desc">Display the meaning under each sentence</string>
+
+    <!-- Settings: Legal -->
+    <string name="settings_section_legal">LEGAL</string>
+    <string name="settings_privacy_label">Privacy Policy</string>
+    <string name="settings_privacy_desc">How your data is handled</string>
+    <string name="settings_terms_label">Terms of Service</string>
+    <string name="settings_terms_desc">Rules governing app use</string>
+
+    <!-- Settings: About -->
+    <string name="settings_section_about">ABOUT</string>
+    <string name="settings_about_label">About Glosso Studio</string>
+    <string name="settings_about_desc">Version, credits, open source licenses</string>
+
+    <!-- Settings: UI language -->
+    <string name="settings_section_ui_language">APP LANGUAGE</string>
+    <string name="settings_ui_language_label">Interface Language</string>
+    <string name="settings_ui_language_desc">Language used for menus, buttons and messages</string>
+    <string name="settings_ui_lang_system">System</string>
+    <string name="settings_ui_lang_en">🇬🇧 English</string>
+    <string name="settings_ui_lang_es">🇪🇸 Español</string>
+    <string name="settings_ui_lang_fr">🇫🇷 Français</string>
+    <string name="settings_ui_lang_de">🇩🇪 Deutsch</string>
+
+    <!-- Reusable button -->
+    <string name="btn_cancel_mixed">Cancel</string>
+</resources>
