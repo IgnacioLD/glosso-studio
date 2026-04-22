@@ -361,4 +361,5 @@
     <string name="lang_select_selected_mark">✓</string>
     <string name="feedback_hint_missed">Verfehlt — versuche /%1$s/ auszusprechen.</string>
     <string name="feedback_hint_substitution">Du hast /%1$s/ ausgesprochen — erwartet war /%2$s/.</string>
+    <string name="feedback_hint_no_speech">Wir haben dich kaum gehört — nimm näher am Mikro neu auf.</string>
 </resources>

@@ -379,4 +379,5 @@
 
     <string name="feedback_hint_missed">Raté — essayez de prononcer /%1$s/.</string>
     <string name="feedback_hint_substitution">Vous avez prononcé /%1$s/ — on attendait /%2$s/.</string>
+    <string name="feedback_hint_no_speech">Nous ne vous avons pas bien entendu — enregistrez à nouveau près du micro.</string>
 </resources>

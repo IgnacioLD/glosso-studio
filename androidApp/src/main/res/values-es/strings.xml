@@ -361,4 +361,5 @@
     <string name="lang_select_selected_mark">✓</string>
     <string name="feedback_hint_missed">Fallaste — intenta pronunciar /%1$s/.</string>
     <string name="feedback_hint_substitution">Pronunciaste /%1$s/ — se esperaba /%2$s/.</string>
+    <string name="feedback_hint_no_speech">No te escuchamos bien — vuelve a grabar cerca del micrófono.</string>
 </resources>
