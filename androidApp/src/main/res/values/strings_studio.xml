@@ -70,6 +70,7 @@
     <string name="feedback_missed_desc">Incorrect pronunciation.</string>
     <string name="feedback_hint_missed">Missed — try to pronounce /%1$s/.</string>
     <string name="feedback_hint_substitution">You pronounced /%1$s/ — expected /%2$s/.</string>
+    <string name="feedback_hint_no_speech">We couldn\'t hear much — record again closer to the mic.</string>
 
     <!-- Milestone dialog (caps variant used by Studio) -->
     <string name="milestone_caps_title">MILESTONE!</string>

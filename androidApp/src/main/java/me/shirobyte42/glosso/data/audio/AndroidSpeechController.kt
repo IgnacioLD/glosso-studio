@@ -84,26 +84,45 @@ class AndroidSpeechController(
         val result = PhoneticComparator.calculateScoringResult(targetText, expectedIpa, actualIpa, language)
         val letterFeedback = PhoneticComparator.generateLetterFeedback(targetText, expectedIpa, result.alignment, language)
 
-        // Generate pair hints for every mismatch (CLOSE + MISSED). For known
-        // minimal pairs we use the curated linguistic description in the
-        // learner's UI language; otherwise a localized generic fallback so the
-        // learner always sees where they went wrong.
+        // Pair hints should be a *few* actionable tips, not a wall of identical
+        // "Missed — try /X/" cards. Strategy:
+        //   1. Detect the degenerate "caught nothing" case (most phonemes missed
+        //      with no substitution) and surface a single "record again" card.
+        //   2. Otherwise prefer hints with a curated linguistic description
+        //      (real teaching value) over generic "pronounced /X/ instead of
+        //      /Y/" fallbacks, and cap at MAX_HINTS total.
         val uiLang = getUiLanguage().ifEmpty { "en" }
-        val seenPairs = mutableSetOf<Set<String>>()
-        val pairHints = result.alignment
-            .filter { it.expected != it.actual && it.expected.isNotBlank() && it.status != MatchStatus.PERFECT }
-            .mapNotNull { match ->
-                val pair = setOf(match.expected, match.actual)
-                if (seenPairs.add(pair)) {
-                    val description = PhoneticComparator.getMinimalPairDescription(match.expected, match.actual, uiLang)
-                        ?: if (match.actual.isBlank() || match.actual == "-") {
-                            context.getString(R.string.feedback_hint_missed, match.expected)
-                        } else {
-                            context.getString(R.string.feedback_hint_substitution, match.actual, match.expected)
-                        }
-                    PairHint(match.expected, match.actual, description)
-                } else null
+        val mismatches = result.alignment.filter {
+            it.expected != it.actual && it.expected.isNotBlank() && it.status != MatchStatus.PERFECT
+        }
+        val allMissed = mismatches.isNotEmpty() && mismatches.all { it.actual.isBlank() || it.actual == "-" }
+        val pairHints: List<PairHint> = if (allMissed && mismatches.size >= 3) {
+            // Near-silent recording — don't stack N identical "try /X/" cards.
+            listOf(PairHint("", "", context.getString(R.string.feedback_hint_no_speech)))
+        } else {
+            val MAX_HINTS = 3
+            // Pass 1: curated descriptions. Pass 2: generic fallbacks, only if
+            // we still have budget. Always de-dupe by phoneme pair.
+            val seen = mutableSetOf<Set<String>>()
+            val curated = mutableListOf<PairHint>()
+            val fallback = mutableListOf<PairHint>()
+            for (m in mismatches) {
+                val pair = setOf(m.expected, m.actual)
+                if (!seen.add(pair)) continue
+                val curatedDesc = PhoneticComparator.getMinimalPairDescription(m.expected, m.actual, uiLang)
+                if (curatedDesc != null) {
+                    curated += PairHint(m.expected, m.actual, curatedDesc)
+                } else {
+                    val text = if (m.actual.isBlank() || m.actual == "-") {
+                        context.getString(R.string.feedback_hint_missed, m.expected)
+                    } else {
+                        context.getString(R.string.feedback_hint_substitution, m.actual, m.expected)
+                    }
+                    fallback += PairHint(m.expected, m.actual, text)
+                }
             }
+            (curated + fallback).take(MAX_HINTS)
+        }
 
         return PronunciationFeedback(
             score = result.score,
