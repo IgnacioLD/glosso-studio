@@ -150,11 +150,18 @@ fun WordAlignedIpa(
                 val statuses = (start until end).mapNotNull { idx ->
                     feedback.getOrNull(idx)?.status
                 }
+                // Word-level color by majority, not "any": a single mis-aligned
+                // phoneme shouldn't paint the whole word red. Red only when the
+                // word is genuinely wrong (>50% missed); yellow when there's any
+                // issue but the word is still mostly right.
+                val total = statuses.size
+                val missed = statuses.count { it == MatchStatusModel.MISSED }
+                val close = statuses.count { it == MatchStatusModel.CLOSE }
                 when {
-                    statuses.any { it == MatchStatusModel.MISSED } -> GlossoFeedbackMissed
-                    statuses.any { it == MatchStatusModel.CLOSE } -> GlossoFeedbackClose
-                    statuses.isNotEmpty() -> MaterialTheme.colorScheme.secondary
-                    else -> MaterialTheme.colorScheme.onSurfaceVariant
+                    total == 0 -> MaterialTheme.colorScheme.onSurfaceVariant
+                    missed * 2 > total -> GlossoFeedbackMissed
+                    missed > 0 || close > 0 -> GlossoFeedbackClose
+                    else -> MaterialTheme.colorScheme.secondary
                 }
             } else MaterialTheme.colorScheme.onSurfaceVariant
             Column(
