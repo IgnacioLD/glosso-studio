@@ -39,11 +39,17 @@ defaultConfig {
     versionName = baseVersionName
 }
 
+flavorDimensions += "distribution"
+productFlavors {
+    create("playstore") { dimension = "distribution" }
+    create("fdroid") { dimension = "distribution" }
+}
+
 applicationVariants.all {
     val variant = this
     variant.outputs.all {
         val output = this as com.android.build.gradle.internal.api.ApkVariantOutputImpl
-        output.outputFileName = "glosso-studio-v${variant.versionName}.apk"
+        output.outputFileName = "glosso-studio-${variant.flavorName}-v${variant.versionName}.apk"
     }
 }
 
@@ -150,6 +156,6 @@ dependencies {
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
 
-    // In-app review
-    implementation("com.google.android.play:review-ktx:2.0.2")
+    // In-app review (Play Store distribution only)
+    "playstoreImplementation"("com.google.android.play:review-ktx:2.0.2")
 }
