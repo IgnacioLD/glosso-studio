@@ -24,7 +24,8 @@ class DatabaseDownloader(
     private val client: HttpClient,
     private val getPracticeLanguage: () -> String = { "en_GB" },
     private val getUiLanguage: () -> String = { "en" },
-    private val repo: String = "IgnacioLD/glosso-studio"
+    private val gitlabProjectId: String = "80477548",
+    private val gitlabPackageName: String = "glosso-studio"
 ) {
     private val TAG = "DatabaseDownloader"
 
@@ -34,12 +35,12 @@ class DatabaseDownloader(
     }
 
     private fun getBaseUrl(): String {
-        // Binaries are published as GitHub Release assets (free, unlimited bandwidth).
-        // URL shape: https://github.com/OWNER/REPO/releases/download/TAG/FILENAME
+        // Binaries are published to GitLab Generic Package Registry.
+        // URL shape: https://gitlab.com/api/v4/projects/ID/packages/generic/NAME/VERSION/FILENAME
         val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
         val rawVersion = packageInfo.versionName.substringBefore("-")
         val version = if (rawVersion.startsWith("v")) rawVersion else "v$rawVersion"
-        return "https://github.com/$repo/releases/download/$version"
+        return "https://gitlab.com/api/v4/projects/$gitlabProjectId/packages/generic/$gitlabPackageName/$version"
     }
 
     private fun getDownloadUrl(fileName: String): String = "${getBaseUrl()}/$fileName"
