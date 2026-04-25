@@ -438,19 +438,11 @@ fun StudioScreen(
     val levelColor = levelColor(category)
     val isExpandedWidth = LocalWindowWidthClass.current == WindowWidthSizeClass.Expanded
 
-    // In-app review prompt
+    // In-app review prompt (no-op in F-Droid flavor)
     if (state.shouldPromptReview) {
         viewModel.consumeReviewPrompt()
         LaunchedEffect(Unit) {
-            try {
-                val reviewManager = com.google.android.play.core.review.ReviewManagerFactory.create(context)
-                reviewManager.requestReviewFlow().addOnCompleteListener { request ->
-                    if (request.isSuccessful) {
-                        val activity = context as? androidx.activity.ComponentActivity
-                        activity?.let { reviewManager.launchReviewFlow(it, request.result) }
-                    }
-                }
-            } catch (_: Exception) { }
+            me.shirobyte42.glosso.util.launchInAppReview(context)
         }
     }
 
