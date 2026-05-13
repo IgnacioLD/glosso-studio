@@ -25,7 +25,8 @@ class DatabaseDownloader(
     private val getPracticeLanguage: () -> String = { "en_GB" },
     private val getUiLanguage: () -> String = { "en" },
     private val gitlabProjectId: String = "80477548",
-    private val gitlabPackageName: String = "glosso-studio"
+    private val gitlabPackageName: String = "glosso-studio",
+    private val dataVersion: String? = null
 ) {
     private val TAG = "DatabaseDownloader"
 
@@ -37,9 +38,11 @@ class DatabaseDownloader(
     private fun getBaseUrl(): String {
         // Binaries are published to GitLab Generic Package Registry.
         // URL shape: https://gitlab.com/api/v4/projects/ID/packages/generic/NAME/VERSION/FILENAME
-        val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
-        val rawVersion = packageInfo.versionName.substringBefore("-")
-        val version = if (rawVersion.startsWith("v")) rawVersion else "v$rawVersion"
+        val version = dataVersion ?: run {
+            val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+            val rawVersion = packageInfo.versionName.substringBefore("-")
+            if (rawVersion.startsWith("v")) rawVersion else "v$rawVersion"
+        }
         return "https://gitlab.com/api/v4/projects/$gitlabProjectId/packages/generic/$gitlabPackageName/$version"
     }
 

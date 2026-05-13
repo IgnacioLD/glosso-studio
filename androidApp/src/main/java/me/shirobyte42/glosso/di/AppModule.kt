@@ -43,7 +43,8 @@ val appModule = module {
             context = get(),
             client = get(),
             getPracticeLanguage = { prefs.getTargetLanguage() },
-            getUiLanguage = { prefs.getUiLanguage() }
+            getUiLanguage = { prefs.getUiLanguage() },
+            dataVersion = "v2.2.6"
         )
     }
 
