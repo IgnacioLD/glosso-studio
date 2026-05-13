@@ -71,6 +71,8 @@ object PhoneticComparator {
         setOf("f", "v") to 0.8,
         setOf("s", "z") to 0.8,
         setOf("ʃ", "ʒ") to 0.8,
+        setOf("ʒ", "dʒ") to 0.7,
+        setOf("ʃ", "dʒ") to 0.5,
         setOf("ʁ", "ʀ") to 0.9,
         setOf("ʁ", "r") to 0.7,
         setOf("m", "n") to 0.6,
@@ -83,19 +85,108 @@ object PhoneticComparator {
         setOf("ɛ̃", "ɑ̃") to 0.6,
         setOf("œ̃", "ɛ̃") to 0.7,
         setOf("ɔ̃", "ɑ̃") to 0.6,
-        setOf("e", "ɛ") to 0.7,
+        setOf("e", "ɛ") to 0.85,
         setOf("o", "ɔ") to 0.7,
         setOf("a", "ɑ") to 0.8,
-        setOf("ə", "e") to 0.7,
+        setOf("ə", "e") to 0.85,
         setOf("ə", "œ") to 0.7,
-        setOf("j", "i") to 0.6,
+        setOf("j", "i") to 0.8,
         setOf("w", "u") to 0.6,
         setOf("ɥ", "y") to 0.7,
         setOf("ɥ", "w") to 0.6
     )
 
-    private fun getMatrix(language: String) =
-        if (language == "fr") frSimilarityMatrix else enSimilarityMatrix
+    // ES similarity matrix — Spanish vowel and consonant allophony
+    private val esSimilarityMatrix = mapOf(
+        setOf("p", "b") to 0.8,
+        setOf("t", "d") to 0.8,
+        setOf("k", "ɡ") to 0.8,
+        setOf("b", "β") to 0.9,
+        setOf("d", "ð") to 0.9,
+        setOf("ɡ", "ɣ") to 0.9,
+        setOf("f", "v") to 0.7,
+        setOf("s", "θ") to 0.6,
+        setOf("s", "z") to 0.8,
+        setOf("s", "ʃ") to 0.6,
+        setOf("x", "h") to 0.7,
+        setOf("tʃ", "ʃ") to 0.6,
+        setOf("ʝ", "j") to 0.8,
+        setOf("j", "i") to 0.85,
+        setOf("w", "u") to 0.8,
+        setOf("ʎ", "ʝ") to 0.9,
+        setOf("ʎ", "l") to 0.7,
+        setOf("ʎ", "dʒ") to 0.5,
+        setOf("ʎ", "ʒ") to 0.5,
+        setOf("ɲ", "n") to 0.7,
+        setOf("m", "n") to 0.7,
+        setOf("ɾ", "r") to 0.9,
+        setOf("β", "v") to 0.7,
+        setOf("ð", "β") to 0.6,
+        setOf("i", "ɪ") to 0.9,
+        setOf("e", "ɛ") to 0.9,
+        setOf("a", "æ") to 0.85,
+        setOf("a", "ɑ") to 0.9,
+        setOf("a", "ʌ") to 0.7,
+        setOf("a", "ə") to 0.8,
+        setOf("o", "ɔ") to 0.9,
+        setOf("o", "ʊ") to 0.6,
+        setOf("u", "ʊ") to 0.9,
+    )
+
+    // DE similarity matrix — German vowel quality, R allophony, rounded front vowels
+    private val deSimilarityMatrix = mapOf(
+        setOf("p", "b") to 0.8,
+        setOf("t", "d") to 0.8,
+        setOf("k", "ɡ") to 0.8,
+        setOf("f", "v") to 0.8,
+        setOf("s", "z") to 0.8,
+        setOf("ʃ", "ʒ") to 0.8,
+        setOf("ʁ", "ʀ") to 0.9,
+        setOf("ʁ", "r") to 0.7,
+        setOf("ʁ", "ɐ") to 0.6,
+        setOf("x", "ç") to 0.6,
+        setOf("x", "h") to 0.6,
+        setOf("ç", "ʃ") to 0.5,
+        setOf("ç", "k") to 0.4,
+        setOf("ʏ", "y") to 0.8,
+        setOf("ʏ", "ɪ") to 0.7,
+        setOf("y", "i") to 0.7,
+        setOf("œ", "ɛ") to 0.7,
+        setOf("ɑ", "a") to 0.9,
+        setOf("ɪ", "i") to 0.85,
+        setOf("ʊ", "u") to 0.8,
+        setOf("ɔ", "o") to 0.8,
+        setOf("ɛ", "e") to 0.8,
+        setOf("e", "ɛ") to 0.9,
+        setOf("ɐ", "ə") to 0.8,
+        setOf("t", "ts") to 0.7,
+        setOf("ts", "s") to 0.6,
+        setOf("ts", "z") to 0.6,
+        setOf("ɾ", "ʁ") to 0.7,
+        setOf("ɾ", "r") to 0.7,
+        setOf("m", "n") to 0.6,
+        setOf("n", "ŋ") to 0.6,
+    )
+
+    // LA similarity matrix — Latin vowel length, labialized velars, semivowels
+    private val laSimilarityMatrix = mapOf(
+        setOf("p", "b") to 0.8,
+        setOf("t", "d") to 0.8,
+        setOf("k", "ɡ") to 0.8,
+        setOf("kʷ", "k") to 0.7,
+        setOf("ɡʷ", "ɡ") to 0.7,
+        setOf("j", "i") to 0.8,
+        setOf("w", "u") to 0.8,
+        setOf("r", "ɾ") to 0.85,
+    )
+
+    private fun getMatrix(language: String) = when (language) {
+        "fr" -> frSimilarityMatrix
+        "es" -> esSimilarityMatrix
+        "de" -> deSimilarityMatrix
+        "la" -> laSimilarityMatrix
+        else -> enSimilarityMatrix
+    }
 
     /** Human-readable descriptions for minimal phoneme pairs. */
     private val pairDescriptions: Map<Set<String>, Map<String, String>> = mapOf(
@@ -189,7 +280,13 @@ object PhoneticComparator {
         val matrix = getMatrix(language)
         val expectedList = getNormalizedPhoneList(expected)
         val actualList = getNormalizedPhoneList(actual)
-        
+
+        Log.d(TAG, "=== calculateScoringResult [lang=$language text=$text] ===")
+        Log.d(TAG, "  expected IPA raw : $expected")
+        Log.d(TAG, "  actual   IPA raw : $actual")
+        Log.d(TAG, "  expected phones  : $expectedList")
+        Log.d(TAG, "  actual   phones  : $actualList")
+
         if (expectedList.isEmpty()) {
             return ScoringResult(if (actualList.isEmpty()) 100 else 0, "", "")
         }
@@ -224,6 +321,15 @@ object PhoneticComparator {
                 MatchStatus.MISSED -> 0.0
             }
             alignment.add(PhonemeMatch(exp, bestMatch, status))
+
+            if (status != MatchStatus.PERFECT) {
+                val simsToAll = actualList.joinToString(", ") { a ->
+                    val s = getSimilarity(exp, a, matrix)
+                    "$a=$s"
+                }
+                Log.d(TAG, "  [$language] exp=%-4s  best=%s (sim=%.2f) → %s  all: [%s]"
+                    .format(exp, bestMatch, bestSim, status, simsToAll))
+            }
         }
         
         val score = if (totalWeight > 0) (matchWeight / totalWeight * 100).toInt() else 0
@@ -377,6 +483,28 @@ object PhoneticComparator {
             g2pSim['ù'] = setOf("y", "u")
         }
 
+        if (language == "de") {
+            // German-specific G2P overrides
+            // 'v' → /f/ (Vogel), not /v/
+            g2pSim['v'] = setOf("f", "v")
+            // 'w' → /v/ (Wasser), not /w/
+            g2pSim['w'] = setOf("v", "w")
+            // 'z' → /ts/ (Zeit), not /z/
+            g2pSim['z'] = setOf("ts", "z", "s")
+            // 'j' → /j/ (ja), not /d͡ʒ/
+            g2pSim['j'] = setOf("j")
+            // 'r' → /ʁ/ uvular (rot)
+            g2pSim['r'] = setOf("ʁ", "ʀ", "r", "ɐ", "ɹ")
+            // 's' → /z/ before vowels, /ʃ/ in st/sp, /s/ elsewhere
+            g2pSim['s'] = setOf("z", "s", "ʃ")
+            // 'ß' → /s/ (Straße)
+            g2pSim['ß'] = setOf("s")
+            // Umlauts
+            g2pSim['ä'] = setOf("ɛː", "ɛ", "eː", "e")
+            g2pSim['ö'] = setOf("øː", "ø", "œ", "oː", "ɔ")
+            g2pSim['ü'] = setOf("yː", "y", "ʏ", "uː", "ʊ")
+        }
+
         if (g2pSim[c]?.contains(p) == true) return 2
 
         return 8 // High cost for non-matching
@@ -394,6 +522,7 @@ object PhoneticComparator {
             .replace("ɚ", "ər")
             .replace("\u200D", "")
             .replace("\u00A0", " ")
+            .replace("ː", "")
 
         val wordGroups = folded.lowercase().split(" ").filter { it.isNotBlank() }
         val result = mutableListOf<String>()
