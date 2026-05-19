@@ -1,0 +1,3 @@
+- Fix scroll on language selection screen
+- Add language-specific similarity matrices for Spanish, German, and Latin
+- Update internal versioning and metadata for v2.2.8
