@@ -22,7 +22,7 @@ Kotlin Multiplatform + Jetpack Compose Android app for offline pronunciation tra
 - **Room:** Two DB categories — a persistent `glosso_progress_db` (mastery, streaks, reviews) and per-level dynamic databases (`sentences_{level}.db`, downloaded on demand via `DatabaseDownloader`). Both use `fallbackToDestructiveMigration()`.
 - **Model inference:** ONNX Runtime (`onnxruntime-android:1.24.3`). ML model file (`wav2vec2_espeak_cv_ft_int8.onnx`) lives in `data/` and is shipped as asset. Model assets are *not* bundled in APK — downloaded at runtime.
 - **Product flavors:** `playstore` / `fdroid`. In-app review (`playstoreImplementation`) only compiled for playstore flavor.
-- **Version:** `versionCode = 2208`, `versionName = "2.2.7"`. Version tag pipeline: GitLab CI builds tags, uploads APK + model files + sentence DBs to generic package registry.
+- **Version:** `versionCode = 2209`, `versionName = "2.2.8"`. Version tag pipeline: GitLab CI builds tags, uploads APK + model files + sentence DBs to generic package registry.
 
 ## Important state / gotchas
 
