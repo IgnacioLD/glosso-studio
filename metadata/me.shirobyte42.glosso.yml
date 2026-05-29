@@ -1,8 +1,8 @@
+AntiFeatures:
+  - NonFreeNet
 Categories:
   - Science & Education
 License: AGPL-3.0-or-later
-AntiFeatures:
-  - NonFreeNet
 AuthorName: ShiroByte42
 SourceCode: https://gitlab.com/shirobyte421/glosso-studio
 IssueTracker: https://gitlab.com/shirobyte421/glosso-studio/-/issues
