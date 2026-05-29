@@ -1,6 +1,8 @@
 Categories:
   - Science & Education
 License: AGPL-3.0-or-later
+AntiFeatures:
+  - NonFreeNet
 AuthorName: ShiroByte42
 SourceCode: https://gitlab.com/shirobyte421/glosso-studio
 IssueTracker: https://gitlab.com/shirobyte421/glosso-studio/-/issues
@@ -13,7 +15,7 @@ Repo: https://gitlab.com/shirobyte421/glosso-studio.git
 Builds:
   - versionName: 2.2.8
     versionCode: 2209
-    commit: ef0e6f5991aca22f5def2a06cb751d4d14831ee5
+    commit: 8801b09b4c579e8daac436651ab7f9e893ab5d42
     subdir: androidApp
     gradle:
       - fdroid
