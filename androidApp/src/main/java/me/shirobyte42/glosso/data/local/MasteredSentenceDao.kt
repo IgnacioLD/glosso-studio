@@ -16,6 +16,13 @@ interface MasteredSentenceDao {
     @Query("SELECT COUNT(*) FROM mastered_sentences WHERE language = :language")
     suspend fun getTotalCount(language: String = "en"): Int
 
+    @Query(
+        "SELECT strftime('%Y-%m-%d', masteredAt / 1000, 'unixepoch', 'localtime') AS date, COUNT(*) AS count " +
+        "FROM mastered_sentences WHERE language = :language " +
+        "GROUP BY date ORDER BY date ASC"
+    )
+    suspend fun getMasteryCountsByDay(language: String = "en"): List<DailyMasteryCount>
+
     @Query("SELECT EXISTS(SELECT 1 FROM mastered_sentences WHERE text = :text AND language = :language)")
     suspend fun isMastered(text: String, language: String = "en"): Boolean
 
@@ -25,3 +32,8 @@ interface MasteredSentenceDao {
     @Query("DELETE FROM mastered_sentences WHERE language = :language")
     suspend fun deleteAll(language: String = "en")
 }
+
+data class DailyMasteryCount(
+    val date: String,
+    val count: Int
+)

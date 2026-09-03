@@ -1,0 +1,295 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 11,
+    "identityHash": "a8d4aa9227f4a601741b3a7c824c8e5c",
+    "entities": [
+      {
+        "tableName": "sentences",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `text` TEXT NOT NULL, `ipa` TEXT, `level` TEXT, `topic` TEXT, `language` TEXT, `audio_b64` TEXT, `audio_b64_2` TEXT, `word_offsets` TEXT DEFAULT '', `translation_en` TEXT DEFAULT NULL, `translation_es` TEXT DEFAULT NULL, `translation_fr` TEXT DEFAULT NULL, `translation_de` TEXT DEFAULT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "text",
+            "columnName": "text",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ipa",
+            "columnName": "ipa",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "level",
+            "columnName": "level",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "topic",
+            "columnName": "topic",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "language",
+            "columnName": "language",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "audio1",
+            "columnName": "audio_b64",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "audio2",
+            "columnName": "audio_b64_2",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "wordOffsets",
+            "columnName": "word_offsets",
+            "affinity": "TEXT",
+            "notNull": false,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "translationEn",
+            "columnName": "translation_en",
+            "affinity": "TEXT",
+            "notNull": false,
+            "defaultValue": "NULL"
+          },
+          {
+            "fieldPath": "translationEs",
+            "columnName": "translation_es",
+            "affinity": "TEXT",
+            "notNull": false,
+            "defaultValue": "NULL"
+          },
+          {
+            "fieldPath": "translationFr",
+            "columnName": "translation_fr",
+            "affinity": "TEXT",
+            "notNull": false,
+            "defaultValue": "NULL"
+          },
+          {
+            "fieldPath": "translationDe",
+            "columnName": "translation_de",
+            "affinity": "TEXT",
+            "notNull": false,
+            "defaultValue": "NULL"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "ix_sentences_id",
+            "unique": false,
+            "columnNames": [
+              "id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `ix_sentences_id` ON `${TABLE_NAME}` (`id`)"
+          },
+          {
+            "name": "ix_sentences_language",
+            "unique": false,
+            "columnNames": [
+              "language"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `ix_sentences_language` ON `${TABLE_NAME}` (`language`)"
+          },
+          {
+            "name": "ix_sentences_level",
+            "unique": false,
+            "columnNames": [
+              "level"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `ix_sentences_level` ON `${TABLE_NAME}` (`level`)"
+          },
+          {
+            "name": "ix_lang_level",
+            "unique": false,
+            "columnNames": [
+              "language",
+              "level"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `ix_lang_level` ON `${TABLE_NAME}` (`language`, `level`)"
+          },
+          {
+            "name": "ix_sentences_topic",
+            "unique": false,
+            "columnNames": [
+              "topic"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `ix_sentences_topic` ON `${TABLE_NAME}` (`topic`)"
+          },
+          {
+            "name": "ix_lang_level_topic",
+            "unique": false,
+            "columnNames": [
+              "language",
+              "level",
+              "topic"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `ix_lang_level_topic` ON `${TABLE_NAME}` (`language`, `level`, `topic`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "mastered_sentences",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`text` TEXT NOT NULL, `levelIndex` INTEGER NOT NULL, `masteredAt` INTEGER NOT NULL, `topic` TEXT NOT NULL, `language` TEXT NOT NULL DEFAULT 'en', PRIMARY KEY(`text`, `language`))",
+        "fields": [
+          {
+            "fieldPath": "text",
+            "columnName": "text",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "levelIndex",
+            "columnName": "levelIndex",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "masteredAt",
+            "columnName": "masteredAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "topic",
+            "columnName": "topic",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "language",
+            "columnName": "language",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'en'"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "text",
+            "language"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "activity_days",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`dateString` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, `language` TEXT NOT NULL DEFAULT 'en', PRIMARY KEY(`dateString`, `language`))",
+        "fields": [
+          {
+            "fieldPath": "dateString",
+            "columnName": "dateString",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "language",
+            "columnName": "language",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'en'"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "dateString",
+            "language"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "review_queue",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`text` TEXT NOT NULL, `levelIndex` INTEGER NOT NULL, `nextReviewAt` INTEGER NOT NULL, `intervalDays` INTEGER NOT NULL, `language` TEXT NOT NULL DEFAULT 'en', PRIMARY KEY(`text`, `language`))",
+        "fields": [
+          {
+            "fieldPath": "text",
+            "columnName": "text",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "levelIndex",
+            "columnName": "levelIndex",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nextReviewAt",
+            "columnName": "nextReviewAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "intervalDays",
+            "columnName": "intervalDays",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "language",
+            "columnName": "language",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'en'"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "text",
+            "language"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a8d4aa9227f4a601741b3a7c824c8e5c')"
+    ]
+  }
+}

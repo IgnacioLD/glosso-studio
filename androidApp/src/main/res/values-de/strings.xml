@@ -151,7 +151,7 @@
     <string name="home_onboarding_how_title">So funktioniert\'s</string>
     <string name="home_onboarding_how_body">1. Höre die Referenzstimme an\n2. Tippe auf das Mikro und wiederhole den Satz\n3. Erhalte sofortiges phonetisches Feedback, das dir genau zeigt, welche Laute du verbessern kannst</string>
     <string name="home_onboarding_mastery_title">Beherrschungssystem</string>
-    <string name="home_onboarding_mastery_body">Erreiche 85%% oder mehr, um einen Satz zu meistern. Sätze, die du nicht meisterst, werden wiederholt, bis du es schaffst. Schließe eine ganze Runde ab, um aufzusteigen.</string>
+    <string name="home_onboarding_mastery_body" formatted="false">Erreiche 85% oder mehr, um einen Satz zu meistern. Sätze, die du nicht meisterst, werden wiederholt, bis du es schaffst. Schließe eine ganze Runde ab, um aufzusteigen.</string>
     <string name="btn_next">WEITER</string>
     <string name="btn_lets_go">LOS GEHT\'S</string>
     <string name="btn_skip">ÜBERSPRINGEN</string>
@@ -255,7 +255,7 @@
     <!-- Studio: Tutorial overlay -->
     <string name="tutorial_how_to_read_feedback">FEEDBACK LESEN</string>
     <string name="tutorial_intro">Nach der Aufnahme deiner Stimme analysiert Glosso Studio deine Aussprache phonetisch.</string>
-    <string name="tutorial_mastery_note">Erreiche 85%% Genauigkeit oder mehr, um einen Satz zu MEISTERN und im Lehrplan weiterzukommen.</string>
+    <string name="tutorial_mastery_note" formatted="false">Erreiche 85% Genauigkeit oder mehr, um einen Satz zu MEISTERN und im Lehrplan weiterzukommen.</string>
 
     <!-- Feedback guide labels -->
     <string name="feedback_correct_label">KORREKT</string>
@@ -298,7 +298,7 @@
     <string name="about_section_libraries">OPEN-SOURCE-BIBLIOTHEKEN</string>
 
     <!-- Privacy -->
-    <string name="about_privacy_title">100%% auf dem Gerät</string>
+    <string name="about_privacy_title" formatted="false">100% auf dem Gerät</string>
     <string name="about_privacy_body">Die gesamte phonetische Analyse läuft vollständig auf deinem Gerät mit einem lokalen ONNX-Modell. Deine Sprachaufnahmen werden nie irgendwohin hochgeladen, es ist kein Konto erforderlich und es werden keine Nutzungsdaten erhoben.</string>
 
     <!-- Source code -->
@@ -317,7 +317,7 @@
     <string name="about_step4_title">Erhalte farbcodiertes Feedback</string>
     <string name="about_step4_desc">Jeder Buchstabe ist eingefärbt — weiß für korrekt, orange für fast, rot für verfehlt — damit du genau weißt, was du verbessern musst.</string>
     <string name="about_step5_title">Meistere die Runde</string>
-    <string name="about_step5_desc">Übe in Runden von 10 Sätzen. Nicht gemeisterte Sätze tauchen wieder auf, bis alle 10 eine Genauigkeit von 85%% erreichen.</string>
+    <string name="about_step5_desc" formatted="false">Übe in Runden von 10 Sätzen. Nicht gemeisterte Sätze tauchen wieder auf, bis alle 10 eine Genauigkeit von 85% erreichen.</string>
 
     <!-- Feature chips -->
     <string name="about_feature_offline">Offline-\nAnalyse</string>
@@ -362,4 +362,25 @@
     <string name="feedback_hint_missed">Verfehlt — versuche /%1$s/ auszusprechen.</string>
     <string name="feedback_hint_substitution">Du hast /%1$s/ ausgesprochen — erwartet war /%2$s/.</string>
     <string name="feedback_hint_no_speech">Wir haben dich kaum gehört — nimm näher am Mikro neu auf.</string>
+
+    <!-- Stats screen -->
+    <string name="home_cd_stats">Fortschrittsstatistiken</string>
+    <string name="stats_title">Dein Fortschritt</string>
+    <string name="stats_back">Zurück</string>
+    <string name="stats_summary_mastered">Gemeistert</string>
+    <string name="stats_summary_active_days">Aktive Tage</string>
+    <string name="stats_summary_best_combo">Beste Serie</string>
+    <string name="stats_section_timeline">Meister-Timeline</string>
+    <string name="stats_timeline_subtitle">Täglich gemeisterte Phrasen, letzte 30 Tage</string>
+    <string name="stats_section_activity">Übungskalender</string>
+    <string name="stats_activity_subtitle">Tage mit mindestens einer gemeisterten Phrase</string>
+    <string name="stats_section_sounds">Zu verbessernde Laute</string>
+    <string name="stats_sounds_subtitle">Laute, die du am häufigsten verfehlst</string>
+    <string name="stats_section_reviews">Wiederholungen</string>
+    <string name="stats_reviews_subtitle">Wiederholungen halten gemeisterte Phrasen frisch</string>
+    <string name="stats_reviews_due">Jetzt fällig: %1$d</string>
+    <string name="stats_reviews_scheduled">Geplant: %1$d</string>
+    <string name="stats_reviews_empty">Noch nichts geplant. Meistere Phrasen, um deine Wiederholungen aufzubauen.</string>
+    <string name="stats_empty_timeline">Meistere deine ersten Phrasen, um hier deinen Fortschritt zu sehen</string>
+    <string name="stats_empty_sounds">Noch keine problematischen Laute erkannt. Übe weiter!</string>
 </resources>

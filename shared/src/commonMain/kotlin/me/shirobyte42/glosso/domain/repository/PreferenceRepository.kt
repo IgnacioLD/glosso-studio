@@ -36,6 +36,7 @@ interface PreferenceRepository {
     // Phoneme statistics
     fun incrementPhonemeStats(phoneme: String, missed: Boolean)
     fun getWeakPhonemes(minMissed: Int = 5): List<String>
+    fun getPhonemeStats(): List<me.shirobyte42.glosso.domain.model.PhonemeStat>
 
     // Spaced repetition
     suspend fun getDueReviews(levelIndex: Int): List<String>

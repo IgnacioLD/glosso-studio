@@ -19,7 +19,7 @@ Kotlin Multiplatform + Jetpack Compose Android app for offline pronunciation tra
 ## Architecture quirks
 
 - **DI:** Koin. Modules are `commonModule` (`shared`) + `appModule` (`androidApp`). ViewModels use `viewModel { ... }` with `parametersOf` for per-level DB wiring.
-- **Room:** Two DB categories — a persistent `glosso_progress_db` (mastery, streaks, reviews) and per-level dynamic databases (`sentences_{level}.db`, downloaded on demand via `DatabaseDownloader`). Both use `fallbackToDestructiveMigration()`.
+- **Room:** Two DB categories — a persistent `glosso_progress_db` (mastery, streaks, reviews) and per-level dynamic databases (`sentences_{level}.db`, downloaded on demand via `DatabaseDownloader`). The progress DB never wipes user data on upgrade: destructive fallback is limited to legacy pre-v11 schemas (`fallbackToDestructiveMigrationFrom(1..10)`); any future version bump needs a real `Migration` (schemas exported to `androidApp/schemas/` via KSP for `MigrationTestHelper`). The level DBs keep full destructive fallback (re-downloadable cache semantics).
 - **Model inference:** ONNX Runtime (`onnxruntime-android:1.24.3`). ML model file (`wav2vec2_espeak_cv_ft_int8.onnx`) lives in `data/` and is shipped as asset. Model assets are *not* bundled in APK — downloaded at runtime.
 - **Product flavors:** `playstore` / `fdroid`. In-app review (`playstoreImplementation`) only compiled for playstore flavor.
 - **Version:** `versionCode = 2209`, `versionName = "2.2.8"`. Version tag pipeline: GitLab CI builds tags, uploads APK + model files + sentence DBs to generic package registry.

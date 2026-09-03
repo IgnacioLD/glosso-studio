@@ -156,7 +156,7 @@
     <string name="home_onboarding_how_title">Comment ça marche</string>
     <string name="home_onboarding_how_body">1. Écoutez la voix de référence\n2. Appuyez sur le micro et répétez la phrase\n3. Obtenez un retour phonétique instantané indiquant précisément les sons à améliorer</string>
     <string name="home_onboarding_mastery_title">Système de maîtrise</string>
-    <string name="home_onboarding_mastery_body">Obtenez 85%% ou plus pour maîtriser une phrase. Les phrases non maîtrisées sont répétées jusqu\'à réussite. Terminez une série complète pour monter de niveau.</string>
+    <string name="home_onboarding_mastery_body" formatted="false">Obtenez 85% ou plus pour maîtriser une phrase. Les phrases non maîtrisées sont répétées jusqu\'à réussite. Terminez une série complète pour monter de niveau.</string>
     <string name="btn_next">SUIVANT</string>
     <string name="btn_lets_go">C\'EST PARTI</string>
     <string name="btn_skip">PASSER</string>
@@ -266,7 +266,7 @@
     <!-- Studio: Tutorial overlay -->
     <string name="tutorial_how_to_read_feedback">COMMENT LIRE LE RETOUR</string>
     <string name="tutorial_intro">Après avoir enregistré votre voix, Glosso Studio analyse votre prononciation phonétiquement.</string>
-    <string name="tutorial_mastery_note">Atteignez 85%% de précision ou plus pour MAÎTRISER une phrase et progresser dans le programme.</string>
+    <string name="tutorial_mastery_note" formatted="false">Atteignez 85% de précision ou plus pour MAÎTRISER une phrase et progresser dans le programme.</string>
 
     <!-- Feedback guide labels -->
     <string name="feedback_correct_label">CORRECT</string>
@@ -312,7 +312,7 @@
     <string name="about_section_libraries">BIBLIOTHÈQUES OPEN SOURCE</string>
 
     <!-- Privacy -->
-    <string name="about_privacy_title">100%% sur l\'appareil</string>
+    <string name="about_privacy_title" formatted="false">100% sur l\'appareil</string>
     <string name="about_privacy_body">Toute l\'analyse phonétique s\'exécute entièrement sur votre appareil via un modèle ONNX local. Vos enregistrements vocaux ne sont jamais envoyés en ligne, aucun compte n\'est requis et aucune donnée d\'utilisation n\'est collectée.</string>
 
     <!-- Source code -->
@@ -331,7 +331,7 @@
     <string name="about_step4_title">Recevez un retour coloré</string>
     <string name="about_step4_desc">Chaque lettre est colorée — blanc pour correct, orange pour proche, rouge pour manqué — pour que vous sachiez exactement quoi améliorer.</string>
     <string name="about_step5_title">Maîtrisez la série</string>
-    <string name="about_step5_desc">Entraînez-vous par séries de 10 phrases. Les phrases échouées réapparaissent jusqu\'à ce que les 10 atteignent 85%% de précision.</string>
+    <string name="about_step5_desc" formatted="false">Entraînez-vous par séries de 10 phrases. Les phrases échouées réapparaissent jusqu\'à ce que les 10 atteignent 85% de précision.</string>
 
     <!-- Feature chips -->
     <string name="about_feature_offline">Analyse\nhors ligne</string>
@@ -380,4 +380,25 @@
     <string name="feedback_hint_missed">Raté — essayez de prononcer /%1$s/.</string>
     <string name="feedback_hint_substitution">Vous avez prononcé /%1$s/ — on attendait /%2$s/.</string>
     <string name="feedback_hint_no_speech">Nous ne vous avons pas bien entendu — enregistrez à nouveau près du micro.</string>
+
+    <!-- Stats screen -->
+    <string name="home_cd_stats">Statistiques de progression</string>
+    <string name="stats_title">Votre progression</string>
+    <string name="stats_back">Retour</string>
+    <string name="stats_summary_mastered">Maîtrisées</string>
+    <string name="stats_summary_active_days">Jours actifs</string>
+    <string name="stats_summary_best_combo">Meilleure série</string>
+    <string name="stats_section_timeline">Chronologie de maîtrise</string>
+    <string name="stats_timeline_subtitle">Phrases maîtrisées par jour, 30 derniers jours</string>
+    <string name="stats_section_activity">Calendrier d\'entraînement</string>
+    <string name="stats_activity_subtitle">Jours avec au moins une phrase maîtrisée</string>
+    <string name="stats_section_sounds">Sons à améliorer</string>
+    <string name="stats_sounds_subtitle">Phonèmes que vous manquez le plus souvent</string>
+    <string name="stats_section_reviews">File de révision</string>
+    <string name="stats_reviews_subtitle">Les révisions espacées gardent vos phrases fraîches en mémoire</string>
+    <string name="stats_reviews_due">À réviser : %1$d</string>
+    <string name="stats_reviews_scheduled">Programmées : %1$d</string>
+    <string name="stats_reviews_empty">Rien de programmé pour l\'instant. Maîtrisez des phrases pour créer votre file de révision.</string>
+    <string name="stats_empty_timeline">Maîtrisez vos premières phrases pour voir votre progression ici</string>
+    <string name="stats_empty_sounds">Aucun son problématique détecté pour l\'instant. Continuez !</string>
 </resources>

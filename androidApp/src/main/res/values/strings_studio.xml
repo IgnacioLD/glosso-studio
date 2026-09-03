@@ -59,7 +59,7 @@
     <!-- Studio: Tutorial overlay -->
     <string name="tutorial_how_to_read_feedback">HOW TO READ FEEDBACK</string>
     <string name="tutorial_intro">After recording your voice, Glosso Studio analyzes your pronunciation phonetically.</string>
-    <string name="tutorial_mastery_note">Achieve 85%% accuracy or higher to MASTER a sentence and progress in the curriculum.</string>
+    <string name="tutorial_mastery_note" formatted="false">Achieve 85% accuracy or higher to MASTER a sentence and progress in the curriculum.</string>
 
     <!-- Feedback guide labels -->
     <string name="feedback_correct_label">CORRECT</string>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="stats_title">Your Progress</string>
+    <string name="stats_back">Back</string>
+    <string name="stats_summary_mastered">Mastered</string>
+    <string name="stats_summary_active_days">Active days</string>
+    <string name="stats_summary_best_combo">Best combo</string>
+    <string name="stats_section_timeline">Mastery timeline</string>
+    <string name="stats_timeline_subtitle">Phrases mastered per day, last 30 days</string>
+    <string name="stats_section_activity">Practice calendar</string>
+    <string name="stats_activity_subtitle">Days with at least one mastered phrase</string>
+    <string name="stats_section_sounds">Sounds to improve</string>
+    <string name="stats_sounds_subtitle">Phonemes you miss most often</string>
+    <string name="stats_section_reviews">Review queue</string>
+    <string name="stats_reviews_subtitle">Spaced repetition keeps mastered phrases fresh</string>
+    <string name="stats_reviews_due">Due now: %1$d</string>
+    <string name="stats_reviews_scheduled">Scheduled: %1$d</string>
+    <string name="stats_reviews_empty">Nothing scheduled yet. Master phrases to build your review queue.</string>
+    <string name="stats_empty_timeline">Master your first phrases to see your progress here</string>
+    <string name="stats_empty_sounds">No problem sounds detected yet. Keep practicing!</string>
+</resources>

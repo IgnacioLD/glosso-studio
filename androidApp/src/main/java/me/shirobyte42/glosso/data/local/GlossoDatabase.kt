@@ -6,7 +6,7 @@ import androidx.room.RoomDatabase
 @Database(
     entities = [SentenceEntity::class, MasteredSentenceEntity::class, ActivityDayEntity::class, ReviewEntity::class],
     version = 11,
-    exportSchema = false
+    exportSchema = true
 )
 abstract class GlossoDatabase : RoomDatabase() {
     abstract val sentenceDao: SentenceDao

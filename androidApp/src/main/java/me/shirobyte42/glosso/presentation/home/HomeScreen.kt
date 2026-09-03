@@ -35,6 +35,7 @@ import me.shirobyte42.glosso.presentation.theme.levelColor
 fun HomeScreen(
     onNavigateToStudio: (Int) -> Unit,
     onNavigateToSettings: () -> Unit,
+    onNavigateToStats: () -> Unit = {},
     viewModel: HomeViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -213,6 +214,9 @@ fun HomeScreen(
                     )
                 },
                 actions = {
+                    IconButton(onClick = onNavigateToStats) {
+                        Icon(Icons.Default.Insights, contentDescription = stringResource(R.string.home_cd_stats), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
                     IconButton(onClick = { viewModel.showLanguageSelector() }) {
                         Icon(Icons.Default.Language, contentDescription = stringResource(R.string.home_cd_language), tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     }

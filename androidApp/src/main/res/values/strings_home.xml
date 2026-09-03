@@ -26,6 +26,7 @@
     <!-- Top bar -->
     <string name="home_title_glosso">GLOSSO</string>
     <string name="home_cd_language">Language</string>
+    <string name="home_cd_stats">Progress statistics</string>
     <string name="home_cd_settings">Settings</string>
 
     <!-- Stats -->
@@ -46,7 +47,7 @@
     <string name="home_onboarding_how_title">How It Works</string>
     <string name="home_onboarding_how_body">1. Listen to the reference voice\n2. Tap the mic and repeat the sentence\n3. Get instant phonetic feedback showing exactly which sounds to improve</string>
     <string name="home_onboarding_mastery_title">Mastery System</string>
-    <string name="home_onboarding_mastery_body">Score 85%% or higher to master a sentence. Sentences you don\'t master are repeated until you do. Complete a full batch to level up.</string>
+    <string name="home_onboarding_mastery_body" formatted="false">Score 85% or higher to master a sentence. Sentences you don\'t master are repeated until you do. Complete a full batch to level up.</string>
     <string name="btn_next">NEXT</string>
     <string name="btn_lets_go">LET\'S GO</string>
     <string name="btn_skip">SKIP</string>

@@ -12,6 +12,7 @@ import me.shirobyte42.glosso.data.prefs.AndroidPreferenceRepository
 import me.shirobyte42.glosso.domain.repository.PreferenceRepository
 import me.shirobyte42.glosso.domain.repository.SpeechController
 import me.shirobyte42.glosso.presentation.home.HomeViewModel
+import me.shirobyte42.glosso.presentation.stats.StatsViewModel
 import me.shirobyte42.glosso.presentation.studio.StudioViewModel
 import me.shirobyte42.glosso.presentation.settings.SettingsViewModel
 
@@ -21,7 +22,9 @@ import me.shirobyte42.glosso.data.local.DatabaseDownloader
 import me.shirobyte42.glosso.data.local.SentenceDao
 import androidx.room.Room
 import me.shirobyte42.glosso.data.repository.GlossoRepositoryImpl
+import me.shirobyte42.glosso.data.repository.RoomStatsRepository
 import me.shirobyte42.glosso.domain.repository.GlossoRepository
+import me.shirobyte42.glosso.domain.repository.StatsRepository
 
 import io.ktor.client.*
 import io.ktor.client.plugins.*
@@ -48,14 +51,15 @@ val appModule = module {
         )
     }
 
-    // Persistent database for user progress (streaks, activity, mastered IDs)
+    // Persistent database for user progress (streaks, activity, mastered IDs).
+    // Destructive fallback ONLY for legacy (< v11) schemas; v11+ user progress must never be silently wiped.
     single(qualifier = org.koin.core.qualifier.named("progress_db")) {
         Room.databaseBuilder(
             get(),
             GlossoDatabase::class.java,
             GlossoDatabase.PROGRESS_DATABASE_NAME
         )
-        .fallbackToDestructiveMigration()
+        .fallbackToDestructiveMigrationFrom(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
         .build()
     }
 
@@ -94,9 +98,11 @@ val appModule = module {
     }
 
     single<GlossoRepository> { GlossoRepositoryImpl(get<LocalSentenceDataSource>()) }
+    single<StatsRepository> { RoomStatsRepository(get(), get(), get(), get()) }
 
     viewModel { HomeViewModel(get(), get(), get(), get()) }
     viewModel { SettingsViewModel(get()) }
+    viewModel { StatsViewModel(get(), get()) }
     viewModel { (levelIndex: Int) ->
         val levelDb: GlossoDatabase = get(qualifier = org.koin.core.qualifier.named("level_db")) { parametersOf(levelIndex) }
 

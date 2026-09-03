@@ -7,6 +7,10 @@ plugins {
 
 import java.util.Properties
 
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
 android {
     namespace = "me.shirobyte42.glosso"
     compileSdk = 34
@@ -95,10 +99,17 @@ packaging {
 
 // Completely disable non-deterministic background tasks
 tasks.configureEach {
-    if (name.contains("ArtProfile", ignoreCase = true) || 
+    if (name.contains("ArtProfile", ignoreCase = true) ||
         name.contains("BaselineProfile", ignoreCase = true) ||
         name.contains("vcsInfo", ignoreCase = true)) {
         enabled = false
+    }
+}
+
+testOptions {
+    unitTests {
+        // PhoneticComparator and friends log via android.util.Log; return defaults instead of throwing in JVM tests
+        isReturnDefaultValues = true
     }
 }
 
@@ -158,4 +169,7 @@ dependencies {
 
     // In-app review (Play Store distribution only)
     "playstoreImplementation"("com.google.android.play:review-ktx:2.0.2")
+
+    // Unit tests
+    testImplementation("junit:junit:4.13.2")
 }
