@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import me.shirobyte42.glosso.domain.repository.PreferenceRepository
+import me.shirobyte42.glosso.domain.model.PhonemeStat
 
 import me.shirobyte42.glosso.data.local.MasteredSentenceDao
 import me.shirobyte42.glosso.data.local.MasteredSentenceEntity
@@ -122,6 +123,20 @@ class AndroidPreferenceRepository(
             .map { it.removePrefix("ph_miss_") }
             .filter { phoneme -> prefs.getInt("ph_miss_$phoneme", 0) >= minMissed }
             .sortedByDescending { phoneme -> prefs.getInt("ph_miss_$phoneme", 0) }
+    }
+
+    override fun getPhonemeStats(): List<PhonemeStat> {
+        return prefs.all.keys
+            .filter { it.startsWith("ph_total_") }
+            .map { it.removePrefix("ph_total_") }
+            .map { phoneme ->
+                PhonemeStat(
+                    phoneme = phoneme,
+                    total = prefs.getInt("ph_total_$phoneme", 0),
+                    missed = prefs.getInt("ph_miss_$phoneme", 0)
+                )
+            }
+            .sortedByDescending { it.missed }
     }
 
     override suspend fun getTotalMasteryCount(): Int = withContext(Dispatchers.IO) {

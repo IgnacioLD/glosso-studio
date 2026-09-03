@@ -10,6 +10,12 @@ interface ReviewDao {
     @Query("SELECT * FROM review_queue WHERE levelIndex = :levelIndex AND language = :language AND nextReviewAt <= :now")
     suspend fun getDueReviews(levelIndex: Int, now: Long, language: String = "en"): List<ReviewEntity>
 
+    @Query("SELECT COUNT(*) FROM review_queue WHERE language = :language AND nextReviewAt <= :now")
+    suspend fun getDueCount(language: String, now: Long): Int
+
+    @Query("SELECT COUNT(*) FROM review_queue WHERE language = :language")
+    suspend fun getScheduledCount(language: String): Int
+
     @Query("SELECT * FROM review_queue WHERE text = :text AND language = :language")
     suspend fun getReview(text: String, language: String = "en"): ReviewEntity?
 

@@ -151,7 +151,7 @@
     <string name="home_onboarding_how_title">Cómo funciona</string>
     <string name="home_onboarding_how_body">1. Escucha la voz de referencia\n2. Toca el micrófono y repite la oración\n3. Recibe retroalimentación fonética al instante que te muestra exactamente qué sonidos mejorar</string>
     <string name="home_onboarding_mastery_title">Sistema de dominio</string>
-    <string name="home_onboarding_mastery_body">Consigue 85%% o más para dominar una oración. Las oraciones que no domines se repiten hasta que lo logres. Completa un lote entero para subir de nivel.</string>
+    <string name="home_onboarding_mastery_body" formatted="false">Consigue 85% o más para dominar una oración. Las oraciones que no domines se repiten hasta que lo logres. Completa un lote entero para subir de nivel.</string>
     <string name="btn_next">SIGUIENTE</string>
     <string name="btn_lets_go">¡VAMOS!</string>
     <string name="btn_skip">OMITIR</string>
@@ -255,7 +255,7 @@
     <!-- Studio: Tutorial overlay -->
     <string name="tutorial_how_to_read_feedback">CÓMO LEER LA RETROALIMENTACIÓN</string>
     <string name="tutorial_intro">Después de grabar tu voz, Glosso Studio analiza tu pronunciación fonéticamente.</string>
-    <string name="tutorial_mastery_note">Consigue una precisión del 85%% o mayor para DOMINAR una oración y avanzar en el plan de estudios.</string>
+    <string name="tutorial_mastery_note" formatted="false">Consigue una precisión del 85% o mayor para DOMINAR una oración y avanzar en el plan de estudios.</string>
 
     <!-- Feedback guide labels -->
     <string name="feedback_correct_label">CORRECTO</string>
@@ -298,7 +298,7 @@
     <string name="about_section_libraries">BIBLIOTECAS DE CÓDIGO ABIERTO</string>
 
     <!-- Privacy -->
-    <string name="about_privacy_title">100%% en el dispositivo</string>
+    <string name="about_privacy_title" formatted="false">100% en el dispositivo</string>
     <string name="about_privacy_body">Todo el análisis fonético se ejecuta completamente en tu dispositivo usando un modelo ONNX local. Tus grabaciones de voz nunca se suben a ningún sitio, no se requiere cuenta y no se recopilan datos de uso.</string>
 
     <!-- Source code -->
@@ -317,7 +317,7 @@
     <string name="about_step4_title">Recibe retroalimentación con colores</string>
     <string name="about_step4_desc">Cada letra se colorea — blanco si es correcta, naranja si está cerca, rojo si es incorrecta — así sabes exactamente qué mejorar.</string>
     <string name="about_step5_title">Domina el lote</string>
-    <string name="about_step5_desc">Practica en lotes de 10 oraciones. Las oraciones fallidas reaparecen hasta que las 10 alcancen el 85%% de precisión.</string>
+    <string name="about_step5_desc" formatted="false">Practica en lotes de 10 oraciones. Las oraciones fallidas reaparecen hasta que las 10 alcancen el 85% de precisión.</string>
 
     <!-- Feature chips -->
     <string name="about_feature_offline">Análisis\nsin conexión</string>
@@ -362,4 +362,25 @@
     <string name="feedback_hint_missed">Fallaste — intenta pronunciar /%1$s/.</string>
     <string name="feedback_hint_substitution">Pronunciaste /%1$s/ — se esperaba /%2$s/.</string>
     <string name="feedback_hint_no_speech">No te escuchamos bien — vuelve a grabar cerca del micrófono.</string>
+
+    <!-- Stats screen -->
+    <string name="home_cd_stats">Estadísticas de progreso</string>
+    <string name="stats_title">Tu progreso</string>
+    <string name="stats_back">Atrás</string>
+    <string name="stats_summary_mastered">Dominadas</string>
+    <string name="stats_summary_active_days">Días activos</string>
+    <string name="stats_summary_best_combo">Mejor racha</string>
+    <string name="stats_section_timeline">Cronología de dominio</string>
+    <string name="stats_timeline_subtitle">Frases dominadas por día, últimos 30 días</string>
+    <string name="stats_section_activity">Calendario de práctica</string>
+    <string name="stats_activity_subtitle">Días con al menos una frase dominada</string>
+    <string name="stats_section_sounds">Sonidos por mejorar</string>
+    <string name="stats_sounds_subtitle">Fonemas que fallas con más frecuencia</string>
+    <string name="stats_section_reviews">Cola de repaso</string>
+    <string name="stats_reviews_subtitle">Los repasos espaciados mantienen frescas las frases dominadas</string>
+    <string name="stats_reviews_due">Pendientes ahora: %1$d</string>
+    <string name="stats_reviews_scheduled">Programadas: %1$d</string>
+    <string name="stats_reviews_empty">Nada programado todavía. Domina frases para crear tu cola de repaso.</string>
+    <string name="stats_empty_timeline">Domina tus primeras frases para ver tu progreso aquí</string>
+    <string name="stats_empty_sounds">Aún no se detectan sonidos problemáticos. ¡Sigue practicando!</string>
 </resources>

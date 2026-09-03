@@ -25,6 +25,7 @@ import me.shirobyte42.glosso.domain.repository.PreferenceRepository
 import me.shirobyte42.glosso.presentation.theme.GlossoTheme
 import me.shirobyte42.glosso.presentation.home.HomeScreen
 import me.shirobyte42.glosso.presentation.studio.StudioScreen
+import me.shirobyte42.glosso.presentation.stats.StatsScreen
 import me.shirobyte42.glosso.presentation.topic.TopicSelectionScreen
 import me.shirobyte42.glosso.presentation.about.AboutScreen
 import me.shirobyte42.glosso.presentation.settings.SettingsScreen
@@ -89,8 +90,14 @@ class MainActivity : ComponentActivity() {
                             },
                             onNavigateToSettings = {
                                 navController.navigate("settings")
+                            },
+                            onNavigateToStats = {
+                                navController.navigate("stats")
                             }
                         )
+                    }
+                    composable("stats") {
+                        StatsScreen(onNavigateBack = { navController.popBackStack() })
                     }
                     composable("about") {
                         AboutScreen(onNavigateBack = { navController.popBackStack() })
