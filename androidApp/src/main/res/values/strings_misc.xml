@@ -2,12 +2,12 @@
 <resources>
 
     <!-- Topic selection screen -->
-    <string name="topics_title">SELECT TOPICS</string>
+    <string name="topics_title">Topics</string>
     <string name="topics_level_fallback">Level %1$d</string>
     <string name="topics_back">Back</string>
-    <string name="topics_continue_batch_label">CONTINUE BATCH  ·  %1$d/%2$d MASTERED</string>
-    <string name="topics_practice_all_cta">PRACTICE ALL TOPICS</string>
-    <string name="topics_practice_selected_cta">PRACTICE %1$d TOPICS</string>
+    <string name="topics_continue_batch_label">Continue · %1$d/%2$d mastered</string>
+    <string name="topics_practice_all_cta">Practice all topics</string>
+    <string name="topics_practice_selected_cta">Practice %1$d topics</string>
     <string name="topics_select_subtitle">Select one or more topics to focus your practice.</string>
     <string name="topics_mastered_count">%1$d / %2$d mastered</string>
 

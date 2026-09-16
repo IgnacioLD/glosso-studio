@@ -51,8 +51,8 @@ fun ActivityHeatmap(
         val topOffset = (size.height - gridHeight) / 2f
 
         cells.forEachIndexed { weekIndex, weekCells ->
-            weekCells.forEachIndexed { dayIndex, cell ->
-                if (cell == null) return@forEachIndexed
+            weekCells.forEachIndexed dayLoop@{ dayIndex, cell ->
+                if (cell == null) return@dayLoop
                 drawRoundRect(
                     color = if (cell.active) activeColor else inactiveColor,
                     topLeft = Offset(

@@ -6,15 +6,9 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateIntAsState
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,15 +24,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.SlowMotionVideo
 import androidx.compose.material3.Button
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -57,7 +50,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
@@ -65,6 +57,7 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
@@ -117,21 +110,32 @@ fun StudioScreen(
             ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
         )
     }
+    var showMicrophoneDisclosure by remember { mutableStateOf(false) }
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { granted -> hasPermission = granted }
     )
 
-    val infiniteTransition = rememberInfiniteTransition(label = "pulse")
-    val pulseScale by infiniteTransition.animateFloat(
-        initialValue = 1f,
-        targetValue = 1.25f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(1200, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "scale"
-    )
+    if (showMicrophoneDisclosure) {
+        AlertDialog(
+            onDismissRequest = { showMicrophoneDisclosure = false },
+            title = { Text(stringResource(R.string.studio_microphone_title)) },
+            text = { Text(stringResource(R.string.studio_microphone_message)) },
+            confirmButton = {
+                Button(onClick = {
+                    showMicrophoneDisclosure = false
+                    launcher.launch(Manifest.permission.RECORD_AUDIO)
+                }) {
+                    Text(stringResource(R.string.studio_microphone_continue))
+                }
+            },
+            dismissButton = {
+                androidx.compose.material3.TextButton(onClick = { showMicrophoneDisclosure = false }) {
+                    Text(stringResource(R.string.btn_cancel))
+                }
+            }
+        )
+    }
 
     // Count-up animation for score
     val animatedScore by animateIntAsState(
@@ -176,6 +180,7 @@ fun StudioScreen(
     }
 
     Scaffold(
+        contentWindowInsets = androidx.compose.foundation.layout.WindowInsets(0, 0, 0, 0),
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             StudioTopBar(
@@ -206,7 +211,7 @@ fun StudioScreen(
                     .fillMaxSize()
                     .padding(padding)
                     .navigationBarsPadding()
-                    .padding(horizontal = 24.dp),
+                    .padding(horizontal = 20.dp),
                 horizontalArrangement = Arrangement.spacedBy(24.dp)
             ) {
                 // Left column: sentence card
@@ -259,26 +264,20 @@ fun StudioScreen(
                             modifier = Modifier
                         )
                     }
-                    Spacer(modifier = Modifier.height(24.dp))
-                    // Record button
-                    RecordButton(
+                    Spacer(modifier = Modifier.height(16.dp))
+                    FeedbackSummary(state.feedback?.score, state.isMastered)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    PracticeActionCard(
                         isRecording = state.isRecording,
                         isAnalyzing = state.isAnalyzing,
-                        pulseScale = pulseScale,
-                        onAction = {
+                        hasRecordedVoice = state.hasRecordedVoice,
+                        onRecord = {
                             if (hasPermission) viewModel.toggleRecording()
-                            else launcher.launch(Manifest.permission.RECORD_AUDIO)
-                        }
+                            else showMicrophoneDisclosure = true
+                        },
+                        onPlayRecording = { viewModel.playRecordedVoice() },
+                        onNext = { viewModel.advanceInBatch() }
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        Surface(modifier = Modifier.weight(1f).height(52.dp).clip(RoundedCornerShape(16.dp)).clickable(enabled = state.hasRecordedVoice) { viewModel.playRecordedVoice() }, color = if (state.hasRecordedVoice) MaterialTheme.colorScheme.secondary.copy(alpha = 0.15f) else Color.Transparent, border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))) {
-                            Box(contentAlignment = Alignment.Center) { Icon(Icons.Default.PlayArrow, stringResource(R.string.studio_cd_play_recording), modifier = Modifier.size(26.dp), tint = if (state.hasRecordedVoice) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.outline.copy(alpha = 0.4f)) }
-                        }
-                        Surface(modifier = Modifier.weight(1f).height(52.dp).clip(RoundedCornerShape(16.dp)).clickable { viewModel.advanceInBatch() }, color = Color.Transparent, border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))) {
-                            Box(contentAlignment = Alignment.Center) { Icon(Icons.Default.ArrowForward, stringResource(R.string.studio_cd_next_sentence), modifier = Modifier.size(26.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant) }
-                        }
-                    }
                 }
             }
         } else Column(
@@ -286,7 +285,7 @@ fun StudioScreen(
                 .fillMaxSize()
                 .padding(padding)
                 .navigationBarsPadding()
-                .padding(horizontal = 24.dp),
+                .padding(horizontal = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Scrollable main content
@@ -298,7 +297,7 @@ fun StudioScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
             ) {
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
                 // Batch progress bar
                 if (state.batchTotalSize > 0) {
@@ -328,9 +327,9 @@ fun StudioScreen(
                             isMastered = state.isMastered,
                             isReview = sentence.text in state.reviewSentenceTexts,
                             showIpa = state.isIpaVisible && sentence.ipa.isNotBlank(),
-                            textStyle = MaterialTheme.typography.headlineSmall.copy(
+                            textStyle = MaterialTheme.typography.headlineMedium.copy(
                                 fontWeight = FontWeight.Bold,
-                                lineHeight = 36.sp
+                                lineHeight = 30.sp
                             ),
                             onWordClick = { viewModel.speakWord(it) }
                         )
@@ -355,48 +354,56 @@ fun StudioScreen(
                 // Single Play button (no voice variants in v2.2)
                 if (!state.isBatchComplete) {
                     val hasAudio = state.currentSentence?.audio1 != null
-                    if (hasAudio) {
-                        Surface(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable { viewModel.setVoiceIndex(0, autoPlay = true) },
-                            color = MaterialTheme.colorScheme.primary,
-                            shape = RoundedCornerShape(20.dp),
-                        ) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth().padding(vertical = 14.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center,
-                            ) {
-                                Icon(
-                                    Icons.Default.PlayArrow,
-                                    contentDescription = stringResource(R.string.studio_btn_play),
-                                    tint = Color.White,
-                                    modifier = Modifier.size(22.dp)
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(
-                                    text = stringResource(R.string.studio_btn_play).uppercase(),
-                                    color = Color.White,
-                                    style = MaterialTheme.typography.labelLarge,
-                                    fontWeight = FontWeight.Black
-                                )
-                            }
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    // Playback speed toggle
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End,
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
+                        if (hasAudio) {
+                            Surface(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .clickable { viewModel.setVoiceIndex(0, autoPlay = true) },
+                                color = MaterialTheme.colorScheme.primaryContainer,
+                                shape = RoundedCornerShape(14.dp),
+                                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.18f))
+                            ) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth().padding(vertical = 13.dp, horizontal = 16.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Center,
+                                ) {
+                                    Icon(
+                                        Icons.Default.PlayArrow,
+                                        contentDescription = stringResource(R.string.studio_btn_play),
+                                        tint = MaterialTheme.colorScheme.primary,
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text(
+                                        text = stringResource(R.string.studio_btn_play),
+                                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                        style = MaterialTheme.typography.titleSmall,
+                                        fontWeight = FontWeight.Bold,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                }
+                            }
+                        } else {
+                            Spacer(modifier = Modifier.weight(1f))
+                        }
+
                         PlaybackSpeedToggle(
                             isSlow = state.playbackSpeed < 1.0f,
                             onToggle = { viewModel.togglePlaybackSpeed() }
                         )
+                    }
+
+                    // Idle guidance fills the space before the first take so the
+                    // screen never reads as empty.
+                    if (state.feedback == null && !state.isRecording && !state.isAnalyzing && !state.hasRecordedVoice) {
+                        IdlePracticeHint()
                     }
 
                     // Score display with count-up animation
@@ -407,6 +414,7 @@ fun StudioScreen(
                         animatedScoreProgress = animatedScoreProgress,
                         modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
                     )
+                    FeedbackSummary(state.feedback?.score, state.isMastered)
                 }
 
                 Spacer(modifier = Modifier.height(4.dp))
@@ -416,41 +424,58 @@ fun StudioScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp),
+                    .padding(top = 8.dp, bottom = 10.dp),
                 contentAlignment = Alignment.Center
             ) {
                 if (state.isBatchComplete) {
                     Button(
                         onClick = { viewModel.loadBatch(category) },
-                        modifier = Modifier.fillMaxWidth().height(64.dp),
-                        shape = RoundedCornerShape(20.dp)
+                        modifier = Modifier.fillMaxWidth().height(56.dp),
+                        shape = RoundedCornerShape(14.dp)
                     ) {
                         Icon(Icons.Default.Refresh, contentDescription = null)
                         Spacer(modifier = Modifier.width(12.dp))
-                        Text(stringResource(R.string.studio_btn_next_batch), fontWeight = FontWeight.Black, letterSpacing = 1.sp)
+                        Text(stringResource(R.string.studio_btn_next_batch), fontWeight = FontWeight.Bold)
                     }
                 } else {
-                    Row(
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        PlayRecordingButton(enabled = state.hasRecordedVoice) { viewModel.playRecordedVoice() }
-
-                        RecordButton(
-                            isRecording = state.isRecording,
-                            isAnalyzing = state.isAnalyzing,
-                            pulseScale = pulseScale,
-                            onAction = {
-                                if (hasPermission) viewModel.toggleRecording()
-                                else launcher.launch(Manifest.permission.RECORD_AUDIO)
-                            }
-                        )
-
-                        NextSentenceButton { viewModel.advanceInBatch() }
-                    }
+                    PracticeActionCard(
+                        isRecording = state.isRecording,
+                        isAnalyzing = state.isAnalyzing,
+                        hasRecordedVoice = state.hasRecordedVoice,
+                        onRecord = {
+                            if (hasPermission) viewModel.toggleRecording()
+                            else showMicrophoneDisclosure = true
+                        },
+                        onPlayRecording = { viewModel.playRecordedVoice() },
+                        onNext = { viewModel.advanceInBatch() }
+                    )
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun IdlePracticeHint() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 36.dp, bottom = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Icon(
+            Icons.Default.Mic,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.35f),
+            modifier = Modifier.size(36.dp)
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(
+            text = stringResource(R.string.studio_practice_hint),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(horizontal = 32.dp)
+        )
     }
 }

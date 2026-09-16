@@ -20,14 +20,18 @@
     <string name="home_setup_description">Glosso Studio necesita descargar el modelo acústico (aprox. 300 MB) para realizar el reconocimiento fonético.</string>
     <string name="home_download_description">Glosso Studio requiere una descarga única para el plan de estudios de %1$s (aprox. 50–100 MB).</string>
     <string name="home_wifi_warning">ADVERTENCIA: Si usas datos móviles, pueden aplicarse costos significativos. Recomendamos usar una conexión Wi-Fi.</string>
-    <string name="home_btn_setup">CONFIGURAR AHORA</string>
-    <string name="home_btn_download">DESCARGAR</string>
-    <string name="home_btn_cancel">CANCELAR</string>
-    <string name="home_btn_retry">REINTENTAR</string>
+    <string name="home_btn_setup">Configurar ahora</string>
+    <string name="home_btn_download">Descargar</string>
+    <string name="home_btn_cancel">Cancelar</string>
+    <string name="home_btn_retry">Reintentar</string>
     <string name="home_download_failed">Error en la descarga</string>
+    <string name="download_error_network">Sin conexión a internet. Comprueba tu Wi-Fi o datos móviles e inténtalo de nuevo.</string>
+    <string name="download_error_server">No se pudo conectar con el servidor de descargas. Inténtalo más tarde.</string>
+    <string name="download_error_verification">El archivo descargado no superó la verificación. Reintenta la descarga.</string>
+    <string name="download_error_generic">Algo salió mal durante la descarga. Inténtalo de nuevo.</string>
     <string name="home_reset_confirm_title">¿Reiniciar progreso?</string>
     <string name="home_reset_confirm_body">Esto borrará tus datos de dominio y reiniciará el plan de estudios. Esta acción no se puede deshacer.</string>
-    <string name="home_btn_reset">REINICIAR</string>
+    <string name="home_btn_reset">Reiniciar</string>
     <string name="home_downloading_level">Descargando %1$s</string>
     <string name="home_setting_up_model">Configurando el modelo</string>
 
@@ -35,6 +39,24 @@
     <string name="studio_btn_mic">Micrófono</string>
     <string name="studio_btn_play">Reproducir referencia</string>
     <string name="studio_btn_play_recorded">Reproducir mi voz</string>
+    <string name="studio_microphone_title">Acceso al micrófono</string>
+    <string name="studio_microphone_message">Glosso usa el micrófono solo cuando tocas grabar. Tu voz se analiza en este dispositivo y no se sube a ningún sitio. Puedes denegar el acceso y seguir explorando las lecciones.</string>
+    <string name="studio_microphone_continue">Continuar</string>
+    <string name="studio_cd_back">Atrás</string>
+    <string name="studio_action_ready_hint">Escucha el ejemplo y después graba tu voz.</string>
+    <string name="studio_action_recording_hint">Habla con naturalidad y toca detener cuando termines.</string>
+    <string name="studio_action_analyzing_hint">Comprobando tu pronunciación en este dispositivo.</string>
+    <string name="studio_action_record_voice">Grabar mi voz</string>
+    <string name="studio_action_stop_recording">Detener grabación</string>
+    <string name="studio_action_analyzing">Analizando</string>
+    <string name="studio_action_listen_back">Escuchar</string>
+    <string name="studio_action_next">Siguiente</string>
+    <string name="studio_feedback_mastered_title">Frase dominada</string>
+    <string name="studio_feedback_mastered_body">Muy bien. Repásala más adelante para mantener el sonido fresco.</string>
+    <string name="studio_feedback_close_title">Casi lo tienes</string>
+    <string name="studio_feedback_close_body">Escucha de nuevo, fíjate en los sonidos resaltados e inténtalo otra vez.</string>
+    <string name="studio_feedback_retry_title">Inténtalo de nuevo</string>
+    <string name="studio_feedback_retry_body">Habla más despacio y usa los sonidos resaltados como guía.</string>
     <string name="studio_btn_next">Siguiente</string>
     <string name="studio_btn_done">Listo</string>
     <string name="studio_accuracy">Precisión: %1$d%%</string>
@@ -87,17 +109,17 @@
     <string name="settings_reset_desc">Borrar datos de dominio, rachas e historial de lotes</string>
     <string name="settings_reset_confirm_title">¿Reiniciar progreso?</string>
     <string name="settings_reset_confirm_body">Esto borrará todos los datos de dominio, rachas e historial de lotes. Esta acción no se puede deshacer.</string>
-    <string name="settings_btn_reset_all">REINICIAR TODO</string>
-    <string name="btn_cancel">CANCELAR</string>
+    <string name="settings_btn_reset_all">Reiniciar todo</string>
+    <string name="btn_cancel">Cancelar</string>
 
     <!-- Milestones -->
     <string name="milestone_title">¡Hito alcanzado!</string>
     <string name="milestone_body">Has dominado %1$d oraciones. ¡Sigue así!</string>
-    <string name="milestone_btn_ok">¡GENIAL!</string>
+    <string name="milestone_btn_ok">¡Genial!</string>
 
     <!-- Tutorial -->
     <string name="tutorial_title">Cómo funciona la retroalimentación</string>
-    <string name="tutorial_btn_got_it">ENTENDIDO</string>
+    <string name="tutorial_btn_got_it">Entendido</string>
 
     <!-- Errors -->
     <string name="error_setup_incomplete">Por favor, completa primero la configuración inicial.</string>
@@ -117,7 +139,6 @@
     <string name="home_this_level">este nivel</string>
     <string name="home_setup_required">Se requiere configuración</string>
     <string name="home_wifi_warning_initial">ADVERTENCIA: Si usas datos móviles, pueden aplicarse costos. Recomendamos usar una conexión Wi-Fi.</string>
-    <string name="home_unknown_setup_error">Ocurrió un error desconocido durante la configuración.</string>
     <string name="home_preparing_curriculum">Preparando tu plan de estudios…</string>
     <string name="home_setting_up_recognition">Configurando el modelo de reconocimiento…</string>
     <string name="home_progress_percent">%1$d%%</string>
@@ -129,7 +150,7 @@
     <string name="home_language_label_selected">✓ %1$s</string>
 
     <!-- Top bar -->
-    <string name="home_title_glosso">GLOSSO</string>
+    <string name="home_title_glosso">Glosso</string>
     <string name="home_cd_language">Idioma</string>
     <string name="home_cd_settings">Ajustes</string>
 
@@ -152,9 +173,9 @@
     <string name="home_onboarding_how_body">1. Escucha la voz de referencia\n2. Toca el micrófono y repite la oración\n3. Recibe retroalimentación fonética al instante que te muestra exactamente qué sonidos mejorar</string>
     <string name="home_onboarding_mastery_title">Sistema de dominio</string>
     <string name="home_onboarding_mastery_body" formatted="false">Consigue 85% o más para dominar una oración. Las oraciones que no domines se repiten hasta que lo logres. Completa un lote entero para subir de nivel.</string>
-    <string name="btn_next">SIGUIENTE</string>
+    <string name="btn_next">Siguiente</string>
     <string name="btn_lets_go">¡VAMOS!</string>
-    <string name="btn_skip">OMITIR</string>
+    <string name="btn_skip">Omitir</string>
 
     <!-- === strings_settings === -->
     <!-- Settings: Latin experimental dialog -->
@@ -163,7 +184,7 @@
     <string name="settings_btn_latin_understand">Entiendo</string>
 
     <!-- Settings: misc -->
-    <string name="settings_title">AJUSTES</string>
+    <string name="settings_title">Ajustes</string>
     <string name="settings_back">Atrás</string>
 
     <!-- Settings: Learning extras -->
@@ -225,11 +246,11 @@
     <!-- Studio: Batch progress / complete -->
     <string name="studio_batch_progress_label">PROGRESO DEL LOTE</string>
     <string name="studio_batch_progress_count">%1$d / %2$d</string>
-    <string name="studio_batch_complete_title">¡LOTE COMPLETADO!</string>
+    <string name="studio_batch_complete_title">Lote completado</string>
     <string name="studio_batch_complete_body">Dominaste las %1$d oraciones.</string>
     <string name="studio_needs_practice">NECESITA PRÁCTICA</string>
     <string name="studio_practice_phoneme">Practica tu sonido /%1$s/</string>
-    <string name="studio_btn_next_batch">SIGUIENTE LOTE</string>
+    <string name="studio_btn_next_batch">Siguiente lote</string>
 
     <!-- Studio: Score -->
     <string name="studio_accuracy_label">PRECISIÓN</string>
@@ -249,11 +270,11 @@
     <string name="studio_cd_next_sentence">Siguiente oración</string>
 
     <!-- Studio: Model error -->
-    <string name="studio_model_load_failed">ERROR AL CARGAR EL MODELO</string>
-    <string name="studio_btn_go_to_settings">IR A AJUSTES</string>
+    <string name="studio_model_load_failed">Error al cargar el modelo</string>
+    <string name="studio_btn_go_to_settings">Ir a ajustes</string>
 
     <!-- Studio: Tutorial overlay -->
-    <string name="tutorial_how_to_read_feedback">CÓMO LEER LA RETROALIMENTACIÓN</string>
+    <string name="tutorial_how_to_read_feedback">Cómo leer la retroalimentación</string>
     <string name="tutorial_intro">Después de grabar tu voz, Glosso Studio analiza tu pronunciación fonéticamente.</string>
     <string name="tutorial_mastery_note" formatted="false">Consigue una precisión del 85% o mayor para DOMINAR una oración y avanzar en el plan de estudios.</string>
 
@@ -266,9 +287,9 @@
     <string name="feedback_missed_desc">Pronunciación incorrecta.</string>
 
     <!-- Milestone dialog (caps variant used by Studio) -->
-    <string name="milestone_caps_title">¡HITO!</string>
+    <string name="milestone_caps_title">Hito</string>
     <string name="milestone_sentences_mastered">¡oraciones dominadas!</string>
-    <string name="milestone_btn_keep_going">¡SIGUE ASÍ!</string>
+    <string name="milestone_btn_keep_going">¡Sigue así!</string>
 
     <!-- Studio: ViewModel errors / messages -->
     <string name="studio_err_model_failed_default">No se pudo cargar el modelo acústico.</string>
@@ -282,10 +303,10 @@
 
     <!-- === strings_about === -->
     <!-- About screen -->
-    <string name="about_title">ACERCA DE</string>
+    <string name="about_title">Acerca de</string>
     <string name="about_back">Atrás</string>
     <string name="about_app_logo_desc">Glosso Studio</string>
-    <string name="about_app_name">GLOSSO STUDIO</string>
+    <string name="about_app_name">Glosso Studio</string>
     <string name="about_version">v2.2.8</string>
     <string name="about_tagline">Entrenador de pronunciación de inglés y francés en el dispositivo\nimpulsado por análisis fonético.</string>
 
@@ -345,12 +366,12 @@
 
     <!-- === strings_misc === -->
     <!-- Topic selection screen -->
-    <string name="topics_title">SELECCIONAR TEMAS</string>
+    <string name="topics_title">Temas</string>
     <string name="topics_level_fallback">Nivel %1$d</string>
     <string name="topics_back">Atrás</string>
-    <string name="topics_continue_batch_label">CONTINUAR LOTE  ·  %1$d/%2$d DOMINADAS</string>
-    <string name="topics_practice_all_cta">PRACTICAR TODOS LOS TEMAS</string>
-    <string name="topics_practice_selected_cta">PRACTICAR %1$d TEMAS</string>
+    <string name="topics_continue_batch_label">Continuar · %1$d/%2$d dominadas</string>
+    <string name="topics_practice_all_cta">Practicar todos los temas</string>
+    <string name="topics_practice_selected_cta">Practicar %1$d temas</string>
     <string name="topics_select_subtitle">Selecciona uno o más temas para enfocar tu práctica.</string>
     <string name="topics_mastered_count">%1$d / %2$d dominadas</string>
 
@@ -383,4 +404,21 @@
     <string name="stats_reviews_empty">Nada programado todavía. Domina frases para crear tu cola de repaso.</string>
     <string name="stats_empty_timeline">Domina tus primeras frases para ver tu progreso aquí</string>
     <string name="stats_empty_sounds">Aún no se detectan sonidos problemáticos. ¡Sigue practicando!</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Inicio</string>
+    <string name="nav_progress">Progreso</string>
+
+    <!-- Home redesign -->
+    <string name="home_continue_label">Continuar</string>
+    <string name="home_continue_cta">Seguir practicando</string>
+    <string name="home_get_started_title">Empieza tu primer nivel</string>
+    <string name="home_get_started_body">Elige un nivel abajo para descargarlo y empezar a practicar.</string>
+    <string name="home_streak_label">Racha de días</string>
+    <string name="home_mastered_label">Frases dominadas</string>
+    <string name="home_all_levels">Tus niveles</string>
+    <string name="home_level_count">%1$d de %2$d dominadas</string>
+    <string name="home_level_not_downloaded">Sin descargar</string>
+    <string name="studio_practice_hint">Escucha la frase, luego toca grabar y repítela.</string>
+    <string name="home_level_setup">Configurar</string>
 </resources>

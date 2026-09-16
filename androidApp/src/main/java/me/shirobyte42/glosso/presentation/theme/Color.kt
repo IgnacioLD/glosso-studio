@@ -2,36 +2,43 @@ package me.shirobyte42.glosso.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Glosso Professional Palette — Light
-val GlossoPrimary = Color(0xFF6366F1) // Modern Indigo
-val GlossoPrimaryLight = Color(0xFF818CF8)
-val GlossoSecondary = Color(0xFF10B981) // Emerald Mastery
-val GlossoTertiary = Color(0xFFF59E0B) // Amber Streak
-val GlossoBackground = Color(0xFFFFFFFF)
-val GlossoSurface = Color(0xFFF8FAFC)
-val GlossoOnSurface = Color(0xFF1E293B) // Deep Slate/Charcoal
-val GlossoOutline = Color(0xFFE2E8F0)
+// A calm, single-accent system. Colour is reserved for meaning (progress,
+// success, caution) rather than decoration, which keeps dense practice screens
+// readable and stops six difficulty levels from competing for attention.
+val GlossoPrimary = Color(0xFF4F46E5)          // Indigo - primary action
+val GlossoPrimaryLight = Color(0xFFA9B4FF)
+val GlossoSecondary = Color(0xFF0E9F6E)        // Success / mastered
+val GlossoTertiary = Color(0xFFC2410C)         // Streak / warm accent
+
+val GlossoBackground = Color(0xFFF1F2F7)
+val GlossoSurface = Color(0xFFFFFFFF)
+val GlossoSurfaceMuted = Color(0xFFEDEFF5)
+val GlossoOnSurface = Color(0xFF14161D)
+val GlossoOnSurfaceVariant = Color(0xFF5D6576)
+val GlossoOutline = Color(0xFFDCE0E9)
 
 // Dark palette
-val GlossoDarkBackground = Color(0xFF0F0F14)
-val GlossoDarkSurface = Color(0xFF1A1A24)
-val GlossoDarkSurfaceVariant = Color(0xFF242433)
-val GlossoDarkOutline = Color(0xFF2E2E42)
-val GlossoDarkOnSurface = Color(0xFFE2E8F0)
-val GlossoDarkPrimaryContainer = Color(0xFF1E1E3A)
-val GlossoDarkSecondaryContainer = Color(0xFF0D2E24)
+val GlossoDarkBackground = Color(0xFF0B0C11)
+val GlossoDarkSurface = Color(0xFF15171E)
+val GlossoDarkSurfaceVariant = Color(0xFF1E212B)
+val GlossoDarkOutline = Color(0xFF2B2F3A)
+val GlossoDarkOnSurface = Color(0xFFE9EAF0)
+val GlossoDarkOnSurfaceVariant = Color(0xFF9AA1B0)
+val GlossoDarkPrimaryContainer = Color(0xFF2A3170)
+val GlossoDarkSecondaryContainer = Color(0xFF10382A)
 
-// Feedback colors (slightly softer than pure red/orange)
-val GlossoFeedbackClose = Color(0xFFFB8C00)   // Softer orange
-val GlossoFeedbackMissed = Color(0xFFE53935)  // Softer red
+// Feedback colors - softened so they read as guidance, not alarm.
+val GlossoFeedbackClose = Color(0xFFD97706)   // Amber
+val GlossoFeedbackMissed = Color(0xFFDC2626)  // Red
 
-// CEFR Level colors (A1 → C2 difficulty gradient: green → pink)
-val LevelColorA1 = Color(0xFF10B981) // Emerald — Beginner
-val LevelColorA2 = Color(0xFF3B82F6) // Blue — Elementary
-val LevelColorB1 = Color(0xFF8B5CF6) // Violet — Intermediate
-val LevelColorB2 = Color(0xFFF59E0B) // Amber — Upper-Int
-val LevelColorC1 = Color(0xFFEF4444) // Red — Advanced
-val LevelColorC2 = Color(0xFFEC4899) // Pink — Mastery
+// CEFR level accents. Muted, related hues so difficulty reads as a gradual
+// progression instead of a rainbow.
+val LevelColorA1 = Color(0xFF0E9F6E)
+val LevelColorA2 = Color(0xFF0E8FA8)
+val LevelColorB1 = Color(0xFF4F46E5)
+val LevelColorB2 = Color(0xFF7C5CD6)
+val LevelColorC1 = Color(0xFFB45309)
+val LevelColorC2 = Color(0xFFBE3455)
 
 fun levelColor(index: Int): Color = when (index) {
     0 -> LevelColorA1

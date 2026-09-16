@@ -37,9 +37,10 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
     val uriHandler = LocalUriHandler.current
 
     Scaffold(
+        contentWindowInsets = androidx.compose.foundation.layout.WindowInsets(0, 0, 0, 0),
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text(stringResource(R.string.about_title), fontWeight = FontWeight.Black, letterSpacing = 2.sp) },
+                title = { Text(stringResource(R.string.about_title), fontWeight = FontWeight.Bold, letterSpacing = 0.sp) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
                         Icon(Icons.Default.ArrowBack, contentDescription = stringResource(R.string.about_back))

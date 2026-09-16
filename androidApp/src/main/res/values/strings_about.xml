@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- About screen -->
-    <string name="about_title">ABOUT</string>
+    <string name="about_title">About</string>
     <string name="about_back">Back</string>
     <string name="about_app_logo_desc">Glosso Studio</string>
-    <string name="about_app_name">GLOSSO STUDIO</string>
+    <string name="about_app_name">Glosso Studio</string>
     <string name="about_version">v2.2.8</string>
     <string name="about_tagline">On-device English &amp; French pronunciation trainer\npowered by phonetic analysis.</string>
 
