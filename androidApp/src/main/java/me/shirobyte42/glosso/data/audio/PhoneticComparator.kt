@@ -1,7 +1,9 @@
 package me.shirobyte42.glosso.data.audio
 
 import android.util.Log
+import kotlin.math.abs
 import kotlin.math.max
+import kotlin.math.roundToInt
 
 data class ScoringResult(
     val score: Int,
@@ -26,6 +28,29 @@ enum class MatchStatus { PERFECT, CLOSE, MISSED }
 object PhoneticComparator {
     
     private const val TAG = "PhoneticComparator"
+
+    /** Similarity at or above this counts as a correctly produced phoneme. */
+    private const val PERFECT_THRESHOLD = 0.85
+
+    /** Similarity at or above this earns partial credit; below it is a miss. */
+    private const val CLOSE_THRESHOLD = 0.3
+
+    /** Cost of a reference phoneme the speaker never produced. */
+    private const val GAP_DELETION = 1.0
+
+    /**
+     * Cost of an extra phoneme the recognizer heard that the reference does not
+     * contain. Cheaper than a deletion on purpose: extra segments are usually
+     * segmentation noise from the acoustic model, while a dropped phoneme is a
+     * genuine error the learner should hear about.
+     */
+    private const val GAP_INSERTION = 0.5
+
+    /** Similarity between a long and short vowel with the same base (i vs iː). */
+    private const val LENGTH_SIMILARITY = 0.8
+
+    /** Floating point tolerance for comparing accumulated DP costs. */
+    private const val EPSILON = 1e-9
 
     // EN similarity matrix
     // Maps eng_to_ipa format ↔ Allosaurus format
@@ -290,61 +315,116 @@ object PhoneticComparator {
         if (expectedList.isEmpty()) {
             return ScoringResult(if (actualList.isEmpty()) 100 else 0, "", "")
         }
-        
-        // Simple position-by-position comparison
-        // For each expected phoneme, find the best match in actual
-        var totalWeight = 0.0
-        var matchWeight = 0.0
-        val alignment = mutableListOf<PhonemeMatch>()
-        
-        for (exp in expectedList) {
-            totalWeight += 1.0
-            // Find best similarity with any position in actual
-            var bestSim = 0.0
-            var bestMatch = "-"
-            for (act in actualList) {
-                val sim = getSimilarity(exp, act, matrix)
-                if (sim > bestSim) {
-                    bestSim = sim
-                    bestMatch = act
-                }
-            }
-            // Lower threshold: 0.85 is close enough for PERFECT
-            val status = when {
-                bestSim >= 0.85 -> MatchStatus.PERFECT
-                bestSim >= 0.3 -> MatchStatus.CLOSE
-                else -> MatchStatus.MISSED
-            }
-            matchWeight += when (status) {
-                MatchStatus.PERFECT -> 1.0
-                MatchStatus.CLOSE -> 0.6
-                MatchStatus.MISSED -> 0.0
-            }
-            alignment.add(PhonemeMatch(exp, bestMatch, status))
 
-            if (status != MatchStatus.PERFECT) {
-                val simsToAll = actualList.joinToString(", ") { a ->
-                    val s = getSimilarity(exp, a, matrix)
-                    "$a=$s"
-                }
-                Log.d(TAG, "  [$language] exp=%-4s  best=%s (sim=%.2f) → %s  all: [%s]"
-                    .format(exp, bestMatch, bestSim, status, simsToAll))
-            }
-        }
-        
-        val score = if (totalWeight > 0) (matchWeight / totalWeight * 100).toInt() else 0
-        
+        val n = expectedList.size
+        val m = actualList.size
+        val result = alignSequence(expectedList, actualList, matrix)
+        val alignment = result.matches
+
+        // Normalised edit distance over phonemes: substitutions, dropped
+        // phonemes and extra phonemes all reduce the score, and the length of
+        // what the speaker actually produced matters.
+        val denominator = max(n, m).toDouble().coerceAtLeast(1.0)
+        val score = ((1.0 - result.cost / denominator) * 100)
+            .roundToInt()
+            .coerceIn(0, 100)
+
         val normExpected = expectedList.joinToString("")
             .replace(Regex("[ˈˌ]"), "")
         val normActual = actualList.joinToString("")
             .replace(Regex("[ˈˌ]"), "")
-        
+
         return ScoringResult(
-            score = score.coerceIn(0, 100),
+            score = score,
             normalizedExpected = normExpected,
             normalizedActual = normActual,
             alignment = alignment
         )
+    }
+
+    /** Alignment plus the total edit cost it was derived from. */
+    data class SequenceAlignment(
+        val matches: List<PhonemeMatch>,
+        val cost: Double
+    )
+
+    /**
+     * Order-sensitive alignment of the reference phones against the produced
+     * phones (Needleman-Wunsch over phonemes).
+     *
+     * The previous implementation searched the whole produced list once per
+     * reference phoneme, which made word order irrelevant, let one produced
+     * phoneme satisfy unlimited reference phonemes, and never penalised extra
+     * sounds - so "tæk" and "kætkæt" both scored a perfect 100 against "kæt".
+     * Alignment with gap costs fixes all three.
+     *
+     * Returns one [PhonemeMatch] per reference phoneme, preserving order, so
+     * downstream letter/word feedback keeps a stable contract.
+     */
+    fun alignSequence(
+        expected: List<String>,
+        actual: List<String>,
+        matrix: Map<Set<String>, Double>
+    ): SequenceAlignment {
+        val n = expected.size
+        val m = actual.size
+        val dp = Array(n + 1) { DoubleArray(m + 1) }
+
+        for (i in 0..n) dp[i][0] = i * GAP_DELETION
+        for (j in 0..m) dp[0][j] = j * GAP_INSERTION
+
+        for (i in 1..n) {
+            for (j in 1..m) {
+                val sub = substitutionCost(expected[i - 1], actual[j - 1], matrix)
+                dp[i][j] = minOf(
+                    dp[i - 1][j - 1] + sub,
+                    dp[i - 1][j] + GAP_DELETION,
+                    dp[i][j - 1] + GAP_INSERTION
+                )
+            }
+        }
+
+        val alignment = ArrayList<PhonemeMatch>(n)
+        var i = n
+        var j = m
+        while (i > 0 || j > 0) {
+            if (i > 0 && j > 0) {
+                val sub = substitutionCost(expected[i - 1], actual[j - 1], matrix)
+                if (nearly(dp[i][j], dp[i - 1][j - 1] + sub)) {
+                    alignment.add(PhonemeMatch(expected[i - 1], actual[j - 1], statusFor(expected[i - 1], actual[j - 1], matrix)))
+                    i--
+                    j--
+                    continue
+                }
+            }
+            if (i > 0 && (j == 0 || nearly(dp[i][j], dp[i - 1][j] + GAP_DELETION))) {
+                alignment.add(PhonemeMatch(expected[i - 1], "-", MatchStatus.MISSED))
+                i--
+            } else {
+                // Insertion: an extra produced phoneme with no reference partner.
+                j--
+            }
+        }
+        alignment.reverse()
+
+        return SequenceAlignment(alignment, dp[n][m])
+    }
+
+    private fun nearly(a: Double, b: Double): Boolean = abs(a - b) < EPSILON
+
+    /** Cost of substituting a reference phoneme with a produced one. */
+    private fun substitutionCost(expected: String, actual: String, matrix: Map<Set<String>, Double>): Double {
+        val sim = getSimilarity(expected, actual, matrix)
+        return if (sim >= PERFECT_THRESHOLD) 0.0 else 1.0 - sim.coerceIn(0.0, 1.0)
+    }
+
+    private fun statusFor(expected: String, actual: String, matrix: Map<Set<String>, Double>): MatchStatus {
+        val sim = getSimilarity(expected, actual, matrix)
+        return when {
+            sim >= PERFECT_THRESHOLD -> MatchStatus.PERFECT
+            sim >= CLOSE_THRESHOLD -> MatchStatus.CLOSE
+            else -> MatchStatus.MISSED
+        }
     }
 
     fun generateLetterFeedback(text: String, expectedIpa: String, phonemeAlignment: List<PhonemeMatch>, language: String = "en"): List<LetterFeedbackInfo> {
@@ -522,7 +602,6 @@ object PhoneticComparator {
             .replace("ɚ", "ər")
             .replace("\u200D", "")
             .replace("\u00A0", " ")
-            .replace("ː", "")
 
         val wordGroups = folded.lowercase().split(" ").filter { it.isNotBlank() }
         val result = mutableListOf<String>()
@@ -538,25 +617,38 @@ object PhoneticComparator {
             var i = 0
             while (i < cleaned.length) {
                 val c = cleaned[i]
-                if (i + 1 < cleaned.length && cleaned[i + 1] == '\u0303') {
-                    result.add(cleaned.substring(i, i + 2))
-                    i += 2
-                } else if (i + 2 < cleaned.length && cleaned[i + 1] == '\u0361') {
-                    result.add(cleaned.substring(i, i + 3))
-                    i += 3
-                } else if (i + 1 < cleaned.length && isTiedPair(cleaned[i], cleaned[i+1])) {
-                    result.add(cleaned.substring(i, i + 2))
-                    i += 2
-                } else if (c == 'g') {
-                    result.add("ɡ")
-                    i++
-                } else {
-                    result.add(c.toString())
-                    i++
+                val phone: String
+                val consumed: Int
+                when {
+                    i + 1 < cleaned.length && cleaned[i + 1] == '\u0303' -> {
+                        phone = cleaned.substring(i, i + 2); consumed = 2
+                    }
+                    i + 2 < cleaned.length && cleaned[i + 1] == '\u0361' -> {
+                        phone = cleaned.substring(i, i + 3); consumed = 3
+                    }
+                    i + 1 < cleaned.length && isTiedPair(cleaned[i], cleaned[i + 1]) -> {
+                        phone = cleaned.substring(i, i + 2); consumed = 2
+                    }
+                    c == 'g' -> {
+                        phone = "ɡ"; consumed = 1
+                    }
+                    else -> {
+                        phone = c.toString(); consumed = 1
+                    }
                 }
+                var next = i + consumed
+                // A length mark belongs to the phone it follows (iː is one phone,
+                // a long vowel - not the vowel plus a separate "ː" segment).
+                if (next < cleaned.length && cleaned[next] == 'ː') {
+                    result.add(phone + "ː")
+                    next++
+                } else {
+                    result.add(phone)
+                }
+                i = next
             }
         }
-        
+
         return result
     }
 
@@ -565,68 +657,24 @@ object PhoneticComparator {
         return s == "tʃ" || s == "dʒ" || s == "ts" || s == "dz"
     }
 
-    private val knownPhones = setOf(
-        "a", "b", "d", "e", "f", "h", "i", "j", "k", "l", "m", "n", "o", "p", 
-        "s", "t", "u", "v", "w", "z", "æ", "ð", "ŋ", "ɑ", "ɔ", "ə", "ɛ", "ɡ", 
-        "ɪ", "ɹ", "ɹ̩", "ʃ", "ʊ", "ʌ", "ʒ", "θ", "t͡ʃ", "d͡ʒ", "tʃ", "dʒ"
-    )
-
     private fun getSimilarity(p1: String, p2: String, matrix: Map<Set<String>, Double>): Double {
         if (p1 == p2) return 1.0
+        // Length is phonemic in German/Latin and meaning-bearing in English, so a
+        // long/short vowel mismatch must not count as perfect. Checked before the
+        // matrices so every language treats it consistently.
+        if (isLengthVariant(p1, p2)) return LENGTH_SIMILARITY
         matrix[setOf(p1, p2)]?.let { return it }
         // No fallback - only explicit mappings count
         // This prevents random matches from scoring high
         return 0.0
     }
 
-    private fun align(expected: List<String>, actual: List<String>, matrix: Map<Set<String>, Double>): List<PhonemeMatch> {
-        val n = expected.size
-        val m = actual.size
-        val dp = Array(n + 1) { DoubleArray(m + 1) }
-        
-        for (i in 0..n) dp[i][0] = i.toDouble()
-        for (j in 0..m) dp[0][j] = j.toDouble()
-        
-        for (i in 1..n) {
-            for (j in 1..m) {
-                val sim = getSimilarity(expected[i - 1], actual[j - 1], matrix)
-                val cost = 1.0 - sim
-                // Gap cost = 0: insertions/deletions don't penalize at all
-                // This handles epenthetic schwas, extra sounds, etc without score loss
-                dp[i][j] = minOf(
-                    dp[i - 1][j] + 0.0,    // Deletion
-                    dp[i][j - 1] + 0.0,    // Insertion
-                    dp[i - 1][j - 1] + cost   // Substitution
-                )
-            }
-        }
-        
-        val result = mutableListOf<PhonemeMatch>()
-        var i = n
-        var j = m
-        while (i > 0 || j > 0) {
-            if (i > 0 && j > 0) {
-                val sim = getSimilarity(expected[i - 1], actual[j - 1], matrix)
-                val cost = 1.0 - sim
-                if (dp[i][j] == dp[i - 1][j - 1] + cost) {
-                    val status = when {
-                        sim >= 1.0 -> MatchStatus.PERFECT
-                        sim >= 0.3 -> MatchStatus.CLOSE  // Lowered from 0.5 for more partial credit
-                        else -> MatchStatus.MISSED
-                    }
-                    result.add(0, PhonemeMatch(expected[i - 1], actual[j - 1], status))
-                    i--; j--
-                    continue
-                }
-            }
-            if (i > 0 && (j == 0 || dp[i][j] == dp[i - 1][j])) {
-                result.add(0, PhonemeMatch(expected[i - 1], "-", MatchStatus.MISSED))
-                i--
-            } else {
-                j--
-            }
-        }
-        return result
+    /** True when two phones are the same vowel differing only by a length mark. */
+    private fun isLengthVariant(a: String, b: String): Boolean {
+        val aLong = a.endsWith("ː")
+        val bLong = b.endsWith("ː")
+        if (aLong == bLong) return false
+        return a.removeSuffix("ː") == b.removeSuffix("ː")
     }
 
     fun normalize(ipa: String): String {
