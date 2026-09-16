@@ -1,41 +1,42 @@
 # Glosso Studio
 
-Glosso Studio is an offline-first pronunciation training application built with Kotlin Multiplatform and Jetpack Compose. It provides real-time phonetic assessment and a structured curriculum to help users improve their spoken English.
+Glosso Studio is an offline-first pronunciation training application built with Kotlin Multiplatform and Jetpack Compose. It provides real-time phonetic assessment and a structured curriculum to help users improve their pronunciation in English (UK/US), French, Spanish, German and Latin.
 
 ## Features
 
 ### Phonetic Assessment
-The application uses the Allosaurus model (specifically `eng2102`) to perform phonetic recognition. It processes 8kHz audio, computes Mel-frequency cepstral coefficients (MFCCs), and runs inference via ONNX Runtime to provide feedback on pronunciation accuracy.
+The application runs a **wav2vec2 acoustic model** (facebook/wav2vec2-lv-60-espeak-cv-ft, int8-quantized ONNX) directly on device via ONNX Runtime. It processes **16 kHz raw waveform** input (no MFCC feature extraction) and maps predictions to **eSpeak phoneme labels**, which are compared against the sentence's canonical eSpeak IPA using a language-specific phoneme similarity matrix (alignment, per-phoneme feedback and minimal-pair hints).
 
 ### Offline-First Architecture
 The application is designed to be fully functional offline once the initial assets are retrieved.
-- **ONNX Runtime:** Executes the acoustic model (`eng2102`) directly on the device.
-- **Dynamic Database Download:** To keep the APK size minimal, curriculum databases are downloaded on-demand from GitLab when a level is first accessed.
+- **ONNX Runtime:** Executes the acoustic model (`wav2vec2_espeak_cv_ft_int8.onnx`) directly on the device.
+- **Dynamic Asset Download:** To keep the APK size minimal, the acoustic model, vocabulary and per-language curriculum databases are downloaded on-demand from the GitLab generic package registry when first needed.
 - **Room Database:** Manages the repository of practice sentences and user progress.
 - **Git LFS:** Used for managing large binary assets in the repository.
 
 ### Mastery and Progress Tracking
-- **Curriculum Levels:** Six difficulty tiers ranging from Beginner to Mastery.
+- **Curriculum Levels:** Six difficulty tiers (A1-C2) from Beginner to Mastery.
 - **Mastery System:** Sentences are marked as mastered when users achieve a threshold score (85%+).
+- **Spaced Repetition:** Mastered sentences enter a review queue with growing intervals.
 - **Streak Tracking:** Encourages consistent practice through a daily streak system verified against activity logs.
-- **Statistics:** Comprehensive tracking of total mastered phrases and level-specific progress.
+- **Statistics:** Progress screen with mastery timeline, practice calendar, weakest phonemes and review backlog.
 
 ## Tech Stack
 
 - **Framework:** Kotlin Multiplatform (KMP)
-- **UI:** Jetpack Compose (Android)
+- **UI:** Jetpack Compose (Material 3)
 - **Dependency Injection:** Koin
 - **Database:** Room (Android)
 - **Networking:** Ktor Client
 - **Machine Learning:** ONNX Runtime for Android
-- **Phonetic Model:** Allosaurus `eng2102` (GPL-3.0) for high-accuracy phonetic recognition
-- **Text-to-Speech:** Qwen3-TTS (Apache-2.0) for high-fidelity speech synthesis
-- **Audio Processing:** Custom MFCC implementation for 8kHz signal processing
+- **Phonetic Model:** facebook/wav2vec2-lv-60-espeak-cv-ft (int8-quantized ONNX) with eSpeak phoneme labels
+- **Text-to-Speech:** Android system `TextToSpeech` engine for reference playback
+- **Audio Processing:** 16 kHz PCM capture, raw waveform model input
 - **Serialization:** Kotlinx Serialization
 
 ## Prerequisites
 
-- **Git LFS:** Required to pull the large ONNX models and database.
+- **Git LFS:** Required to pull the large binary assets in the repository.
 - **Android Studio:** Hedgehog (2023.1.1) or later recommended.
 - **JDK:** Version 17.
 
@@ -49,7 +50,7 @@ The application is designed to be fully functional offline once the initial asse
 
 2. **Clone the Repository**
    ```bash
-   git clone git@gitlab.com:shirobyte421/glosso-studio.git
+   git clone git@github.com:IgnacioLD/glosso-studio.git
    cd glosso-studio
    git lfs pull
    ```

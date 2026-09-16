@@ -250,6 +250,8 @@ class StudioViewModel(
 
     fun advanceInBatch() {
         val state = _uiState.value
+        // Never replace the visible sentence while its recording or analysis owns the state.
+        if (state.isRecording || state.isAnalyzing) return
         val current = state.currentSentence ?: return
         val score = state.feedback?.score ?: 0
         val mastered = score >= 85
@@ -313,6 +315,7 @@ class StudioViewModel(
     }
 
     fun toggleRecording() {
+        if (_uiState.value.isAnalyzing) return
         if (_uiState.value.isRecording) {
             try {
                 val base64 = speechController.stopRecording()
