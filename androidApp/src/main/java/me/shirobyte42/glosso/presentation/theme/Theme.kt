@@ -1,62 +1,81 @@
 package me.shirobyte42.glosso.presentation.theme
 
+import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
 
 private val LightColorScheme = lightColorScheme(
     primary = GlossoPrimary,
     onPrimary = Color.White,
-    primaryContainer = Color(0xFFE8E9FF),
-    onPrimaryContainer = Color(0xFF1A1A5C),
+    primaryContainer = Color(0xFFEAECFF),
+    onPrimaryContainer = Color(0xFF201E52),
     secondary = GlossoSecondary,
     onSecondary = Color.White,
-    secondaryContainer = Color(0xFFD1FAE5),
-    onSecondaryContainer = Color(0xFF052E1A),
+    secondaryContainer = Color(0xFFE1F6EC),
+    onSecondaryContainer = Color(0xFF06301F),
     tertiary = GlossoTertiary,
     onTertiary = Color.White,
-    tertiaryContainer = Color(0xFFFEF3C7),
-    onTertiaryContainer = Color(0xFF3D2000),
+    tertiaryContainer = Color(0xFFFFEAD8),
+    onTertiaryContainer = Color(0xFF3D1A03),
     background = GlossoBackground,
     onBackground = GlossoOnSurface,
     surface = GlossoSurface,
     onSurface = GlossoOnSurface,
-    surfaceVariant = Color(0xFFF1F5F9),
-    onSurfaceVariant = Color(0xFF475569),
+    surfaceVariant = GlossoSurfaceMuted,
+    onSurfaceVariant = GlossoOnSurfaceVariant,
     outline = GlossoOutline,
+    outlineVariant = Color(0xFFE8EBF1),
+    scrim = Color(0xFF0B0C11),
     error = Color(0xFFDC2626),
     onError = Color.White,
-    errorContainer = Color(0xFFFEE2E2),
-    onErrorContainer = Color(0xFF7F1D1D)
+    errorContainer = Color(0xFFFDE7E7),
+    onErrorContainer = Color(0xFF7A1414)
 )
 
 private val DarkColorScheme = darkColorScheme(
     primary = GlossoPrimaryLight,
-    onPrimary = Color(0xFF1A1A4E),
+    onPrimary = Color(0xFF20265C),
     primaryContainer = GlossoDarkPrimaryContainer,
-    onPrimaryContainer = Color(0xFFC7C8FF),
-    secondary = Color(0xFF34D399),
-    onSecondary = Color(0xFF002618),
+    onPrimaryContainer = Color(0xFFDDE1FF),
+    secondary = Color(0xFF4ADE9E),
+    onSecondary = Color(0xFF05291C),
     secondaryContainer = GlossoDarkSecondaryContainer,
     onSecondaryContainer = Color(0xFFA7F3D0),
-    tertiary = Color(0xFFFBBF24),
-    onTertiary = Color(0xFF3D2000),
-    tertiaryContainer = Color(0xFF2D1A00),
-    onTertiaryContainer = Color(0xFFFDE68A),
+    tertiary = Color(0xFFFDBA74),
+    onTertiary = Color(0xFF3D1A03),
+    tertiaryContainer = Color(0xFF3A2109),
+    onTertiaryContainer = Color(0xFFFED7AA),
     background = GlossoDarkBackground,
     onBackground = GlossoDarkOnSurface,
     surface = GlossoDarkSurface,
     onSurface = GlossoDarkOnSurface,
     surfaceVariant = GlossoDarkSurfaceVariant,
-    onSurfaceVariant = Color(0xFF94A3B8),
+    onSurfaceVariant = GlossoDarkOnSurfaceVariant,
     outline = GlossoDarkOutline,
-    error = Color(0xFFF87171),
-    onError = Color(0xFF7F1D1D),
-    errorContainer = Color(0xFF450A0A),
+    outlineVariant = Color(0xFF232734),
+    scrim = Color(0xFF000000),
+    error = Color(0xFFFCA5A5),
+    onError = Color(0xFF5A0F0F),
+    errorContainer = Color(0xFF3A1515),
     onErrorContainer = Color(0xFFFECACA)
+)
+
+private val GlossoShapes = Shapes(
+    extraSmall = RoundedCornerShape(6.dp),
+    small = RoundedCornerShape(10.dp),
+    medium = RoundedCornerShape(14.dp),
+    large = RoundedCornerShape(18.dp),
+    extraLarge = RoundedCornerShape(24.dp)
 )
 
 @Composable
@@ -72,9 +91,22 @@ fun GlossoTheme(
     }
     val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
 
+    // Keep system bar icons legible even when the app theme is forced against
+    // the system setting.
+    val view = LocalView.current
+    if (!view.isInEditMode) {
+        SideEffect {
+            val window = (view.context as? Activity)?.window ?: return@SideEffect
+            val controller = WindowCompat.getInsetsController(window, view)
+            controller.isAppearanceLightStatusBars = !darkTheme
+            controller.isAppearanceLightNavigationBars = !darkTheme
+        }
+    }
+
     MaterialTheme(
         colorScheme = colorScheme,
         typography = GlossoTypography,
+        shapes = GlossoShapes,
         content = content
     )
 }

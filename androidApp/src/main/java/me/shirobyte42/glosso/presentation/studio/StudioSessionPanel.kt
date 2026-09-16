@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -45,22 +46,22 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import me.shirobyte42.glosso.R
@@ -78,79 +79,70 @@ fun StudioTopBar(
     onShowTutorial: () -> Unit,
     onSettings: () -> Unit
 ) {
+    val levelNames = when (targetLanguage) {
+        "fr" -> listOf(
+            stringResource(R.string.studio_level_fr_beginner),
+            stringResource(R.string.studio_level_fr_elementary),
+            stringResource(R.string.studio_level_fr_intermediate),
+            stringResource(R.string.studio_level_fr_upper_int),
+            stringResource(R.string.studio_level_fr_advanced),
+            stringResource(R.string.studio_level_fr_mastery)
+        )
+        else -> listOf(
+            stringResource(R.string.studio_level_beginner),
+            stringResource(R.string.studio_level_elementary),
+            stringResource(R.string.studio_level_intermediate),
+            stringResource(R.string.studio_level_upper_int),
+            stringResource(R.string.studio_level_advanced),
+            stringResource(R.string.studio_level_mastery)
+        )
+    }
+    val fallback = stringResource(R.string.studio_level_fallback, category + 1)
+
     CenterAlignedTopAppBar(
         title = {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(
-                    stringResource(R.string.studio_app_title),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Black,
-                    letterSpacing = 1.sp
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(7.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(7.dp)
+                        .background(levelColor(category), CircleShape)
                 )
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    // Level color accent dot
-                    Box(
-                        modifier = Modifier
-                            .size(6.dp)
-                            .background(levelColor(category), CircleShape)
-                    )
-                    val levelNames = when (targetLanguage) {
-                        "fr" -> listOf(
-                            stringResource(R.string.studio_level_fr_beginner),
-                            stringResource(R.string.studio_level_fr_elementary),
-                            stringResource(R.string.studio_level_fr_intermediate),
-                            stringResource(R.string.studio_level_fr_upper_int),
-                            stringResource(R.string.studio_level_fr_advanced),
-                            stringResource(R.string.studio_level_fr_mastery)
-                        )
-                        else -> listOf(
-                            stringResource(R.string.studio_level_beginner),
-                            stringResource(R.string.studio_level_elementary),
-                            stringResource(R.string.studio_level_intermediate),
-                            stringResource(R.string.studio_level_upper_int),
-                            stringResource(R.string.studio_level_advanced),
-                            stringResource(R.string.studio_level_mastery)
-                        )
-                    }
-                    val fallback = stringResource(R.string.studio_level_fallback, category + 1)
-                    Text(
-                        levelNames.getOrElse(category) { fallback }.uppercase(),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        letterSpacing = 0.5.sp
-                    )
-                }
+                Text(
+                    levelNames.getOrElse(category) { fallback },
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
             }
         },
         navigationIcon = {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = onBack) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = null)
+                    Icon(Icons.Default.ArrowBack, contentDescription = stringResource(R.string.studio_cd_back))
                 }
                 if (currentStreak > 0) {
                     Surface(
-                        color = Color(0xFFFF5722).copy(alpha = 0.1f),
-                        shape = RoundedCornerShape(10.dp)
+                        color = MaterialTheme.colorScheme.tertiaryContainer,
+                        shape = RoundedCornerShape(8.dp)
                     ) {
                         Row(
-                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp),
+                            modifier = Modifier.padding(horizontal = 7.dp, vertical = 4.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
                                 Icons.Default.Whatshot,
                                 contentDescription = null,
-                                tint = Color(0xFFFF5722),
-                                modifier = Modifier.size(14.dp)
+                                tint = MaterialTheme.colorScheme.tertiary,
+                                modifier = Modifier.size(13.dp)
                             )
-                            Spacer(modifier = Modifier.width(2.dp))
+                            Spacer(modifier = Modifier.width(3.dp))
                             Text(
                                 "$currentStreak",
                                 style = MaterialTheme.typography.labelSmall,
-                                fontWeight = FontWeight.Black,
-                                color = Color(0xFFFF5722)
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.tertiary
                             )
                         }
                     }
@@ -246,14 +238,18 @@ fun SentenceCard(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(32.dp),
+        shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(
-            modifier = Modifier.padding(vertical = 32.dp, horizontal = 24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 190.dp)
+                .padding(vertical = 22.dp, horizontal = 18.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
             if (isMastered || isReview) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -361,9 +357,9 @@ fun ScoreDisplay(
             Box(modifier = modifier, contentAlignment = Alignment.Center) {
                 CircularProgressIndicator(
                     progress = animatedScoreProgress,
-                    modifier = Modifier.size(130.dp),
+                    modifier = Modifier.size(112.dp),
                     color = scoreColor,
-                    strokeWidth = 9.dp,
+                    strokeWidth = 8.dp,
                     trackColor = scoreColor.copy(alpha = 0.1f)
                 )
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -385,42 +381,109 @@ fun ScoreDisplay(
     }
 }
 
+/**
+ * Keeps the practice loop understandable without relying on icon-only controls.
+ */
 @Composable
-fun RecordButton(
+fun PracticeActionCard(
     isRecording: Boolean,
     isAnalyzing: Boolean,
-    pulseScale: Float,
-    onAction: () -> Unit
+    hasRecordedVoice: Boolean,
+    onRecord: () -> Unit,
+    onPlayRecording: () -> Unit,
+    onNext: () -> Unit
 ) {
-    Box(contentAlignment = Alignment.Center) {
-        if (isRecording) {
-            Box(
-                modifier = Modifier
-                    .size(140.dp)
-                    .scale(pulseScale)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.error.copy(alpha = 0.08f))
-            )
-        }
-        if (isAnalyzing) {
-            CircularProgressIndicator(
-                modifier = Modifier.size(100.dp),
-                strokeWidth = 4.dp,
-                color = MaterialTheme.colorScheme.primary
-            )
-        }
-        FloatingActionButton(
-            onClick = onAction,
-            containerColor = if (isRecording) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
-            contentColor = Color.White,
-            shape = CircleShape,
-            modifier = Modifier.size(84.dp)
-        ) {
-            Icon(
-                if (isRecording) Icons.Default.Stop else Icons.Default.Mic,
-                contentDescription = null,
-                modifier = Modifier.size(38.dp)
-            )
+    val actionLabel = when {
+        isAnalyzing -> stringResource(R.string.studio_action_analyzing)
+        isRecording -> stringResource(R.string.studio_action_stop_recording)
+        else -> stringResource(R.string.studio_action_record_voice)
+    }
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+            Button(
+                onClick = onRecord,
+                enabled = !isAnalyzing,
+                modifier = Modifier.fillMaxWidth().height(52.dp),
+                shape = RoundedCornerShape(14.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (isRecording) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+                )
+            ) {
+                if (isAnalyzing) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(20.dp),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        strokeWidth = 2.dp
+                    )
+                } else {
+                    Icon(
+                        imageVector = if (isRecording) Icons.Default.Stop else Icons.Default.Mic,
+                        contentDescription = null
+                    )
+                }
+                Spacer(modifier = Modifier.width(10.dp))
+                Text(actionLabel, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                OutlinedButton(
+                    onClick = onPlayRecording,
+                    enabled = hasRecordedVoice && !isRecording && !isAnalyzing,
+                    modifier = Modifier.weight(1f).height(48.dp),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Icon(Icons.Default.PlayArrow, contentDescription = null, modifier = Modifier.size(18.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(stringResource(R.string.studio_action_listen_back), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                }
+                OutlinedButton(
+                    onClick = onNext,
+                    enabled = !isRecording && !isAnalyzing,
+                    modifier = Modifier.weight(1f).height(48.dp),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Icon(Icons.Default.ArrowForward, contentDescription = null, modifier = Modifier.size(18.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(stringResource(R.string.studio_action_next), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                }
+            }
+    }
+}
+
+@Composable
+fun FeedbackSummary(score: Int?, isMastered: Boolean) {
+    score ?: return
+    val (title, body, color) = when {
+        isMastered -> Triple(
+            stringResource(R.string.studio_feedback_mastered_title),
+            stringResource(R.string.studio_feedback_mastered_body),
+            MaterialTheme.colorScheme.secondary
+        )
+        score >= 70 -> Triple(
+            stringResource(R.string.studio_feedback_close_title),
+            stringResource(R.string.studio_feedback_close_body),
+            MaterialTheme.colorScheme.tertiary
+        )
+        else -> Triple(
+            stringResource(R.string.studio_feedback_retry_title),
+            stringResource(R.string.studio_feedback_retry_body),
+            MaterialTheme.colorScheme.error
+        )
+    }
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        color = color.copy(alpha = 0.1f),
+        shape = RoundedCornerShape(14.dp)
+    ) {
+        Column(modifier = Modifier.padding(12.dp)) {
+            Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = color)
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(body, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }

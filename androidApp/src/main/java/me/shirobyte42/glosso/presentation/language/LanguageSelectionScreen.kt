@@ -1,7 +1,6 @@
 package me.shirobyte42.glosso.presentation.language
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,7 +9,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -42,14 +40,14 @@ fun LanguageSelectionScreen(
             .background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState())
             .navigationBarsPadding()
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+            .padding(horizontal = 20.dp),
+        horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
-        Spacer(modifier = Modifier.height(48.dp))
+        Spacer(modifier = Modifier.height(56.dp))
         Text(
             text = stringResource(R.string.lang_select_title),
-            style = MaterialTheme.typography.headlineMedium,
+            style = MaterialTheme.typography.displaySmall,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onBackground
         )
@@ -60,31 +58,30 @@ fun LanguageSelectionScreen(
             text = stringResource(R.string.lang_select_subtitle),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Start
         )
 
-        Spacer(modifier = Modifier.height(48.dp))
+        Spacer(modifier = Modifier.height(36.dp))
 
         SUPPORTED_LANGUAGES.forEach { lang ->
             LanguageCard(
-                code = lang.code,
                 displayName = lang.displayName,
                 flag = lang.flag,
                 isSelected = selected == lang.code,
                 onClick = { selected = lang.code }
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(10.dp))
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         Button(
             onClick = { selected?.let { onLanguageSelected(it) } },
             enabled = selected != null,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp),
-            shape = RoundedCornerShape(16.dp)
+                .height(52.dp),
+            shape = RoundedCornerShape(14.dp)
         ) {
             Text(
                 text = stringResource(R.string.lang_select_continue),
@@ -96,8 +93,8 @@ fun LanguageSelectionScreen(
 }
 
 @Composable
+@OptIn(ExperimentalMaterial3Api::class)
 private fun LanguageCard(
-    code: String,
     displayName: String,
     flag: String,
     isSelected: Boolean,
@@ -114,37 +111,43 @@ private fun LanguageCard(
         MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
     }
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
-            .background(backgroundColor)
-            .clickable(onClick = onClick)
-            .padding(20.dp),
-        verticalAlignment = Alignment.CenterVertically
+    Card(
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = backgroundColor),
+        border = androidx.compose.foundation.BorderStroke(
+            width = if (isSelected) 1.5.dp else 1.dp,
+            color = borderColor
+        )
     ) {
-        Text(
-            text = flag,
-            fontSize = 32.sp
-        )
-
-        Spacer(modifier = Modifier.width(16.dp))
-
-        Text(
-            text = displayName,
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Medium,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        if (isSelected) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Text(
-                text = stringResource(R.string.lang_select_selected_mark),
-                color = MaterialTheme.colorScheme.primary,
-                fontSize = 20.sp
+                text = flag,
+                fontSize = 28.sp
             )
+
+            Spacer(modifier = Modifier.width(12.dp))
+
+            Text(
+                text = displayName,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            if (isSelected) {
+                Text(
+                    text = stringResource(R.string.lang_select_selected_mark),
+                    color = MaterialTheme.colorScheme.primary,
+                    fontSize = 20.sp
+                )
+            }
         }
     }
 }

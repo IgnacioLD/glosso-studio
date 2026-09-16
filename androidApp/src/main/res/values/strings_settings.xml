@@ -6,7 +6,7 @@
     <string name="settings_btn_latin_understand">I understand</string>
 
     <!-- Settings: misc -->
-    <string name="settings_title">SETTINGS</string>
+    <string name="settings_title">Settings</string>
     <string name="settings_back">Back</string>
 
     <!-- Settings: Learning extras -->

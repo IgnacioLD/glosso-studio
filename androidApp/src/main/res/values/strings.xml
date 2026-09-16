@@ -7,6 +7,8 @@
     <string name="title_settings">Settings</string>
     <string name="title_studio">Practice</string>
     <string name="title_select_topics">Select Topics</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_progress">Progress</string>
 
     <!-- Home screen -->
     <string name="home_mastery_score">Mastery Score</string>
@@ -19,14 +21,18 @@
     <string name="home_setup_description">Glosso Studio needs to download the acoustic model (approx. 300 MB) to perform phonetic recognition.</string>
     <string name="home_download_description">Glosso Studio requires a one-time download for the %1$s curriculum (approx. 50–100MB).</string>
     <string name="home_wifi_warning">WARNING: If you are using mobile data, significant costs may apply. We recommend using a Wi-Fi connection.</string>
-    <string name="home_btn_setup">SET UP NOW</string>
-    <string name="home_btn_download">DOWNLOAD</string>
-    <string name="home_btn_cancel">CANCEL</string>
-    <string name="home_btn_retry">RETRY</string>
+    <string name="home_btn_setup">Set up now</string>
+    <string name="home_btn_download">Download</string>
+    <string name="home_btn_cancel">Cancel</string>
+    <string name="home_btn_retry">Retry</string>
     <string name="home_download_failed">Download Failed</string>
+    <string name="download_error_network">No internet connection. Check your Wi-Fi or mobile data and try again.</string>
+    <string name="download_error_server">The download server could not be reached. Please try again later.</string>
+    <string name="download_error_verification">The downloaded file failed verification. Retry to download it again.</string>
+    <string name="download_error_generic">Something went wrong during the download. Please try again.</string>
     <string name="home_reset_confirm_title">Reset Progress?</string>
     <string name="home_reset_confirm_body">This will clear your mastery data and reset the curriculum. This cannot be undone.</string>
-    <string name="home_btn_reset">RESET</string>
+    <string name="home_btn_reset">Reset</string>
     <string name="home_downloading_level">Downloading %1$s</string>
     <string name="home_setting_up_model">Setting Up Model</string>
 
@@ -86,17 +92,17 @@
     <string name="settings_reset_desc">Clear mastery data, streaks, and batch history</string>
     <string name="settings_reset_confirm_title">Reset Progress?</string>
     <string name="settings_reset_confirm_body">This will clear all mastery data, streaks, and batch history. This cannot be undone.</string>
-    <string name="settings_btn_reset_all">RESET ALL</string>
-    <string name="btn_cancel">CANCEL</string>
+    <string name="settings_btn_reset_all">Reset all</string>
+    <string name="btn_cancel">Cancel</string>
 
     <!-- Milestones -->
     <string name="milestone_title">Milestone Reached!</string>
     <string name="milestone_body">You have mastered %1$d sentences. Keep going!</string>
-    <string name="milestone_btn_ok">AWESOME!</string>
+    <string name="milestone_btn_ok">Awesome!</string>
 
     <!-- Tutorial -->
     <string name="tutorial_title">How Feedback Works</string>
-    <string name="tutorial_btn_got_it">GOT IT</string>
+    <string name="tutorial_btn_got_it">Got it</string>
 
     <!-- Errors -->
     <string name="error_setup_incomplete">Please complete the initial setup first.</string>

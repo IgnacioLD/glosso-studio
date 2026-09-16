@@ -22,14 +22,18 @@
     <string name="home_setup_description">Glosso Studio doit télécharger le modèle acoustique (environ 300 Mo) pour effectuer la reconnaissance phonétique.</string>
     <string name="home_download_description">Glosso Studio nécessite un téléchargement unique pour le programme %1$s (environ 50–100 Mo).</string>
     <string name="home_wifi_warning">ATTENTION : si vous utilisez les données mobiles, des frais importants peuvent s\'appliquer. Nous recommandons une connexion Wi-Fi.</string>
-    <string name="home_btn_setup">CONFIGURER MAINTENANT</string>
-    <string name="home_btn_download">TÉLÉCHARGER</string>
-    <string name="home_btn_cancel">ANNULER</string>
-    <string name="home_btn_retry">RÉESSAYER</string>
+    <string name="home_btn_setup">Configurer maintenant</string>
+    <string name="home_btn_download">Télécharger</string>
+    <string name="home_btn_cancel">Annuler</string>
+    <string name="home_btn_retry">Réessayer</string>
     <string name="home_download_failed">Échec du téléchargement</string>
+    <string name="download_error_network">Pas de connexion internet. Vérifiez votre Wi-Fi ou vos données mobiles, puis réessayez.</string>
+    <string name="download_error_server">Le serveur de téléchargement est inaccessible. Réessayez plus tard.</string>
+    <string name="download_error_verification">Le fichier téléchargé n\'a pas passé la vérification. Relancez le téléchargement.</string>
+    <string name="download_error_generic">Une erreur est survenue pendant le téléchargement. Veuillez réessayer.</string>
     <string name="home_reset_confirm_title">Réinitialiser la progression ?</string>
     <string name="home_reset_confirm_body">Cela effacera vos données de maîtrise et réinitialisera le programme. Cette action est irréversible.</string>
-    <string name="home_btn_reset">RÉINITIALISER</string>
+    <string name="home_btn_reset">Réinitialiser</string>
     <string name="home_downloading_level">Téléchargement de %1$s</string>
     <string name="home_setting_up_model">Configuration du modèle</string>
 
@@ -89,17 +93,17 @@
     <string name="settings_reset_desc">Effacer les données de maîtrise, les séries et l\'historique des lots</string>
     <string name="settings_reset_confirm_title">Réinitialiser la progression ?</string>
     <string name="settings_reset_confirm_body">Cela effacera toutes les données de maîtrise, séries et historique des lots. Cette action est irréversible.</string>
-    <string name="settings_btn_reset_all">TOUT RÉINITIALISER</string>
-    <string name="btn_cancel">ANNULER</string>
+    <string name="settings_btn_reset_all">Tout réinitialiser</string>
+    <string name="btn_cancel">Annuler</string>
 
     <!-- Milestones -->
     <string name="milestone_title">Objectif atteint !</string>
     <string name="milestone_body">Vous avez maîtrisé %1$d phrases. Continuez comme ça !</string>
-    <string name="milestone_btn_ok">GÉNIAL !</string>
+    <string name="milestone_btn_ok">Génial !</string>
 
     <!-- Tutorial -->
     <string name="tutorial_title">Comment fonctionne le retour</string>
-    <string name="tutorial_btn_got_it">COMPRIS</string>
+    <string name="tutorial_btn_got_it">Compris</string>
 
     <!-- Errors -->
     <string name="error_setup_incomplete">Veuillez d\'abord terminer la configuration initiale.</string>
@@ -122,7 +126,6 @@
     <string name="home_this_level">ce niveau</string>
     <string name="home_setup_required">Configuration requise</string>
     <string name="home_wifi_warning_initial">ATTENTION : si vous utilisez les données mobiles, des frais peuvent s\'appliquer. Nous recommandons une connexion Wi-Fi.</string>
-    <string name="home_unknown_setup_error">Une erreur inconnue s\'est produite pendant la configuration.</string>
     <string name="home_preparing_curriculum">Préparation de votre programme…</string>
     <string name="home_setting_up_recognition">Configuration du modèle de reconnaissance…</string>
     <string name="home_progress_percent">%1$d%%</string>
@@ -134,7 +137,7 @@
     <string name="home_language_label_selected">✓ %1$s</string>
 
     <!-- Top bar -->
-    <string name="home_title_glosso">GLOSSO</string>
+    <string name="home_title_glosso">Glosso</string>
     <string name="home_cd_language">Langue</string>
     <string name="home_cd_settings">Paramètres</string>
 
@@ -157,9 +160,9 @@
     <string name="home_onboarding_how_body">1. Écoutez la voix de référence\n2. Appuyez sur le micro et répétez la phrase\n3. Obtenez un retour phonétique instantané indiquant précisément les sons à améliorer</string>
     <string name="home_onboarding_mastery_title">Système de maîtrise</string>
     <string name="home_onboarding_mastery_body" formatted="false">Obtenez 85% ou plus pour maîtriser une phrase. Les phrases non maîtrisées sont répétées jusqu\'à réussite. Terminez une série complète pour monter de niveau.</string>
-    <string name="btn_next">SUIVANT</string>
+    <string name="btn_next">Suivant</string>
     <string name="btn_lets_go">C\'EST PARTI</string>
-    <string name="btn_skip">PASSER</string>
+    <string name="btn_skip">Passer</string>
 
     <!-- ============================================================ -->
     <!-- strings_settings.xml -->
@@ -171,7 +174,7 @@
     <string name="settings_btn_latin_understand">J\'ai compris</string>
 
     <!-- Settings: misc -->
-    <string name="settings_title">PARAMÈTRES</string>
+    <string name="settings_title">Paramètres</string>
     <string name="settings_back">Retour</string>
 
     <!-- Settings: Learning extras -->
@@ -236,11 +239,11 @@
     <!-- Studio: Batch progress / complete -->
     <string name="studio_batch_progress_label">PROGRESSION DE LA SÉRIE</string>
     <string name="studio_batch_progress_count">%1$d / %2$d</string>
-    <string name="studio_batch_complete_title">SÉRIE TERMINÉE !</string>
+    <string name="studio_batch_complete_title">Série terminée</string>
     <string name="studio_batch_complete_body">Vous avez maîtrisé les %1$d phrases.</string>
     <string name="studio_needs_practice">À TRAVAILLER</string>
     <string name="studio_practice_phoneme">Travaillez votre son /%1$s/</string>
-    <string name="studio_btn_next_batch">SÉRIE SUIVANTE</string>
+    <string name="studio_btn_next_batch">Série suivante</string>
 
     <!-- Studio: Score -->
     <string name="studio_accuracy_label">PRÉCISION</string>
@@ -260,11 +263,11 @@
     <string name="studio_cd_next_sentence">Phrase suivante</string>
 
     <!-- Studio: Model error -->
-    <string name="studio_model_load_failed">ÉCHEC DU CHARGEMENT DU MODÈLE</string>
-    <string name="studio_btn_go_to_settings">OUVRIR LES PARAMÈTRES</string>
+    <string name="studio_model_load_failed">Échec du chargement du modèle</string>
+    <string name="studio_btn_go_to_settings">Ouvrir les paramètres</string>
 
     <!-- Studio: Tutorial overlay -->
-    <string name="tutorial_how_to_read_feedback">COMMENT LIRE LE RETOUR</string>
+    <string name="tutorial_how_to_read_feedback">Comment lire le retour</string>
     <string name="tutorial_intro">Après avoir enregistré votre voix, Glosso Studio analyse votre prononciation phonétiquement.</string>
     <string name="tutorial_mastery_note" formatted="false">Atteignez 85% de précision ou plus pour MAÎTRISER une phrase et progresser dans le programme.</string>
 
@@ -277,9 +280,9 @@
     <string name="feedback_missed_desc">Prononciation incorrecte.</string>
 
     <!-- Milestone dialog (caps variant used by Studio) -->
-    <string name="milestone_caps_title">OBJECTIF !</string>
+    <string name="milestone_caps_title">Objectif</string>
     <string name="milestone_sentences_mastered">phrases maîtrisées !</string>
-    <string name="milestone_btn_keep_going">CONTINUEZ !</string>
+    <string name="milestone_btn_keep_going">Continuez !</string>
 
     <!-- Studio: ViewModel errors / messages -->
     <string name="studio_err_model_failed_default">Échec du chargement du modèle acoustique.</string>
@@ -296,10 +299,10 @@
     <!-- ============================================================ -->
 
     <!-- About screen -->
-    <string name="about_title">À PROPOS</string>
+    <string name="about_title">À propos</string>
     <string name="about_back">Retour</string>
     <string name="about_app_logo_desc">Glosso Studio</string>
-    <string name="about_app_name">GLOSSO STUDIO</string>
+    <string name="about_app_name">Glosso Studio</string>
     <string name="about_version">v2.2.8</string>
     <string name="about_tagline">Entraîneur de prononciation anglais &amp; français sur l\'appareil\npropulsé par l\'analyse phonétique.</string>
 
@@ -362,12 +365,12 @@
     <!-- ============================================================ -->
 
     <!-- Topic selection screen -->
-    <string name="topics_title">CHOISIR LES THÈMES</string>
+    <string name="topics_title">Thèmes</string>
     <string name="topics_level_fallback">Niveau %1$d</string>
     <string name="topics_back">Retour</string>
-    <string name="topics_continue_batch_label">CONTINUER LA SÉRIE  ·  %1$d/%2$d MAÎTRISÉES</string>
-    <string name="topics_practice_all_cta">S\'ENTRAÎNER SUR TOUS LES THÈMES</string>
-    <string name="topics_practice_selected_cta">S\'ENTRAÎNER SUR %1$d THÈMES</string>
+    <string name="topics_continue_batch_label">Continuer · %1$d/%2$d maîtrisées</string>
+    <string name="topics_practice_all_cta">S\'entraîner sur tous les thèmes</string>
+    <string name="topics_practice_selected_cta">S\'entraîner sur %1$d thèmes</string>
     <string name="topics_select_subtitle">Choisissez un ou plusieurs thèmes pour cibler votre pratique.</string>
     <string name="topics_mastered_count">%1$d / %2$d maîtrisées</string>
 
@@ -401,4 +404,41 @@
     <string name="stats_reviews_empty">Rien de programmé pour l\'instant. Maîtrisez des phrases pour créer votre file de révision.</string>
     <string name="stats_empty_timeline">Maîtrisez vos premières phrases pour voir votre progression ici</string>
     <string name="stats_empty_sounds">Aucun son problématique détecté pour l\'instant. Continuez !</string>
+
+    <!-- Studio controls and feedback -->
+    <string name="studio_cd_back">Retour</string>
+    <string name="studio_microphone_title">Accès au microphone</string>
+    <string name="studio_microphone_message">Glosso utilise le microphone seulement lorsque vous lancez un enregistrement. Votre voix est analysée sur cet appareil et n\'est pas envoyée. Vous pouvez refuser l\'accès et continuer à parcourir les leçons.</string>
+    <string name="studio_microphone_continue">Continuer</string>
+    <string name="studio_action_ready_hint">Écoutez l\'exemple, puis enregistrez votre voix.</string>
+    <string name="studio_action_recording_hint">Parlez naturellement, puis appuyez sur arrêter lorsque vous avez terminé.</string>
+    <string name="studio_action_analyzing_hint">Votre prononciation est analysée sur cet appareil.</string>
+    <string name="studio_action_record_voice">Enregistrer ma voix</string>
+    <string name="studio_action_stop_recording">Arrêter l\'enregistrement</string>
+    <string name="studio_action_analyzing">Analyse en cours</string>
+    <string name="studio_action_listen_back">Écouter</string>
+    <string name="studio_action_next">Suivant</string>
+    <string name="studio_feedback_mastered_title">Phrase maîtrisée</string>
+    <string name="studio_feedback_mastered_body">Excellent. Révisez ce son plus tard pour le garder en mémoire.</string>
+    <string name="studio_feedback_close_title">Vous y êtes presque</string>
+    <string name="studio_feedback_close_body">Réécoutez, concentrez-vous sur les sons surlignés, puis réessayez.</string>
+    <string name="studio_feedback_retry_title">Essayez encore</string>
+    <string name="studio_feedback_retry_body">Ralentissez et utilisez les sons surlignés comme guide.</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Accueil</string>
+    <string name="nav_progress">Progrès</string>
+
+    <!-- Home redesign -->
+    <string name="home_continue_label">Continuer</string>
+    <string name="home_continue_cta">Reprendre</string>
+    <string name="home_get_started_title">Commencez votre premier niveau</string>
+    <string name="home_get_started_body">Choisissez un niveau ci-dessous pour le télécharger et commencer.</string>
+    <string name="home_streak_label">Série de jours</string>
+    <string name="home_mastered_label">Phrases maîtrisées</string>
+    <string name="home_all_levels">Vos niveaux</string>
+    <string name="home_level_count">%1$d sur %2$d maîtrisées</string>
+    <string name="home_level_not_downloaded">Non téléchargé</string>
+    <string name="studio_practice_hint">Écoutez la phrase, puis appuyez sur enregistrer et répétez-la.</string>
+    <string name="home_level_setup">Configurer</string>
 </resources>
