@@ -15,8 +15,8 @@ class PhoneticComparatorTest {
     }
 
     @Test
-    fun `normalize strips stress and length marks`() {
-        assertEquals("kæti", PhoneticComparator.normalize("ˈkætˌiː"))
+    fun `normalize strips stress but keeps vowel length`() {
+        assertEquals("kætiː", PhoneticComparator.normalize("ˈkætˌiː"))
     }
 
     @Test
@@ -91,10 +91,10 @@ class PhoneticComparatorTest {
 
     @Test
     fun `known similar pair earns partial credit`() {
-        // l ↔ r has similarity 0.8 in the EN matrix -> CLOSE -> 0.6 weight; a, ɪ, t match -> (0.6 + 3) / 4 = 90
+        // l ↔ r has similarity 0.8 in the EN matrix -> CLOSE with 0.2 cost; a, ɪ, t match
         val result = PhoneticComparator.calculateScoringResult("light", "laɪt", "raɪt")
         assertEquals(MatchStatus.CLOSE, result.alignment[0].status)
-        assertEquals(90, result.score)
+        assertEquals(95, result.score)
     }
 
     @Test
@@ -107,9 +107,9 @@ class PhoneticComparatorTest {
 
     @Test
     fun `mixed alignment computes weighted score`() {
-        // l↔r CLOSE (0.6), ɪ↔ɪ and t↔t PERFECT (1.0 each) -> (0.6 + 1.0 + 1.0) / 3 = 86
+        // l↔r costs 0.2, ɪ and t match -> 1 - 0.2/3 = 93
         val result = PhoneticComparator.calculateScoringResult("lit", "lɪt", "rɪt")
-        assertEquals(86, result.score)
+        assertEquals(93, result.score)
         assertEquals(MatchStatus.CLOSE, result.alignment[0].status)
         assertEquals(MatchStatus.PERFECT, result.alignment[1].status)
     }
@@ -133,11 +133,56 @@ class PhoneticComparatorTest {
     }
 
     @Test
-    fun `normalized output strips stress and length marks`() {
+    fun `normalized output strips stress but keeps vowel length`() {
         val result = PhoneticComparator.calculateScoringResult("sheep", "ˈʃiːp", "ʃiːp")
-        assertEquals("ʃip", result.normalizedExpected)
-        assertEquals("ʃip", result.normalizedActual)
+        assertEquals("ʃiːp", result.normalizedExpected)
+        assertEquals("ʃiːp", result.normalizedActual)
     }
+
+    // region sequence sensitivity (regression: scoring used to be order-insensitive)
+
+    @Test
+    fun `word order matters`() {
+        // Regression: the old bag-of-phonemes search scored reversed phones 100.
+        val result = PhoneticComparator.calculateScoringResult("cat", "kæt", "tæk")
+        assertTrue("reordering should be penalised, got ${result.score}", result.score < 50)
+    }
+
+    @Test
+    fun `repeating the utterance does not inflate the score`() {
+        // Regression: extra produced phonemes used to be completely free.
+        val result = PhoneticComparator.calculateScoringResult("cat", "kæt", "kætkæt")
+        assertTrue("duplication should be penalised, got ${result.score}", result.score < 85)
+    }
+
+    @Test
+    fun `dropping a phoneme is penalised`() {
+        val result = PhoneticComparator.calculateScoringResult("cat", "kæt", "kæ")
+        assertTrue("omission should be penalised, got ${result.score}", result.score < 70)
+    }
+
+    @Test
+    fun `extra phonemes cost something but less than a drop`() {
+        val clean = PhoneticComparator.calculateScoringResult("cat", "kæt", "kæt")
+        val extra = PhoneticComparator.calculateScoringResult("cat", "kæt", "kætə")
+        val dropped = PhoneticComparator.calculateScoringResult("cat", "kæt", "kæ")
+        assertEquals(100, clean.score)
+        assertTrue("extra phone should cost something", extra.score < clean.score)
+        assertTrue("an extra phone should be cheaper than a dropped one", extra.score > dropped.score)
+    }
+
+    @Test
+    fun `vowel length is meaningful`() {
+        // German Stadt /ʃtat/ vs Staat /ʃtaːt/ differ only in vowel length.
+        val wrongLength = PhoneticComparator.calculateScoringResult("Staat", "ʃtaːt", "ʃtat", "de")
+        assertEquals(MatchStatus.CLOSE, wrongLength.alignment[2].status)
+        assertTrue("short vowel for a long one should not be perfect", wrongLength.score < 100)
+
+        val rightLength = PhoneticComparator.calculateScoringResult("Staat", "ʃtaːt", "ʃtaːt", "de")
+        assertEquals(100, rightLength.score)
+    }
+
+    // endregion
 
     @Test
     fun `alignment length matches expected phone count`() {
