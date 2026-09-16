@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import me.shirobyte42.glosso.domain.repository.GlossoRepository
 import me.shirobyte42.glosso.domain.repository.PreferenceRepository
 import me.shirobyte42.glosso.data.local.DatabaseDownloader
+import me.shirobyte42.glosso.data.local.DownloadErrorKind
 import me.shirobyte42.glosso.data.local.DownloadProgress
 import me.shirobyte42.glosso.data.audio.PhonemeRecognizer
 
@@ -89,7 +90,13 @@ class HomeViewModel(
                     }
                     is DownloadProgress.Error -> {
                         Log.e(TAG, "Initial setup failed: ${progress.message}")
-                        _uiState.update { it.copy(isDownloading = false, downloadError = progress.message) }
+                        _uiState.update {
+                            it.copy(
+                                isDownloading = false,
+                                downloadError = progress.message,
+                                downloadErrorKind = progress.kind
+                            )
+                        }
                     }
                 }
             }
@@ -111,11 +118,33 @@ class HomeViewModel(
                         refreshStats()
                     }
                     is DownloadProgress.Error -> {
-                        _uiState.update { it.copy(isDownloading = false, downloadError = progress.message) }
+                        _uiState.update {
+                            it.copy(
+                                isDownloading = false,
+                                downloadError = progress.message,
+                                downloadErrorKind = progress.kind
+                            )
+                        }
                     }
                 }
             }
         }
+    }
+
+    /**
+     * Re-attempts whatever download failed last: the level download when one
+     * was pending, otherwise the initial asset setup.
+     */
+    fun retryDownload() {
+        if (_uiState.value.pendingLevelIndex != null) {
+            startDownload()
+        } else {
+            startInitialSetup()
+        }
+    }
+
+    fun dismissDownloadError() {
+        _uiState.update { it.copy(downloadError = null, downloadErrorKind = null) }
     }
 
     fun cancelSetup() {
@@ -128,7 +157,7 @@ class HomeViewModel(
 
     fun refreshStats() {
         Log.d(TAG, "Refreshing dashboard stats")
-        _uiState.update { it.copy(downloadError = null) }
+        _uiState.update { it.copy(downloadError = null, downloadErrorKind = null) }
         
         viewModelScope.launch {
             val totalMastery = prefs.getTotalMasteryCount()
@@ -149,7 +178,6 @@ class HomeViewModel(
                     0
                 }
                 
-                val safeTotal = if (total <= 0) 1 else total
                 LevelStat(
                     mastered = mastered,
                     total = total,
@@ -211,6 +239,7 @@ data class HomeUiState(
     val isDownloading: Boolean = false,
     val downloadProgress: Float = 0f,
     val downloadError: String? = null,
+    val downloadErrorKind: DownloadErrorKind? = null,
     val pendingLevelIndex: Int? = null,
     val targetLanguage: String = "en_GB",
     val showLanguageSelector: Boolean = false,

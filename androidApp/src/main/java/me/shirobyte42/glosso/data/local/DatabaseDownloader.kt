@@ -40,7 +40,7 @@ class DatabaseDownloader(
         // URL shape: https://gitlab.com/api/v4/projects/ID/packages/generic/NAME/VERSION/FILENAME
         val version = dataVersion ?: run {
             val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
-            val rawVersion = packageInfo.versionName.substringBefore("-")
+            val rawVersion = packageInfo.versionName?.substringBefore("-") ?: "0.0.0"
             if (rawVersion.startsWith("v")) rawVersion else "v$rawVersion"
         }
         return "https://gitlab.com/api/v4/projects/$gitlabProjectId/packages/generic/$gitlabPackageName/$version"
@@ -77,11 +77,21 @@ class DatabaseDownloader(
                 Log.d(TAG, "Downloading vocab (${EspeakModelConfig.VOCAB_FILE})...")
                 try {
                     val response = client.get(getDownloadUrl(EspeakModelConfig.VOCAB_FILE))
+                    if (!response.status.isSuccess()) {
+                        throw DownloadException(
+                            DownloadErrorKind.SERVER,
+                            "HTTP ${response.status.value}"
+                        )
+                    }
                     val bytes = response.body<ByteArray>()
                     withContext(Dispatchers.IO) { vocabFile.writeBytes(bytes) }
                     if (vocabFile.length() < EspeakModelConfig.MIN_VOCAB_BYTES) {
+                        val size = vocabFile.length()
                         vocabFile.delete()
-                        throw Exception("Vocab download too small (${vocabFile.length()} bytes).")
+                        throw DownloadException(
+                            DownloadErrorKind.VERIFICATION,
+                            "Vocab download too small ($size bytes)."
+                        )
                     }
                 } catch (e: Exception) {
                     if (vocabFile.exists()) vocabFile.delete()
@@ -97,20 +107,24 @@ class DatabaseDownloader(
                     trySend(DownloadProgress.Progress(progress))
                 }
                 if (onnxFile.length() < EspeakModelConfig.MIN_MODEL_BYTES) {
+                    val size = onnxFile.length()
                     onnxFile.delete()
-                    throw Exception("Model download too small (${onnxFile.length()} bytes).")
+                    throw DownloadException(
+                        DownloadErrorKind.VERIFICATION,
+                        "Model download too small ($size bytes)."
+                    )
                 }
             }
 
             if (isModelSetupComplete()) {
                 trySend(DownloadProgress.Success)
             } else {
-                trySend(DownloadProgress.Error("Verification failed"))
+                trySend(DownloadProgress.Error("Verification failed", DownloadErrorKind.VERIFICATION))
             }
             close()
         } catch (e: Exception) {
             Log.e(TAG, "Asset download failed", e)
-            trySend(DownloadProgress.Error(e.message ?: "Setup failed"))
+            trySend(DownloadProgress.Error(e.message ?: "Setup failed", classifyDownloadError(e)))
             close(e)
         }
         awaitClose { }
@@ -118,7 +132,9 @@ class DatabaseDownloader(
 
     private suspend fun downloadStreamingInternal(url: String, destination: File, onProgress: (Float) -> Unit) {
         withContext(Dispatchers.IO) {
+            val temporaryDestination = File(destination.parentFile, "${destination.name}.download")
             try {
+                temporaryDestination.delete()
                 client.prepareGet(url) {
                     onDownload { bytesSentTotal, contentLength ->
                         if (contentLength > 0) {
@@ -131,7 +147,7 @@ class DatabaseDownloader(
                         val expectedSize = response.contentLength() ?: -1L
                         var totalBytesRead = 0L
 
-                        FileOutputStream(destination).use { fos ->
+                        FileOutputStream(temporaryDestination).use { fos ->
                             val bufferedOutputStream = fos.buffered()
                             val inputStream = channel.toInputStream()
                             val buffer = ByteArray(64 * 1024)
@@ -148,17 +164,29 @@ class DatabaseDownloader(
                         }
 
                         if (expectedSize != -1L && totalBytesRead != expectedSize) {
-                            destination.delete()
-                            throw Exception("File size mismatch after download!")
+                            temporaryDestination.delete()
+                            throw DownloadException(
+                                DownloadErrorKind.VERIFICATION,
+                                "File size mismatch after download ($totalBytesRead of $expectedSize bytes)."
+                            )
+                        }
+                        // Replace only after the complete file has been verified.
+                        destination.delete()
+                        if (!temporaryDestination.renameTo(destination)) {
+                            throw DownloadException(
+                                DownloadErrorKind.VERIFICATION,
+                                "Could not finalize downloaded file."
+                            )
                         }
                     } else {
-                        throw Exception("HTTP ${response.status.value}")
+                        throw DownloadException(
+                            DownloadErrorKind.SERVER,
+                            "HTTP ${response.status.value}"
+                        )
                     }
                 }
             } catch (e: Exception) {
-                if (destination.exists()) {
-                    destination.delete()
-                }
+                temporaryDestination.delete()
                 throw e
             }
         }
@@ -177,15 +205,38 @@ class DatabaseDownloader(
             close()
         } catch (e: Exception) {
             Log.e(TAG, "Level download failed", e)
-            trySend(DownloadProgress.Error(e.message ?: "Download failed"))
+            trySend(DownloadProgress.Error(e.message ?: "Download failed", classifyDownloadError(e)))
             close(e)
         }
         awaitClose { }
     }
 }
 
+enum class DownloadErrorKind { NETWORK, SERVER, VERIFICATION, GENERIC }
+
+class DownloadException(val kind: DownloadErrorKind, message: String) : Exception(message)
+
+/**
+ * Maps low-level failures to a coarse category so the UI can show a
+ * localized, actionable message instead of a raw exception string.
+ */
+fun classifyDownloadError(e: Throwable): DownloadErrorKind {
+    if (e is DownloadException) return e.kind
+    return when (e) {
+        is io.ktor.client.plugins.HttpRequestTimeoutException,
+        is io.ktor.client.network.sockets.ConnectTimeoutException,
+        is io.ktor.client.network.sockets.SocketTimeoutException,
+        is java.net.UnknownHostException,
+        is java.net.ConnectException,
+        is java.net.SocketException,
+        is java.io.IOException -> DownloadErrorKind.NETWORK
+        is io.ktor.client.plugins.ResponseException -> DownloadErrorKind.SERVER
+        else -> DownloadErrorKind.GENERIC
+    }
+}
+
 sealed class DownloadProgress {
     data class Progress(val percent: Float) : DownloadProgress()
     object Success : DownloadProgress()
-    data class Error(val message: String) : DownloadProgress()
+    data class Error(val message: String, val kind: DownloadErrorKind) : DownloadProgress()
 }

@@ -13,8 +13,7 @@ ksp {
 
 android {
     namespace = "me.shirobyte42.glosso"
-    compileSdk = 34
-    buildToolsVersion = "34.0.0"
+    compileSdk = 35
 
     val baseVersionName = "2.2.8"
 
