@@ -308,7 +308,7 @@
     <string name="about_app_logo_desc">Glosso Studio</string>
     <string name="about_app_name">Glosso Studio</string>
     <string name="about_version">v2.2.8</string>
-    <string name="about_tagline">Entrenador de pronunciación de inglés y francés en el dispositivo\nimpulsado por análisis fonético.</string>
+    <string name="about_tagline">Entrenador de pronunciación en el dispositivo para inglés, francés, español, alemán y latín,\nimpulsado por análisis fonético.</string>
 
     <!-- Section headers -->
     <string name="about_section_how_it_works">CÓMO FUNCIONA</string>
@@ -330,11 +330,11 @@
 
     <!-- How it works -->
     <string name="about_step1_title">Escucha la referencia</string>
-    <string name="about_step1_desc">Elige a Vivian o Aiden como tu voz de referencia y escucha la pronunciación correcta.</string>
+    <string name="about_step1_desc">Pulsa reproducir y escucha la voz de referencia, fijándote en el ritmo y en cada sonido.</string>
     <string name="about_step2_title">Grábate</string>
     <string name="about_step2_desc">Toca el micrófono y di la oración con claridad.</string>
     <string name="about_step3_title">Análisis fonético en el dispositivo</string>
-    <string name="about_step3_desc">Tu grabación se convierte en fonemas IPA mediante Allosaurus (inglés) o Wav2Vec2 (francés), que se ejecutan totalmente sin conexión en tu dispositivo.</string>
+    <string name="about_step3_desc">Tu grabación se convierte en fonemas IPA mediante un modelo wav2vec2 afinado con eSpeak, que se ejecuta totalmente sin conexión en tu dispositivo.</string>
     <string name="about_step4_title">Recibe retroalimentación con colores</string>
     <string name="about_step4_desc">Cada letra se colorea — blanco si es correcta, naranja si está cerca, rojo si es incorrecta — así sabes exactamente qué mejorar.</string>
     <string name="about_step5_title">Domina el lote</string>
@@ -350,9 +350,8 @@
 
     <!-- Credits -->
     <string name="about_credits_intro">Construido sobre los hombros de gigantes.</string>
-    <string name="about_credit_allosaurus_subtitle">Reconocimiento fonético de inglés · GPL-3.0</string>
-    <string name="about_credit_wav2vec2_title">Wav2Vec2 (francés)</string>
-    <string name="about_credit_wav2vec2_subtitle">Reconocimiento de fonemas en francés · Apache-2.0</string>
+    <string name="about_credit_wav2vec2_title">wav2vec2 · eSpeak</string>
+    <string name="about_credit_wav2vec2_subtitle">Reconocimiento fonético multilingüe · Apache-2.0</string>
     <string name="about_credit_qwen_subtitle">Síntesis de voz de referencia · Apache-2.0</string>
     <string name="about_credit_aipron_subtitle">Enfoque de puntuación fonética · por Thiagohgl</string>
     <string name="about_credit_onnx_subtitle">Inferencia de ML en el dispositivo · MIT</string>

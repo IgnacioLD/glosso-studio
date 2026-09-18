@@ -6,7 +6,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.colorResource
+import me.shirobyte42.glosso.BuildConfig
 import me.shirobyte42.glosso.R
+import me.shirobyte42.glosso.presentation.components.readableWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -51,6 +54,7 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
     ) { padding ->
         Column(
             modifier = Modifier
+                .readableWidth()
                 .fillMaxSize()
                 .padding(padding)
                 .navigationBarsPadding()
@@ -60,19 +64,12 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
         ) {
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Hero — replicate adaptive icon: gradient background + foreground vector
+            // Hero — mirrors the adaptive launcher icon: brand background + glyph.
             Box(
                 modifier = Modifier
                     .size(80.dp)
                     .clip(RoundedCornerShape(20.dp))
-                    .background(Color.White)
-                    .then(
-                        Modifier.border(
-                            width = 1.dp,
-                            color = Color.LightGray.copy(alpha = 0.5f),
-                            shape = RoundedCornerShape(20.dp)
-                        )
-                    ),
+                    .background(colorResource(R.color.ic_launcher_background)),
                 contentAlignment = Alignment.Center
             ) {
                 Image(
@@ -96,7 +93,7 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
                 shape = RoundedCornerShape(8.dp)
             ) {
                 Text(
-                    stringResource(R.string.about_version),
+                    "v" + BuildConfig.VERSION_NAME,
                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 3.dp),
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Black,
@@ -193,15 +190,9 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
                     Text(stringResource(R.string.about_credits_intro), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
 
                     CreditItem(
-                        title = "Allosaurus",
-                        subtitle = stringResource(R.string.about_credit_allosaurus_subtitle),
-                        url = "https://github.com/xinjli/allosaurus",
-                        uriHandler = uriHandler
-                    )
-                    CreditItem(
                         title = stringResource(R.string.about_credit_wav2vec2_title),
                         subtitle = stringResource(R.string.about_credit_wav2vec2_subtitle),
-                        url = "https://huggingface.co/facebook/wav2vec2-base",
+                        url = "https://huggingface.co/onnx-community/wav2vec2-lv-60-espeak-cv-ft-ONNX",
                         uriHandler = uriHandler
                     )
                     CreditItem(
