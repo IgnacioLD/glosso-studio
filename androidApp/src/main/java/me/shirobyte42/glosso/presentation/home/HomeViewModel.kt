@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.shirobyte42.glosso.domain.repository.GlossoRepository
 import me.shirobyte42.glosso.domain.repository.PreferenceRepository
 import me.shirobyte42.glosso.data.local.DatabaseDownloader
@@ -51,6 +52,12 @@ class HomeViewModel(
         // database, so a missing model must never gate the app - it just turns
         // every session into an "listen and repeat" one until the user opts in.
         _uiState.update { it.copy(isScoringEnabled = downloader.isModelSetupComplete()) }
+        if (downloader.isModelSetupComplete()) {
+            // Warm the recognizer in the background so scoring is ready by the time
+            // the user reaches the Studio. Building the session loads a ~300 MB
+            // model, which must never happen on the main thread while entering.
+            viewModelScope.launch(Dispatchers.IO) { recognizer.initialize() }
+        }
         refreshStats()
     }
 
@@ -87,7 +94,8 @@ class HomeViewModel(
                     }
                     is DownloadProgress.Success -> {
                         Log.d(TAG, "Initial setup successful!")
-                        recognizer.initialize() // Load the model we just downloaded
+                        // Loading the model is heavy: keep it off the main thread.
+                        withContext(Dispatchers.IO) { recognizer.initialize() }
                         _uiState.update { it.copy(isDownloading = false, downloadProgress = 1f, isScoringEnabled = true) }
                         refreshStats()
                     }

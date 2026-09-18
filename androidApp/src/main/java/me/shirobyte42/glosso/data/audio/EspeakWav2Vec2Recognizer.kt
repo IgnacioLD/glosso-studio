@@ -47,8 +47,17 @@ class EspeakWav2Vec2Recognizer(
     override var modelError: String? = null
         private set
 
-    init { initialize() }
-
+    /**
+     * Builds the ONNX session from the downloaded model.
+     *
+     * This reads a ~300 MB file and allocates native memory, so it must run on a
+     * background dispatcher - never on the main thread. It is deliberately not
+     * called from the constructor: resolving this singleton used to build the
+     * session on the main thread when the first ViewModel was created, freezing
+     * or OOM-killing the app right as the user tried to enter. Safe to call
+     * repeatedly and from several threads; an in-flight or finished load is a no-op.
+     */
+    @Synchronized
     override fun initialize() {
         if (ortSession != null) {
             _modelState.value = ModelState.READY
@@ -66,12 +75,21 @@ class EspeakWav2Vec2Recognizer(
             }
 
             ortEnv = OrtEnvironment.getEnvironment()
-            ortSession = ortEnv?.createSession(modelFile.readBytes())
+            // Load straight from the file. createSession(String) avoids copying the
+            // whole ~300 MB model into a ByteArray on the Java heap first - that
+            // extra spike is what pushed low-RAM devices over the edge at startup.
+            ortSession = ortEnv?.createSession(modelFile.path)
             val (tokens, pad) = loadVocab(vocabFile)
             idToToken = tokens
             padId = pad
             Log.d(TAG, "Espeak wav2vec2 initialized. Vocab size: ${idToToken.size}, pad id: $padId")
             _modelState.value = ModelState.READY
+        } catch (e: OutOfMemoryError) {
+            // An Error, not an Exception: without this catch it would take the whole
+            // process down. Degrade to "scoring off" and let the user keep practising.
+            Log.e(TAG, "Out of memory while loading phoneme model", e)
+            modelError = "Not enough memory to load the pronunciation model."
+            _modelState.value = ModelState.FAILED
         } catch (e: Exception) {
             Log.e(TAG, "Failed to initialize espeak recognizer", e)
             modelError = e.message ?: "Unknown error loading phoneme model."
