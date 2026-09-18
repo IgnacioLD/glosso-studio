@@ -169,7 +169,14 @@ class HomeViewModel(
     fun refreshStats() {
         Log.d(TAG, "Refreshing dashboard stats")
         _uiState.update { it.copy(downloadError = null, downloadErrorKind = null) }
-        
+
+        viewModelScope.launch {
+            // The streak flow starts at 0 on a cold start and is only refreshed
+            // when a sentence is mastered, so the dashboard would show "0 days"
+            // until the first mastery of the session. Recompute it here instead.
+            prefs.setMasteryStreak(prefs.getMasteryStreak())
+        }
+
         viewModelScope.launch {
             val totalMastery = prefs.getTotalMasteryCount()
             
