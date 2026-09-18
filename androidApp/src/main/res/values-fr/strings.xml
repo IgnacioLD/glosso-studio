@@ -304,7 +304,7 @@
     <string name="about_app_logo_desc">Glosso Studio</string>
     <string name="about_app_name">Glosso Studio</string>
     <string name="about_version">v2.2.8</string>
-    <string name="about_tagline">Entraîneur de prononciation anglais &amp; français sur l\'appareil\npropulsé par l\'analyse phonétique.</string>
+    <string name="about_tagline">Entraîneur de prononciation sur l\'appareil pour l\'anglais, le français, l\'espagnol, l\'allemand et le latin,\npropulsé par l\'analyse phonétique.</string>
 
     <!-- Section headers -->
     <string name="about_section_how_it_works">COMMENT ÇA MARCHE</string>
@@ -326,11 +326,11 @@
 
     <!-- How it works -->
     <string name="about_step1_title">Écoutez la référence</string>
-    <string name="about_step1_desc">Choisissez Vivian ou Aiden comme voix de référence et écoutez la prononciation correcte.</string>
+    <string name="about_step1_desc">Appuyez sur lecture et écoutez la voix de référence, en prêtant attention au rythme et à chaque son.</string>
     <string name="about_step2_title">Enregistrez-vous</string>
     <string name="about_step2_desc">Appuyez sur le microphone et prononcez la phrase clairement.</string>
     <string name="about_step3_title">Analyse phonétique sur l\'appareil</string>
-    <string name="about_step3_desc">Votre enregistrement est converti en phonèmes API par Allosaurus (anglais) ou Wav2Vec2 (français), fonctionnant entièrement hors ligne sur votre appareil.</string>
+    <string name="about_step3_desc">Votre enregistrement est converti en phonèmes API par un modèle wav2vec2 affiné sur eSpeak, fonctionnant entièrement hors ligne sur votre appareil.</string>
     <string name="about_step4_title">Recevez un retour coloré</string>
     <string name="about_step4_desc">Chaque lettre est colorée — blanc pour correct, orange pour proche, rouge pour manqué — pour que vous sachiez exactement quoi améliorer.</string>
     <string name="about_step5_title">Maîtrisez la série</string>
@@ -346,9 +346,8 @@
 
     <!-- Credits -->
     <string name="about_credits_intro">Bâti sur les épaules de géants.</string>
-    <string name="about_credit_allosaurus_subtitle">Reconnaissance phonétique anglaise · GPL-3.0</string>
-    <string name="about_credit_wav2vec2_title">Wav2Vec2 (français)</string>
-    <string name="about_credit_wav2vec2_subtitle">Reconnaissance phonémique française · Apache-2.0</string>
+    <string name="about_credit_wav2vec2_title">wav2vec2 · eSpeak</string>
+    <string name="about_credit_wav2vec2_subtitle">Reconnaissance phonétique multilingue · Apache-2.0</string>
     <string name="about_credit_qwen_subtitle">Synthèse vocale de référence · Apache-2.0</string>
     <string name="about_credit_aipron_subtitle">Approche de notation phonétique · par Thiagohgl</string>
     <string name="about_credit_onnx_subtitle">Inférence ML sur l\'appareil · MIT</string>

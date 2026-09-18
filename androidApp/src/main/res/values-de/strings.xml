@@ -290,7 +290,7 @@
     <string name="about_app_logo_desc">Glosso Studio</string>
     <string name="about_app_name">Glosso Studio</string>
     <string name="about_version">v2.2.8</string>
-    <string name="about_tagline">On-Device-Aussprachetrainer für Englisch &amp; Französisch\nmit phonetischer Analyse.</string>
+    <string name="about_tagline">On-Device-Aussprachetrainer für Englisch, Französisch, Spanisch, Deutsch und Latein\nmit phonetischer Analyse.</string>
 
     <!-- Section headers -->
     <string name="about_section_how_it_works">SO FUNKTIONIERT\'S</string>
@@ -312,11 +312,11 @@
 
     <!-- How it works -->
     <string name="about_step1_title">Höre die Referenz an</string>
-    <string name="about_step1_desc">Wähle Vivian oder Aiden als deine Referenzstimme und höre dir die korrekte Aussprache an.</string>
+    <string name="about_step1_desc">Tippe auf Wiedergabe und höre dir die Referenzstimme an — achte auf den Rhythmus und jeden Laut.</string>
     <string name="about_step2_title">Nimm dich selbst auf</string>
     <string name="about_step2_desc">Tippe auf das Mikrofon und sprich den Satz deutlich.</string>
     <string name="about_step3_title">Phonetische Analyse auf dem Gerät</string>
-    <string name="about_step3_desc">Deine Aufnahme wird durch Allosaurus (Englisch) oder Wav2Vec2 (Französisch) in IPA-Phoneme umgewandelt — vollständig offline auf deinem Gerät.</string>
+    <string name="about_step3_desc">Deine Aufnahme wird durch ein auf eSpeak feinabgestimmtes wav2vec2-Modell in IPA-Phoneme umgewandelt — vollständig offline auf deinem Gerät.</string>
     <string name="about_step4_title">Erhalte farbcodiertes Feedback</string>
     <string name="about_step4_desc">Jeder Buchstabe ist eingefärbt — weiß für korrekt, orange für fast, rot für verfehlt — damit du genau weißt, was du verbessern musst.</string>
     <string name="about_step5_title">Meistere die Runde</string>
@@ -332,9 +332,8 @@
 
     <!-- Credits -->
     <string name="about_credits_intro">Auf den Schultern von Giganten gebaut.</string>
-    <string name="about_credit_allosaurus_subtitle">Englische phonetische Erkennung · GPL-3.0</string>
-    <string name="about_credit_wav2vec2_title">Wav2Vec2 (Französisch)</string>
-    <string name="about_credit_wav2vec2_subtitle">Französische Phonemerkennung · Apache-2.0</string>
+    <string name="about_credit_wav2vec2_title">wav2vec2 · eSpeak</string>
+    <string name="about_credit_wav2vec2_subtitle">Mehrsprachige phonetische Erkennung · Apache-2.0</string>
     <string name="about_credit_qwen_subtitle">Referenzstimmen-Synthese · Apache-2.0</string>
     <string name="about_credit_aipron_subtitle">Phonetischer Bewertungsansatz · von Thiagohgl</string>
     <string name="about_credit_onnx_subtitle">On-Device-ML-Inferenz · MIT</string>

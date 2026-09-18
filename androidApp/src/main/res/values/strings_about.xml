@@ -6,7 +6,7 @@
     <string name="about_app_logo_desc">Glosso Studio</string>
     <string name="about_app_name">Glosso Studio</string>
     <string name="about_version">v2.2.8</string>
-    <string name="about_tagline">On-device English &amp; French pronunciation trainer\npowered by phonetic analysis.</string>
+    <string name="about_tagline">On-device pronunciation trainer for English, French, Spanish, German &amp; Latin,\npowered by phonetic analysis.</string>
 
     <!-- Section headers -->
     <string name="about_section_how_it_works">HOW IT WORKS</string>
@@ -28,11 +28,11 @@
 
     <!-- How it works -->
     <string name="about_step1_title">Listen to the reference</string>
-    <string name="about_step1_desc">Choose Vivian or Aiden as your reference voice and listen to the correct pronunciation.</string>
+    <string name="about_step1_desc">Tap play and listen to the reference voice, paying attention to the rhythm and each sound.</string>
     <string name="about_step2_title">Record yourself</string>
     <string name="about_step2_desc">Tap the microphone and speak the sentence clearly.</string>
     <string name="about_step3_title">On-device phonetic analysis</string>
-    <string name="about_step3_desc">Your recording is converted to IPA phonemes by Allosaurus (English) or Wav2Vec2 (French), running entirely offline on your device.</string>
+    <string name="about_step3_desc">Your recording is converted to IPA phonemes by a wav2vec2 model fine-tuned on eSpeak, running entirely offline on your device.</string>
     <string name="about_step4_title">Get color-coded feedback</string>
     <string name="about_step4_desc">Each letter is colored — white for correct, orange for close, red for missed — so you know exactly what to improve.</string>
     <string name="about_step5_title">Master the batch</string>
@@ -48,9 +48,8 @@
 
     <!-- Credits -->
     <string name="about_credits_intro">Built on the shoulders of giants.</string>
-    <string name="about_credit_allosaurus_subtitle">English phonetic recognition · GPL-3.0</string>
-    <string name="about_credit_wav2vec2_title">Wav2Vec2 (French)</string>
-    <string name="about_credit_wav2vec2_subtitle">French phoneme recognition · Apache-2.0</string>
+    <string name="about_credit_wav2vec2_title">wav2vec2 · eSpeak</string>
+    <string name="about_credit_wav2vec2_subtitle">Multilingual phonetic recognition · Apache-2.0</string>
     <string name="about_credit_qwen_subtitle">Reference voice synthesis · Apache-2.0</string>
     <string name="about_credit_aipron_subtitle">Phonetic scoring approach · by Thiagohgl</string>
     <string name="about_credit_onnx_subtitle">On-device ML inference · MIT</string>
