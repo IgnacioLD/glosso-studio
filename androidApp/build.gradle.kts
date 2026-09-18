@@ -13,9 +13,9 @@ ksp {
 
 android {
     namespace = "me.shirobyte42.glosso"
-    compileSdk = 35
+    compileSdk = 36
 
-    val baseVersionName = "2.2.8"
+    val baseVersionName = "2.3.0"
 
     val localProperties = Properties()
     val localPropertiesFile = rootProject.file("local.properties")
@@ -37,8 +37,8 @@ android {
 defaultConfig {
     applicationId = "me.shirobyte42.glosso"
     minSdk = 26
-    targetSdk = 35
-    versionCode = 2209
+    targetSdk = 36
+    versionCode = 2210
     versionName = baseVersionName
 }
 

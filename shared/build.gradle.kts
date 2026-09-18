@@ -41,7 +41,7 @@ kotlin {
 
 android {
     namespace = "me.shirobyte42.glosso.shared"
-    compileSdk = 35
+    compileSdk = 36
     defaultConfig {
         minSdk = 26
     }
