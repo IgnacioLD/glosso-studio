@@ -16,11 +16,11 @@
     <string name="home_no_streak">Aún sin racha</string>
     <string name="home_level_progress">%1$d / %2$d oraciones dominadas</string>
     <string name="home_download_required">Descarga requerida</string>
-    <string name="home_initial_setup">Configuración inicial</string>
-    <string name="home_setup_description">Glosso Studio necesita descargar el modelo acústico (aprox. 300 MB) para realizar el reconocimiento fonético.</string>
+    <string name="home_initial_setup">Activar la puntuación</string>
+    <string name="home_setup_description">La puntuación usa el modelo acústico (unos 300 MB). Puedes seguir practicando sin él - escucha y repite - y solo añade tu nota a cada intento nuevo.</string>
     <string name="home_download_description">Glosso Studio requiere una descarga única para el plan de estudios de %1$s (aprox. 50–100 MB).</string>
     <string name="home_wifi_warning">ADVERTENCIA: Si usas datos móviles, pueden aplicarse costos significativos. Recomendamos usar una conexión Wi-Fi.</string>
-    <string name="home_btn_setup">Configurar ahora</string>
+    <string name="home_btn_setup">Descargar</string>
     <string name="home_btn_download">Descargar</string>
     <string name="home_btn_cancel">Cancelar</string>
     <string name="home_btn_retry">Reintentar</string>
@@ -421,4 +421,25 @@
     <string name="home_level_not_downloaded">Sin descargar</string>
     <string name="studio_practice_hint">Escucha la frase, luego toca grabar y repítela.</string>
     <string name="home_level_setup">Configurar</string>
+    <string name="studio_feedback_focus_word">Concéntrate en \"%1$s\"</string>
+
+    <!-- Puntuación desactivada (sin modelo acústico) -->
+    <string name="home_scoring_off_title">Puntuación desactivada</string>
+    <string name="home_scoring_off_body">Escucha y repite ya. Descarga el reconocimiento (unos 300 MB) cuando quieras recibir tu nota.</string>
+    <string name="home_scoring_off_cta">Activar</string>
+    <string name="studio_scoring_off_title">Modo escuchar y repetir</string>
+    <string name="studio_scoring_off_body">La puntuación aún no está configurada, así que tus intentos no se corrigen. Tu grabación sí se reproduce para que la compares con la referencia.</string>
+    <string name="studio_scoring_off_cta">Activar puntuación</string>
+    <string name="studio_browse_complete_title">Tanda terminada</string>
+    <string name="studio_browse_complete_body">Has pasado por las %1$d frases. Activa la puntuación para empezar a dominarlas.</string>
+
+    <!-- Niveles de dominio (el resultado que ve el usuario, nunca un porcentaje) -->
+    <string name="mastery_level_perfect">Perfecto</string>
+    <string name="mastery_level_mastered">Dominado</string>
+    <string name="mastery_level_almost">Casi</string>
+    <string name="mastery_level_rough">Mejorable</string>
+    <string name="mastery_level_not_yet">Aún no</string>
+    <string name="studio_feedback_focus_word_level">Concéntrate en \"%1$s\" (%2$s)</string>
+    <string name="settings_sounds_label">Sonidos de resultado</string>
+    <string name="settings_sounds_desc">Reproduce un sonido con cada resultado</string>
 </resources>

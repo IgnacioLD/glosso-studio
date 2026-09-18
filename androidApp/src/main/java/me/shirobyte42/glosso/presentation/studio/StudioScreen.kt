@@ -5,10 +5,6 @@ import android.content.pm.PackageManager
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.animateIntAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -64,6 +60,7 @@ import androidx.core.content.ContextCompat
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import org.koin.androidx.compose.koinViewModel
 import me.shirobyte42.glosso.R
+import me.shirobyte42.glosso.domain.model.MasteryLevel
 import me.shirobyte42.glosso.presentation.LocalWindowWidthClass
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -74,6 +71,7 @@ fun StudioScreen(
     resume: Boolean = false,
     onNavigateBack: () -> Unit,
     onNavigateToSettings: () -> Unit,
+    onNavigateHome: () -> Unit = {},
     viewModel: StudioViewModel = koinViewModel { org.koin.core.parameter.parametersOf(category) }
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -81,6 +79,16 @@ fun StudioScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val haptic = LocalHapticFeedback.current
     val isExpandedWidth = LocalWindowWidthClass.current == WindowWidthSizeClass.Expanded
+
+    // On a phone the named result sits at the end of the scroll, so it would be
+    // half off-screen right when it matters. Bring it fully into view after each take.
+    val phoneScrollState = rememberScrollState()
+    LaunchedEffect(state.feedback) {
+        if (state.feedback != null) {
+            kotlinx.coroutines.delay(60)
+            phoneScrollState.animateScrollTo(phoneScrollState.maxValue)
+        }
+    }
 
     // In-app review prompt (no-op in F-Droid flavor)
     if (state.shouldPromptReview) {
@@ -137,22 +145,11 @@ fun StudioScreen(
         )
     }
 
-    // Count-up animation for score
-    val animatedScore by animateIntAsState(
-        targetValue = state.feedback?.score ?: 0,
-        animationSpec = tween(durationMillis = 700, easing = FastOutSlowInEasing),
-        label = "scoreCountUp"
-    )
-    val animatedScoreProgress by animateFloatAsState(
-        targetValue = (state.feedback?.score ?: 0) / 100f,
-        animationSpec = tween(durationMillis = 700, easing = FastOutSlowInEasing),
-        label = "scoreProgress"
-    )
-
     // Haptic feedback on score reveal
     LaunchedEffect(state.feedback) {
         state.feedback?.let { fb ->
-            if (fb.score >= 85) haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+            val mastered = fb.level == MasteryLevel.PERFECT || fb.level == MasteryLevel.MASTERED
+            if (mastered) haptic.performHapticFeedback(HapticFeedbackType.LongPress)
             else haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
         }
     }
@@ -223,7 +220,7 @@ fun StudioScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    if (state.batchTotalSize > 0) {
+                    if (state.isScoringAvailable && state.batchTotalSize > 0) {
                         BatchProgressBar(mastered = state.batchMasteredCount, total = state.batchTotalSize, levelIndex = category)
                         Spacer(modifier = Modifier.height(16.dp))
                     }
@@ -237,7 +234,8 @@ fun StudioScreen(
                             isReview = sentence.text in state.reviewSentenceTexts,
                             showIpa = state.isIpaVisible && sentence.ipa.isNotBlank(),
                             textStyle = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold, lineHeight = 40.sp),
-                            onWordClick = { viewModel.speakWord(it) }
+                            onWordClick = { viewModel.speakWord(it) },
+                            wordLevels = state.feedback?.words?.map { it.level }
                         )
                         val pairHints = state.feedback?.pairHints
                         if (!pairHints.isNullOrEmpty()) {
@@ -258,14 +256,16 @@ fun StudioScreen(
                     // Score
                     Box(modifier = Modifier.fillMaxWidth().height(150.dp), contentAlignment = Alignment.Center) {
                         ScoreDisplay(
-                            feedbackScore = state.feedback?.score,
-                            animatedScore = animatedScore,
-                            animatedScoreProgress = animatedScoreProgress,
+                            level = state.feedback?.level,
                             modifier = Modifier
                         )
                     }
                     Spacer(modifier = Modifier.height(16.dp))
-                    FeedbackSummary(state.feedback?.score, state.isMastered)
+                    FeedbackSummary(state.feedback)
+                    if (!state.isScoringAvailable) {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        ScoringUnavailableNotice(onGoToHome = onNavigateHome)
+                    }
                     Spacer(modifier = Modifier.height(16.dp))
                     PracticeActionCard(
                         isRecording = state.isRecording,
@@ -293,14 +293,14 @@ fun StudioScreen(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()
-                    .verticalScroll(rememberScrollState()),
+                    .verticalScroll(phoneScrollState),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
             ) {
                 Spacer(modifier = Modifier.height(12.dp))
 
                 // Batch progress bar
-                if (state.batchTotalSize > 0) {
+                if (state.isScoringAvailable && state.batchTotalSize > 0) {
                     BatchProgressBar(
                         mastered = state.batchMasteredCount,
                         total = state.batchTotalSize,
@@ -314,7 +314,8 @@ fun StudioScreen(
                     BatchCompleteCard(
                         batchTotalSize = state.batchTotalSize,
                         suggestedDrillPhoneme = state.suggestedDrillPhoneme,
-                        onPracticePhoneme = { viewModel.startDrillBatch(category, it) }
+                        onPracticePhoneme = { viewModel.startDrillBatch(category, it) },
+                        isScoringAvailable = state.isScoringAvailable
                     )
                 } else {
                     // Sentence card
@@ -331,7 +332,8 @@ fun StudioScreen(
                                 fontWeight = FontWeight.Bold,
                                 lineHeight = 30.sp
                             ),
-                            onWordClick = { viewModel.speakWord(it) }
+                            onWordClick = { viewModel.speakWord(it) },
+                            wordLevels = state.feedback?.words?.map { it.level }
                         )
 
                         // Pair hints - show after feedback when there are CLOSE phoneme confusions
@@ -346,6 +348,11 @@ fun StudioScreen(
                                 CircularProgressIndicator(strokeWidth = 3.dp, modifier = Modifier.size(48.dp))
                             }
                         }
+                    }
+
+                    if (!state.isScoringAvailable) {
+                        Spacer(modifier = Modifier.height(12.dp))
+                        ScoringUnavailableNotice(onGoToHome = onNavigateHome)
                     }
                 }
 
@@ -406,15 +413,13 @@ fun StudioScreen(
                         IdlePracticeHint()
                     }
 
-                    // Score display with count-up animation
+                    // Named mastery level for this take
                     Spacer(modifier = Modifier.height(8.dp))
                     ScoreDisplay(
-                        feedbackScore = state.feedback?.score,
-                        animatedScore = animatedScore,
-                        animatedScoreProgress = animatedScoreProgress,
+                        level = state.feedback?.level,
                         modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
                     )
-                    FeedbackSummary(state.feedback?.score, state.isMastered)
+                    FeedbackSummary(state.feedback)
                 }
 
                 Spacer(modifier = Modifier.height(4.dp))

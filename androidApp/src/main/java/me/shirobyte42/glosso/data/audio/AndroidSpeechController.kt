@@ -12,6 +12,7 @@ import me.shirobyte42.glosso.domain.model.MatchStatusModel
 import me.shirobyte42.glosso.domain.model.PairHint
 import me.shirobyte42.glosso.domain.model.PhonemeMatchModel
 import me.shirobyte42.glosso.domain.model.PronunciationFeedback
+import me.shirobyte42.glosso.domain.model.WordFeedbackModel
 import me.shirobyte42.glosso.domain.repository.SpeechController
 import java.io.File
 import java.io.FileOutputStream
@@ -124,11 +125,29 @@ class AndroidSpeechController(
             (curated + fallback).take(MAX_HINTS)
         }
 
+        // Pair each word score with the sentence word at the same position, so
+        // the learner can be told which word to work on rather than just seeing
+        // a number. If the reference IPA word count ever disagrees with the
+        // sentence text the label is left blank instead of mislabelled.
+        val textWords = targetText.trim().split(Regex("\\s+")).filter { it.isNotBlank() }
+        val words = result.words.map { wordScore ->
+            WordFeedbackModel(
+                text = textWords.getOrNull(wordScore.index)?.trim().orEmpty(),
+                score = wordScore.score,
+                level = wordScore.level
+            )
+        }
+
         return PronunciationFeedback(
             score = result.score,
             transcription = actualIpa,
             normalizedExpected = result.normalizedExpected,
             normalizedActual = result.normalizedActual,
+            accuracy = result.accuracy,
+            completeness = result.completeness,
+            words = words,
+            isMastery = result.isMastery,
+            level = result.level,
             alignment = result.alignment.map { match ->
                 PhonemeMatchModel(
                     expected = match.expected,

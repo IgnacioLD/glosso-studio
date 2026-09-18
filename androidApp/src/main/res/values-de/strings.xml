@@ -16,11 +16,11 @@
     <string name="home_no_streak">Noch kein Streak</string>
     <string name="home_level_progress">%1$d / %2$d Sätze gemeistert</string>
     <string name="home_download_required">Download erforderlich</string>
-    <string name="home_initial_setup">Ersteinrichtung</string>
-    <string name="home_setup_description">Glosso Studio muss das akustische Modell (ca. 300 MB) herunterladen, um die phonetische Erkennung durchzuführen.</string>
+    <string name="home_initial_setup">Bewertung aktivieren</string>
+    <string name="home_setup_description">Die Bewertung nutzt das akustische Modell (ca. 300 MB). Du kannst ohne es weiter üben - zuhören und nachsprechen - es ergänzt nur deine Bewertung bei jedem neuen Versuch.</string>
     <string name="home_download_description">Glosso Studio benötigt einen einmaligen Download für den %1$s-Lehrplan (ca. 50–100 MB).</string>
     <string name="home_wifi_warning">WARNUNG: Bei Nutzung mobiler Daten können erhebliche Kosten entstehen. Wir empfehlen eine WLAN-Verbindung.</string>
-    <string name="home_btn_setup">Jetzt einrichten</string>
+    <string name="home_btn_setup">Herunterladen</string>
     <string name="home_btn_download">Herunterladen</string>
     <string name="home_btn_cancel">Abbrechen</string>
     <string name="home_btn_retry">Wiederholen</string>
@@ -423,4 +423,25 @@
     <string name="home_level_not_downloaded">Nicht heruntergeladen</string>
     <string name="studio_practice_hint">Höre den Satz und tippe dann auf Aufnahme, um ihn zu wiederholen.</string>
     <string name="home_level_setup">Einrichten</string>
+    <string name="studio_feedback_focus_word">Konzentriere dich auf \"%1$s\"</string>
+
+    <!-- Bewertung aus (kein akustisches Modell) -->
+    <string name="home_scoring_off_title">Bewertung ist aus</string>
+    <string name="home_scoring_off_body">Höre zu und sprich jetzt nach. Lade die Erkennung (ca. 300 MB) herunter, wann immer du deine Bewertung möchtest.</string>
+    <string name="home_scoring_off_cta">Aktivieren</string>
+    <string name="studio_scoring_off_title">Modus Zuhören &amp; Nachsprechen</string>
+    <string name="studio_scoring_off_body">Die Bewertung ist noch nicht eingerichtet, deine Aufnahmen werden also nicht benotet. Die Aufnahme lässt sich weiterhin abspielen, um sie mit der Referenz zu vergleichen.</string>
+    <string name="studio_scoring_off_cta">Bewertung aktivieren</string>
+    <string name="studio_browse_complete_title">Runde abgeschlossen</string>
+    <string name="studio_browse_complete_body">Du hast alle %1$d Sätze durchgehört. Aktiviere die Bewertung, um sie zu meistern.</string>
+
+    <!-- Benannte Meisterstufen (das Ergebnis, nie ein Prozentwert) -->
+    <string name="mastery_level_perfect">Perfekt</string>
+    <string name="mastery_level_mastered">Gemeistert</string>
+    <string name="mastery_level_almost">Fast</string>
+    <string name="mastery_level_rough">Unsicher</string>
+    <string name="mastery_level_not_yet">Noch nicht</string>
+    <string name="studio_feedback_focus_word_level">Konzentriere dich auf \"%1$s\" (%2$s)</string>
+    <string name="settings_sounds_label">Ergebnis-Töne</string>
+    <string name="settings_sounds_desc">Bei jedem Ergebnis einen Klang abspielen</string>
 </resources>

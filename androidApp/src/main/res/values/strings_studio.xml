@@ -107,4 +107,20 @@
     <string name="studio_err_no_drill_sentences">No sentences found for /%1$s/ drill.</string>
     <string name="studio_err_drill_load_failed">Drill load failed: %1$s</string>
     <string name="studio_practice_hint">Listen to the sentence, then tap record and repeat it.</string>
+    <string name="studio_feedback_focus_word">Focus on "%1$s"</string>
+
+    <!-- Studio: listen-only mode (acoustic model not downloaded yet) -->
+    <string name="studio_scoring_off_title">Listen &amp; repeat mode</string>
+    <string name="studio_scoring_off_body">Scoring is not set up yet, so takes are not graded. Your recording still plays back so you can compare it with the reference.</string>
+    <string name="studio_scoring_off_cta">Enable scoring</string>
+    <string name="studio_browse_complete_title">Round complete</string>
+    <string name="studio_browse_complete_body">You went through all %1$d sentences. Enable scoring to start mastering them.</string>
+
+    <!-- Named mastery levels (the learner-facing result, never a percentage) -->
+    <string name="mastery_level_perfect">Perfect</string>
+    <string name="mastery_level_mastered">Mastered</string>
+    <string name="mastery_level_almost">Almost</string>
+    <string name="mastery_level_rough">Rough</string>
+    <string name="mastery_level_not_yet">Not yet</string>
+    <string name="studio_feedback_focus_word_level">Focus on "%1$s" (%2$s)</string>
 </resources>

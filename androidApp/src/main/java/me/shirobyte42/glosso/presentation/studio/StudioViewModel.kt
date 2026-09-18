@@ -19,6 +19,7 @@ import me.shirobyte42.glosso.domain.repository.PreferenceRepository
 import me.shirobyte42.glosso.domain.repository.SpeechController
 import me.shirobyte42.glosso.domain.usecase.UpdateMasteryUseCase
 import me.shirobyte42.glosso.data.local.SentenceDao
+import me.shirobyte42.glosso.data.audio.FeedbackSoundPlayer
 import me.shirobyte42.glosso.data.audio.PhonemeRecognizer
 import me.shirobyte42.glosso.data.audio.GlossoTtsController
 import me.shirobyte42.glosso.data.audio.ModelState
@@ -31,6 +32,7 @@ class StudioViewModel(
     private val updateMastery: UpdateMasteryUseCase,
     private val recognizer: PhonemeRecognizer,
     private val ttsController: GlossoTtsController,
+    private val feedbackSoundPlayer: FeedbackSoundPlayer,
     private val appContext: Context
 ) : ViewModel() {
     private val TAG = "StudioViewModel"
@@ -47,7 +49,8 @@ class StudioViewModel(
         isIpaVisible = prefs.isIpaVisible(),
         isTranslationVisible = prefs.isTranslationVisible(),
         targetLanguage = prefs.getTargetLanguage(),
-        uiLanguage = prefs.getUiLanguage().ifEmpty { "en" }
+        uiLanguage = prefs.getUiLanguage().ifEmpty { "en" },
+        isScoringAvailable = recognizer.modelState.value == ModelState.READY
     ))
     val uiState: StateFlow<StudioUiState> = _uiState
 
@@ -56,6 +59,7 @@ class StudioViewModel(
     init {
         viewModelScope.launch {
             recognizer.modelState.collect { state ->
+                _uiState.update { it.copy(isScoringAvailable = state == ModelState.READY) }
                 if (state == ModelState.FAILED) {
                     val msg = recognizer.modelError
                         ?: appContext.getString(R.string.studio_err_model_failed_default)
@@ -253,11 +257,15 @@ class StudioViewModel(
         // Never replace the visible sentence while its recording or analysis owns the state.
         if (state.isRecording || state.isAnalyzing) return
         val current = state.currentSentence ?: return
-        val score = state.feedback?.score ?: 0
-        val mastered = score >= 85
+        // Use the scorer's decision (score + completeness + no destroyed word)
+        // so the batch advances on exactly the same rule that marks mastery.
+        val mastered = state.feedback?.isMastery ?: false
 
+        // With scoring off nothing can ever be mastered, so requeueing would trap
+        // the user in the same ten sentences. Treat it as a straight listen-and-repeat pass.
+        val canScore = state.isScoringAvailable
         val remaining = state.batchQueue.drop(1)
-        val newQueue = if (mastered) remaining else remaining + current
+        val newQueue = if (mastered || !canScore) remaining else remaining + current
         val newMasteredCount = state.batchMasteredCount + if (mastered) 1 else 0
 
         lastAudioBase64 = null
@@ -323,7 +331,11 @@ class StudioViewModel(
                 if (base64 != null) {
                     lastAudioBase64 = base64
                     _uiState.update { it.copy(hasRecordedVoice = true) }
-                    analyzeSpeech(base64)
+                    // Without the acoustic model there is nothing to score against,
+                    // so keep the take for playback and let the user move on.
+                    if (_uiState.value.isScoringAvailable) {
+                        analyzeSpeech(base64)
+                    }
                 } else {
                     _uiState.update { it.copy(error = appContext.getString(R.string.error_recording_failed)) }
                 }
@@ -347,19 +359,31 @@ class StudioViewModel(
                 val sentence = _uiState.value.currentSentence ?: return@launch
                 val startTime = System.currentTimeMillis()
 
-                val feedback = withContext(Dispatchers.Default) {
+                val recognizedIpa = withContext(Dispatchers.Default) {
                     Log.d(TAG, "Attempting on-device recognition...")
-                    val recognizedIpa = speechController.recognize(base64Audio)
+                    speechController.recognize(base64Audio)
+                }
 
-                    if (recognizedIpa != null) {
-                        Log.d(TAG, "On-device recognition success: $recognizedIpa")
-                        val result = speechController.calculateScore(sentence.text, sentence.ipa, recognizedIpa)
-                        Log.d(TAG, "On-device scoring result: ${result.score}")
-                        result
-                    } else {
-                        Log.e(TAG, "On-device recognition failed.")
-                        throw Exception(appContext.getString(R.string.studio_err_recognition_failed_setup))
+                // Silence, noise, or a clipped-off take: don't invent a score and
+                // don't let phantom phones count as missed sounds. Just ask again.
+                if (recognizedIpa.isNullOrBlank()) {
+                    Log.d(TAG, "No usable speech in this attempt - skipping scoring")
+                    val elapsed = System.currentTimeMillis() - startTime
+                    if (elapsed < 300) delay(300 - elapsed)
+                    _uiState.update {
+                        it.copy(
+                            isAnalyzing = false,
+                            error = appContext.getString(R.string.feedback_hint_no_speech)
+                        )
                     }
+                    return@launch
+                }
+
+                val feedback = withContext(Dispatchers.Default) {
+                    Log.d(TAG, "On-device recognition success: $recognizedIpa")
+                    val result = speechController.calculateScore(sentence.text, sentence.ipa, recognizedIpa)
+                    Log.d(TAG, "On-device scoring result: ${result.score}")
+                    result
                 }
 
                 val elapsed = System.currentTimeMillis() - startTime
@@ -367,7 +391,13 @@ class StudioViewModel(
 
                 val levelIndex = prefs.getLastLevel()
                 val topic = sentence.topic
-                val result = updateMastery(feedback.score, sentence.text, levelIndex, topic)
+                val result = updateMastery(
+                    score = feedback.score,
+                    mastered = feedback.isMastery,
+                    sentenceText = sentence.text,
+                    category = levelIndex,
+                    topic = topic
+                )
 
                 // Track phoneme stats
                 feedback.alignment.forEach { match ->
@@ -383,13 +413,16 @@ class StudioViewModel(
                     currentStreak = result.currentStreak
                 ) }
 
+                // Reward the take with the level's chime (top levels only).
+                feedbackSoundPlayer.play(feedback.level)
+
                 // Schedule for review if newly mastered; update review if it was a review sentence
                 val isReview = _uiState.value.reviewSentenceTexts.contains(sentence.text)
                 if (result.isNewMastery) {
                     prefs.scheduleReview(sentence.text, levelIndex)
                     checkMilestone()
                 } else if (isReview) {
-                    prefs.updateReviewResult(sentence.text, mastered = feedback.score >= 85)
+                    prefs.updateReviewResult(sentence.text, mastered = feedback.isMastery)
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Analysis failed", e)
@@ -491,6 +524,7 @@ class StudioViewModel(
         super.onCleared()
         speechController.stopPlayback()
         ttsController.shutdown()
+        feedbackSoundPlayer.release()
     }
 }
 
@@ -512,6 +546,7 @@ data class StudioUiState(
     val isIpaVisible: Boolean = false,
     val isTranslationVisible: Boolean = true,
     val modelError: String? = null,
+    val isScoringAvailable: Boolean = true,
     val pendingMilestone: Int? = null,
     val topicMasteryCounts: Map<String, Int> = emptyMap(),
     val topicTotalCounts: Map<String, Int> = emptyMap(),

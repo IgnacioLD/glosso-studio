@@ -61,6 +61,11 @@ interface PreferenceRepository {
     fun setIpaVisible(visible: Boolean)
     fun getIpaVisibleFlow(): kotlinx.coroutines.flow.Flow<Boolean>
 
+    // Reward sound played when a take reaches a high mastery level
+    fun isFeedbackSoundsEnabled(): Boolean
+    fun setFeedbackSoundsEnabled(enabled: Boolean)
+    fun getFeedbackSoundsEnabledFlow(): kotlinx.coroutines.flow.Flow<Boolean>
+
     // Theme (0=system, 1=light, 2=dark)
     fun getThemeMode(): Int
     fun setThemeMode(mode: Int)
@@ -70,8 +75,13 @@ interface PreferenceRepository {
     fun setTargetLanguage(code: String)
     fun getTargetLanguageFlow(): kotlinx.coroutines.flow.Flow<String>
 
-    // Interface / translation language (what we translate sentences into). Defaults to "en".
+    // Interface / translation language (what we translate sentences into).
+    // The effective code is never blank: when the stored tag is blank (follow
+    // the system) it resolves from the device locale, so hints/translations are
+    // never silently served in English on a non-English device.
     fun getUiLanguage(): String
+    /** The raw stored tag; "" means "follow the system". Used by the Settings UI. */
+    fun getUiLanguageTag(): String
     fun setUiLanguage(code: String)
 
     // Show sentence translation under the text in StudioScreen

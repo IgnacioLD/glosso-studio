@@ -62,4 +62,9 @@
     <string name="btn_lets_go">LET\'S GO</string>
     <string name="btn_skip">Skip</string>
     <string name="home_level_setup">Set up</string>
+
+    <!-- Scoring opt-in (the acoustic model only powers scoring) -->
+    <string name="home_scoring_off_title">Scoring is off</string>
+    <string name="home_scoring_off_body">Listen and repeat now. Download the recognition model (about 300 MB) whenever you want your score.</string>
+    <string name="home_scoring_off_cta">Enable</string>
 </resources>

@@ -250,6 +250,13 @@ fun SettingsScreen(
                         viewModel.setPlaybackSpeed(if (slow) 0.75f else 1.0f)
                     }
                 )
+                SettingsDivider()
+                SettingsToggleRow(
+                    label = stringResource(R.string.settings_sounds_label),
+                    description = stringResource(R.string.settings_sounds_desc),
+                    checked = state.isFeedbackSoundsEnabled,
+                    onCheckedChange = { viewModel.setFeedbackSoundsEnabled(it) }
+                )
             }
 
             SettingsGroup(

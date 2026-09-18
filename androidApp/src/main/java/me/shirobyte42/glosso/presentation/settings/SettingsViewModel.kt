@@ -16,6 +16,7 @@ data class SettingsUiState(
     val playbackSpeed: Float = 1.0f,
     val isIpaVisible: Boolean = false,
     val isTranslationVisible: Boolean = true,
+    val isFeedbackSoundsEnabled: Boolean = true,
     val themeMode: Int = 0, // 0=system, 1=light, 2=dark
     val targetLanguage: String = "en_GB",
     val uiLanguage: String = "en",
@@ -32,9 +33,10 @@ class SettingsViewModel(
             playbackSpeed = prefs.getPlaybackSpeed(),
             isIpaVisible = prefs.isIpaVisible(),
             isTranslationVisible = prefs.isTranslationVisible(),
+            isFeedbackSoundsEnabled = prefs.isFeedbackSoundsEnabled(),
             themeMode = prefs.getThemeMode(),
             targetLanguage = prefs.getTargetLanguage(),
-            uiLanguage = prefs.getUiLanguage()
+            uiLanguage = prefs.getUiLanguageTag()
         )
     )
     val uiState: StateFlow<SettingsUiState> = _uiState.asStateFlow()
@@ -52,6 +54,11 @@ class SettingsViewModel(
     fun setTranslationVisible(visible: Boolean) {
         prefs.setTranslationVisible(visible)
         _uiState.update { it.copy(isTranslationVisible = visible) }
+    }
+
+    fun setFeedbackSoundsEnabled(enabled: Boolean) {
+        prefs.setFeedbackSoundsEnabled(enabled)
+        _uiState.update { it.copy(isFeedbackSoundsEnabled = enabled) }
     }
 
     fun setThemeMode(mode: Int) {
