@@ -70,6 +70,7 @@ import me.shirobyte42.glosso.R
 import me.shirobyte42.glosso.domain.model.SUPPORTED_LANGUAGES
 import me.shirobyte42.glosso.presentation.components.GlossoCard
 import me.shirobyte42.glosso.presentation.components.GlossoSectionLabel
+import me.shirobyte42.glosso.presentation.components.readableWidth
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -146,6 +147,7 @@ fun SettingsScreen(
     ) { padding ->
         Column(
             modifier = Modifier
+                .readableWidth()
                 .fillMaxSize()
                 .padding(padding)
                 .verticalScroll(rememberScrollState())

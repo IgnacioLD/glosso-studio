@@ -110,14 +110,14 @@ class MainActivity : ComponentActivity() {
                 ?: remember { mutableStateOf(initialLang) }
 
             GlossoTheme(themeMode = themeMode) {
-                if (targetLanguage.isNullOrEmpty()) {
-                    LanguageSelectionScreen { lang ->
-                        prefs.setTargetLanguage(lang)
-                    }
-                } else {
-                    CompositionLocalProvider(
-                        LocalWindowWidthClass provides windowSizeClass.widthSizeClass
-                    ) {
+                CompositionLocalProvider(
+                    LocalWindowWidthClass provides windowSizeClass.widthSizeClass
+                ) {
+                    if (targetLanguage.isNullOrEmpty()) {
+                        LanguageSelectionScreen { lang ->
+                            prefs.setTargetLanguage(lang)
+                        }
+                    } else {
                         GlossoAppShell()
                     }
                 }
@@ -316,7 +316,7 @@ private fun NavPill(
         ) {
             Icon(
                 imageVector = if (selected) destination.selectedIcon else destination.unselectedIcon,
-                contentDescription = null,
+                contentDescription = stringResource(destination.labelRes),
                 tint = contentColor,
                 modifier = Modifier.size(22.dp)
             )

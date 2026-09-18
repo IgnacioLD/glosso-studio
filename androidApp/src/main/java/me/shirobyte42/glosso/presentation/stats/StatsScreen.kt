@@ -48,6 +48,7 @@ import me.shirobyte42.glosso.R
 import me.shirobyte42.glosso.presentation.components.GlossoCard
 import me.shirobyte42.glosso.presentation.components.GlossoSectionHeader
 import me.shirobyte42.glosso.presentation.components.GlossoStatCard
+import me.shirobyte42.glosso.presentation.components.readableWidth
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -95,6 +96,7 @@ fun StatsScreen(
 
         Column(
             modifier = Modifier
+                .readableWidth()
                 .fillMaxSize()
                 .padding(padding)
                 .verticalScroll(rememberScrollState())
