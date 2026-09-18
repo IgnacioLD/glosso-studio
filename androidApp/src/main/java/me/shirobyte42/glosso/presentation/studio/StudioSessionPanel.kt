@@ -2,6 +2,7 @@ package me.shirobyte42.glosso.presentation.studio
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -52,11 +53,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -66,6 +69,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import me.shirobyte42.glosso.R
 import me.shirobyte42.glosso.domain.model.LetterFeedbackModel
+import me.shirobyte42.glosso.domain.model.MasteryLevel
+import me.shirobyte42.glosso.domain.model.PronunciationFeedback
 import me.shirobyte42.glosso.presentation.theme.GlossoFeedbackClose
 import me.shirobyte42.glosso.presentation.theme.levelColor
 
@@ -234,7 +239,8 @@ fun SentenceCard(
     isReview: Boolean,
     showIpa: Boolean,
     textStyle: TextStyle,
-    onWordClick: (String) -> Unit
+    onWordClick: (String) -> Unit,
+    wordLevels: List<MasteryLevel>? = null
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -279,7 +285,8 @@ fun SentenceCard(
                 text = sentenceText,
                 feedback = letterFeedback,
                 onWordClick = onWordClick,
-                style = textStyle
+                style = textStyle,
+                wordLevels = wordLevels
             )
 
             translation?.let { tr ->
@@ -338,43 +345,71 @@ fun PairHintsColumn(pairHints: List<me.shirobyte42.glosso.domain.model.PairHint>
 
 @Composable
 fun ScoreDisplay(
-    feedbackScore: Int?,
-    animatedScore: Int,
-    animatedScoreProgress: Float,
+    level: MasteryLevel?,
     modifier: Modifier = Modifier
 ) {
     AnimatedVisibility(
-        visible = feedbackScore != null,
-        enter = fadeIn(tween(300)) + scaleIn(initialScale = 0.85f, animationSpec = tween(400, easing = FastOutSlowInEasing)),
-        exit = fadeOut(tween(300))
+        visible = level != null,
+        enter = fadeIn(tween(250)) + scaleIn(initialScale = 0.85f, animationSpec = tween(350, easing = FastOutSlowInEasing)),
+        exit = fadeOut(tween(200))
     ) {
-        feedbackScore?.let {
-            val scoreColor = when {
-                it >= 85 -> MaterialTheme.colorScheme.secondary
-                it >= 50 -> MaterialTheme.colorScheme.tertiary
-                else -> MaterialTheme.colorScheme.error
-            }
-            Box(modifier = modifier, contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(
-                    progress = animatedScoreProgress,
-                    modifier = Modifier.size(112.dp),
-                    color = scoreColor,
-                    strokeWidth = 8.dp,
-                    trackColor = scoreColor.copy(alpha = 0.1f)
-                )
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        stringResource(R.string.studio_score_percent, animatedScore),
-                        style = MaterialTheme.typography.headlineMedium,
-                        fontWeight = FontWeight.Black
-                    )
-                    Text(
-                        stringResource(R.string.studio_accuracy_label),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = scoreColor,
-                        fontWeight = FontWeight.Black,
-                        letterSpacing = 1.sp
-                    )
+        level?.let {
+            val color = masteryLevelColor(it)
+            val stepCount = MasteryLevel.values().size
+            val filled = stepCount - it.ordinal
+            Column(
+                modifier = modifier,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                // The named result, as a badge: unmistakable without a legend.
+                Surface(
+                    shape = RoundedCornerShape(50),
+                    color = color.copy(alpha = 0.14f),
+                    border = BorderStroke(1.dp, color.copy(alpha = 0.35f))
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 18.dp, vertical = 9.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Icon(
+                            masteryLevelIcon(it),
+                            contentDescription = null,
+                            tint = color,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Text(
+                            text = masteryLevelLabel(it),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Black,
+                            color = color
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+                // Five-step ladder showing where this take landed, lit left to right.
+                Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    for (i in 0 until stepCount) {
+                        val on = i < filled
+                        val alpha = animateFloatAsState(
+                            targetValue = if (on) 1f else 0.16f,
+                            animationSpec = tween(durationMillis = 320, delayMillis = i * 70, easing = FastOutSlowInEasing),
+                            label = "levelBarAlpha$i"
+                        ).value
+                        val scale = animateFloatAsState(
+                            targetValue = if (on) 1f else 0.75f,
+                            animationSpec = tween(durationMillis = 320, delayMillis = i * 70, easing = FastOutSlowInEasing),
+                            label = "levelBarScale$i"
+                        ).value
+                        Box(
+                            modifier = Modifier
+                                .height(8.dp)
+                                .width(30.dp)
+                                .graphicsLayer { scaleY = scale }
+                                .clip(CircleShape)
+                                .background(color.copy(alpha = alpha))
+                        )
+                    }
                 }
             }
         }
@@ -456,25 +491,30 @@ fun PracticeActionCard(
 }
 
 @Composable
-fun FeedbackSummary(score: Int?, isMastered: Boolean) {
-    score ?: return
-    val (title, body, color) = when {
-        isMastered -> Triple(
-            stringResource(R.string.studio_feedback_mastered_title),
-            stringResource(R.string.studio_feedback_mastered_body),
-            MaterialTheme.colorScheme.secondary
-        )
-        score >= 70 -> Triple(
-            stringResource(R.string.studio_feedback_close_title),
-            stringResource(R.string.studio_feedback_close_body),
-            MaterialTheme.colorScheme.tertiary
-        )
-        else -> Triple(
-            stringResource(R.string.studio_feedback_retry_title),
-            stringResource(R.string.studio_feedback_retry_body),
-            MaterialTheme.colorScheme.error
-        )
+fun FeedbackSummary(feedback: PronunciationFeedback?) {
+    feedback ?: return
+    val level = feedback.level
+    val title = masteryLevelLabel(level)
+    val body = when (level) {
+        MasteryLevel.PERFECT, MasteryLevel.MASTERED ->
+            stringResource(R.string.studio_feedback_mastered_body)
+        MasteryLevel.ALMOST ->
+            stringResource(R.string.studio_feedback_close_body)
+        MasteryLevel.ROUGH, MasteryLevel.NOT_YET ->
+            stringResource(R.string.studio_feedback_retry_body)
     }
+    val color = masteryLevelColor(level)
+
+    // Naming the single weakest word (and how far off it is) is far more
+    // actionable than a percentage, and it is how a teacher would phrase it.
+    val focusWord = if (level != MasteryLevel.PERFECT && level != MasteryLevel.MASTERED && feedback.words.size > 1) {
+        feedback.words
+            .filter { it.text.isNotBlank() }
+            .minByOrNull { it.score }
+    } else {
+        null
+    }
+
     Surface(
         modifier = Modifier.fillMaxWidth(),
         color = color.copy(alpha = 0.1f),
@@ -484,6 +524,19 @@ fun FeedbackSummary(score: Int?, isMastered: Boolean) {
             Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = color)
             Spacer(modifier = Modifier.height(2.dp))
             Text(body, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            focusWord?.let { word ->
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = stringResource(
+                        R.string.studio_feedback_focus_word_level,
+                        word.text,
+                        masteryLevelLabel(word.level)
+                    ),
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
         }
     }
 }
@@ -566,10 +619,57 @@ fun PlaybackSpeedToggle(isSlow: Boolean, onToggle: () -> Unit) {
 }
 
 @Composable
+fun ScoringUnavailableNotice(onGoToHome: () -> Unit) {
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        color = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.5f),
+        shape = RoundedCornerShape(14.dp),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.tertiary.copy(alpha = 0.25f))
+    ) {
+        Column(modifier = Modifier.padding(14.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    Icons.Default.Mic,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.tertiary,
+                    modifier = Modifier.size(18.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    stringResource(R.string.studio_scoring_off_title),
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.tertiary
+                )
+            }
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                stringResource(R.string.studio_scoring_off_body),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Spacer(modifier = Modifier.height(6.dp))
+            TextButton(
+                onClick = onGoToHome,
+                contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp)
+            ) {
+                Text(
+                    stringResource(R.string.studio_scoring_off_cta),
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Icon(Icons.Default.ArrowForward, contentDescription = null, modifier = Modifier.size(16.dp))
+            }
+        }
+    }
+}
+
+@Composable
 fun BatchCompleteCard(
     batchTotalSize: Int,
     suggestedDrillPhoneme: String?,
-    onPracticePhoneme: (String) -> Unit
+    onPracticePhoneme: (String) -> Unit,
+    isScoringAvailable: Boolean = true
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -587,20 +687,28 @@ fun BatchCompleteCard(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Icon(
-                Icons.Default.Star,
+                if (isScoringAvailable) Icons.Default.Star else Icons.Default.Check,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.secondary,
+                tint = if (isScoringAvailable) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.tertiary,
                 modifier = Modifier.size(48.dp)
             )
             Text(
-                stringResource(R.string.studio_batch_complete_title),
+                stringResource(
+                    if (isScoringAvailable) R.string.studio_batch_complete_title
+                    else R.string.studio_browse_complete_title
+                ),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Black,
                 letterSpacing = 1.sp,
-                color = MaterialTheme.colorScheme.secondary
+                color = if (isScoringAvailable) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.tertiary,
+                textAlign = TextAlign.Center
             )
             Text(
-                stringResource(R.string.studio_batch_complete_body, batchTotalSize),
+                stringResource(
+                    if (isScoringAvailable) R.string.studio_batch_complete_body
+                    else R.string.studio_browse_complete_body,
+                    batchTotalSize
+                ),
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onSurfaceVariant

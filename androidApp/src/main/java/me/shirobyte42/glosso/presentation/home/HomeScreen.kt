@@ -328,6 +328,12 @@ fun HomeScreen(
                 }
             }
 
+            if (!state.isScoringEnabled) {
+                item {
+                    ScoringOffCard(onEnable = { viewModel.requestScoringSetup() })
+                }
+            }
+
             item {
                 GlossoSectionLabel(text = stringResource(R.string.home_all_levels))
             }
@@ -529,6 +535,55 @@ private fun LevelRow(
             tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
             modifier = Modifier.size(18.dp)
         )
+    }
+}
+
+@Composable
+private fun ScoringOffCard(onEnable: () -> Unit) {
+    GlossoCard(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(MaterialTheme.colorScheme.tertiaryContainer),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    Icons.Default.Mic,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.tertiary,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+            Spacer(modifier = Modifier.width(14.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = stringResource(R.string.home_scoring_off_title),
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(
+                    text = stringResource(R.string.home_scoring_off_body),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+            TextButton(onClick = onEnable) {
+                Text(
+                    text = stringResource(R.string.home_scoring_off_cta),
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
     }
 }
 

@@ -47,11 +47,11 @@ class HomeViewModel(
         if (!prefs.isOnboardingShown()) {
             _uiState.update { it.copy(showOnboarding = true) }
         }
-        if (!downloader.isModelSetupComplete()) {
-            _uiState.update { it.copy(isInitialSetupRequired = true) }
-        } else {
-            refreshStats()
-        }
+        // The acoustic model only powers scoring. Content lives in the per-level
+        // database, so a missing model must never gate the app - it just turns
+        // every session into an "listen and repeat" one until the user opts in.
+        _uiState.update { it.copy(isScoringEnabled = downloader.isModelSetupComplete()) }
+        refreshStats()
     }
 
     fun dismissOnboarding() {
@@ -60,16 +60,19 @@ class HomeViewModel(
     }
 
     fun onLevelClick(levelIndex: Int, onNavigate: (Int) -> Unit) {
-        if (!downloader.isModelSetupComplete()) {
-            _uiState.update { it.copy(isInitialSetupRequired = true) }
-            return
-        }
-        
         if (downloader.isLevelDownloaded(levelIndex)) {
             onNavigate(levelIndex)
         } else {
             _uiState.update { it.copy(pendingLevelIndex = levelIndex, isDownloadRequired = true) }
         }
+    }
+
+    /**
+     * Explicitly opens the scoring opt-in dialog. Reachable from the "scoring
+     * off" card, so the download only ever starts because the user asked for it.
+     */
+    fun requestScoringSetup() {
+        _uiState.update { it.copy(isInitialSetupRequired = true) }
     }
 
     fun startInitialSetup() {
@@ -85,7 +88,7 @@ class HomeViewModel(
                     is DownloadProgress.Success -> {
                         Log.d(TAG, "Initial setup successful!")
                         recognizer.initialize() // Load the model we just downloaded
-                        _uiState.update { it.copy(isDownloading = false, downloadProgress = 1f) }
+                        _uiState.update { it.copy(isDownloading = false, downloadProgress = 1f, isScoringEnabled = true) }
                         refreshStats()
                     }
                     is DownloadProgress.Error -> {
@@ -235,6 +238,7 @@ data class HomeUiState(
     val levelStats: List<LevelStat> = List(6) { LevelStat(0, 10, 0f) },
     val isLoading: Boolean = false,
     val isInitialSetupRequired: Boolean = false,
+    val isScoringEnabled: Boolean = false,
     val isDownloadRequired: Boolean = false,
     val isDownloading: Boolean = false,
     val downloadProgress: Float = 0f,

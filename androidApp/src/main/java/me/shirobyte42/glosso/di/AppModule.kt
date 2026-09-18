@@ -7,6 +7,7 @@ import org.koin.dsl.module
 import me.shirobyte42.glosso.data.audio.EspeakWav2Vec2Recognizer
 import me.shirobyte42.glosso.data.audio.PhonemeRecognizer
 import me.shirobyte42.glosso.data.audio.AndroidSpeechController
+import me.shirobyte42.glosso.data.audio.FeedbackSoundPlayer
 import me.shirobyte42.glosso.data.audio.GlossoTtsController
 import me.shirobyte42.glosso.data.prefs.AndroidPreferenceRepository
 import me.shirobyte42.glosso.domain.repository.PreferenceRepository
@@ -81,6 +82,7 @@ val appModule = module {
 
     single<PhonemeRecognizer> { EspeakWav2Vec2Recognizer(get()) }
     single { GlossoTtsController(get()) }
+    single { FeedbackSoundPlayer(androidContext(), get()) }
     single<PreferenceRepository> { AndroidPreferenceRepository(get(), get(), get(), get()) }
     single<SpeechController> {
         AndroidSpeechController(
@@ -114,6 +116,7 @@ val appModule = module {
             updateMastery = get(),
             recognizer = get(),
             ttsController = get(),
+            feedbackSoundPlayer = get(),
             appContext = androidContext()
         )
     }

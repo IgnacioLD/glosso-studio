@@ -1,9 +1,11 @@
 package me.shirobyte42.glosso.data.audio
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import me.shirobyte42.glosso.domain.model.MasteryLevel
 
 class PhoneticComparatorTest {
 
@@ -189,6 +191,92 @@ class PhoneticComparatorTest {
         val result = PhoneticComparator.calculateScoringResult("cat", "kæt", "ʃuːz")
         assertEquals(3, result.alignment.size)
         assertEquals(listOf("k", "æ", "t"), result.alignment.map { it.expected })
+    }
+
+    // endregion
+
+    // region word scores, axes and mastery gates
+
+    @Test
+    fun `word scores are reported per reference word`() {
+        val result = PhoneticComparator.calculateScoringResult("cat dog", "kæt dɒɡ", "kæt dɒɡ")
+        assertEquals(2, result.words.size)
+        assertTrue(result.words.all { it.score == 100 })
+        assertEquals(3, result.words[0].phoneCount)
+        assertEquals(listOf(0, 1), result.words.map { it.index })
+    }
+
+    @Test
+    fun `accuracy and completeness separate sound quality from skipped words`() {
+        // The second word is never attempted: every sound produced was correct,
+        // but only half the sentence was said. These must not collapse into one
+        // number, or the feedback cannot explain what to fix.
+        val result = PhoneticComparator.calculateScoringResult("cat dog", "kæt dɒɡ", "kæt")
+
+        assertEquals(100, result.accuracy)
+        assertEquals(50, result.completeness)
+        assertEquals(50, result.score)
+        assertEquals(100, result.words[0].score)
+        assertEquals(0, result.words[1].score)
+        assertFalse(result.isMastery)
+    }
+
+    @Test
+    fun `saying nothing scores zero accuracy and completeness`() {
+        val result = PhoneticComparator.calculateScoringResult("cat", "kæt", "")
+        assertEquals(0, result.accuracy)
+        assertEquals(0, result.completeness)
+        assertEquals(0, result.score)
+        assertFalse(result.isMastery)
+    }
+
+    @Test
+    fun `a perfect attempt masters`() {
+        val result = PhoneticComparator.calculateScoringResult("cat dog", "kæt dɒɡ", "kæt dɒɡ")
+        assertEquals(100, result.accuracy)
+        assertEquals(100, result.completeness)
+        assertTrue(result.isMastery)
+    }
+
+    @Test
+    fun `a flawless take is PERFECT at sentence and word level`() {
+        val result = PhoneticComparator.calculateScoringResult("cat dog", "kæt dɒɡ", "kæt dɒɡ")
+        assertEquals(MasteryLevel.PERFECT, result.level)
+        assertTrue(result.words.all { it.level == MasteryLevel.PERFECT })
+    }
+
+    @Test
+    fun `mastery-band score blocked by a missing word is ALMOST, not MASTERED`() {
+        // The level must follow the mastery gate, not the raw band: a great
+        // average with one unsaid word is not "Mastered".
+        val reference = List(7) { "kæt" }.joinToString(" ")
+        val produced = List(6) { "kæt" }.joinToString(" ")
+        val result = PhoneticComparator.calculateScoringResult("x", reference, produced)
+
+        assertTrue("expected a mastery-band score, got ${result.score}", result.score >= 85)
+        assertFalse(result.isMastery)
+        assertEquals(MasteryLevel.ALMOST, result.level)
+        // The unsaid word is somewhere in the sentence, not necessarily last.
+        assertTrue(result.words.any { it.level == MasteryLevel.NOT_YET })
+    }
+
+    @Test
+    fun `one destroyed word blocks mastery even when the average is high`() {
+        // Six of seven words perfect, one word never said. The averaged score
+        // clears the bar, but the learner did not say the sentence.
+        val reference = List(7) { "kæt" }.joinToString(" ")
+        val produced = List(6) { "kæt" }.joinToString(" ")
+        val result = PhoneticComparator.calculateScoringResult("x", reference, produced)
+
+        assertTrue("expected a mastery-band score, got ${result.score}", result.score >= 85)
+        assertEquals(0, result.words.minOf { it.score })
+        assertFalse("a destroyed word must block mastery", result.isMastery)
+    }
+
+    @Test
+    fun `low completeness blocks mastery`() {
+        val result = PhoneticComparator.calculateScoringResult("x", "kæt dɒɡ mæt", "kæt")
+        assertFalse(result.isMastery)
     }
 
     // endregion

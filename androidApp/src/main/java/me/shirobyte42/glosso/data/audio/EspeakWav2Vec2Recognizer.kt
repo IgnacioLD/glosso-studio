@@ -13,6 +13,8 @@ import me.shirobyte42.glosso.domain.model.EspeakModelConfig
 import org.json.JSONObject
 import java.io.File
 import java.nio.FloatBuffer
+import kotlin.math.exp
+import kotlin.math.sqrt
 
 /**
  * Unified phoneme recognizer backed by the multilingual eSpeak-fine-tuned wav2vec2 model
@@ -102,18 +104,39 @@ class EspeakWav2Vec2Recognizer(
             val wavBytes = Base64.decode(base64Wav, Base64.DEFAULT)
             if (wavBytes.size <= 44) return null
 
-            val numSamples = (wavBytes.size - 44) / 2
-            val pcm = FloatArray(numSamples) { i ->
+            val rawSampleCount = (wavBytes.size - 44) / 2
+            if (rawSampleCount <= 0) return null
+            val raw = FloatArray(rawSampleCount) { i ->
                 val b0 = wavBytes[44 + i * 2].toInt() and 0xff
                 val b1 = wavBytes[44 + i * 2 + 1].toInt() and 0xff
                 ((b0 or (b1 shl 8)).toShort()).toFloat() / 32768f
             }
 
+            // Trim the quiet room off both ends first. Otherwise leading/trailing
+            // silence skews the mean/variance normalisation the model expects, and
+            // the model emits spurious phones while it listens to nothing.
+            val pcm = SpeechGate.trimSilence(raw)
+            if (pcm.isEmpty()) {
+                Log.d(TAG, "No speech above the noise floor - not scoring")
+                return null
+            }
+            if (SpeechGate.isTooShort(pcm.size)) {
+                Log.d(TAG, "Speech too short after trimming (${pcm.size} samples) - not scoring")
+                return null
+            }
+
             val mean = pcm.average().toFloat()
             var variance = 0.0
             for (x in pcm) variance += (x - mean).toDouble() * (x - mean)
-            val std = Math.sqrt(variance / pcm.size).toFloat().coerceAtLeast(1e-9f)
+            variance /= pcm.size
+            val rms = sqrt(mean.toDouble() * mean + variance).toFloat()
+            if (SpeechGate.isTooQuiet(rms)) {
+                Log.d(TAG, "Recording is effectively silent (rms=$rms) - not scoring")
+                return null
+            }
+            val std = sqrt(variance).toFloat().coerceAtLeast(1e-9f)
             val normalized = FloatArray(pcm.size) { i -> (pcm[i] - mean) / std }
+            val numSamples = pcm.size
 
             val inputTensor = OnnxTensor.createTensor(
                 env,
@@ -127,20 +150,53 @@ class EspeakWav2Vec2Recognizer(
             val timeSteps = shape[1].toInt()
             val vocabSize = shape[2].toInt()
 
-            val rawIds = IntArray(timeSteps) { t ->
+            // Greedy decode, keeping the top-1 probability per frame so we can
+            // tell a confident transcription apart from noise.
+            val rawIds = IntArray(timeSteps)
+            val topProbs = FloatArray(timeSteps)
+            for (t in 0 until timeSteps) {
+                val base = t * vocabSize
                 var maxIdx = 0
                 var maxVal = Float.NEGATIVE_INFINITY
                 for (v in 0 until vocabSize) {
-                    val score = logits[t * vocabSize + v]
+                    val score = logits[base + v]
                     if (score > maxVal) { maxVal = score; maxIdx = v }
                 }
-                maxIdx
+                var expSum = 0.0
+                for (v in 0 until vocabSize) expSum += exp((logits[base + v] - maxVal).toDouble())
+                rawIds[t] = maxIdx
+                topProbs[t] = (1.0 / expSum).toFloat()
             }
 
+            var voicedFrames = 0
+            var confidenceSum = 0.0
+            for (t in 0 until timeSteps) {
+                if (rawIds[t] == padId) continue
+                voicedFrames++
+                confidenceSum += topProbs[t]
+            }
+            if (voicedFrames == 0) {
+                Log.d(TAG, "No non-blank frames - not scoring")
+                return null
+            }
+            val meanConfidence = (confidenceSum / voicedFrames).toFloat()
+            if (!SpeechGate.isSpeechLike(voicedFrames, meanConfidence)) {
+                Log.d(TAG, "Not speech-like (voiced=$voicedFrames, confidence=$meanConfidence) - not scoring")
+                return null
+            }
+
+            // CTC collapse, dropping blank frames and any frame the model was not
+            // confident about. Without the confidence floor, breath and clicks
+            // become phones and then get scored as mistakes.
             val filtered = mutableListOf<Int>()
             var prev = -1
-            for (id in rawIds) {
-                if (id != prev) { if (id != padId) filtered.add(id); prev = id }
+            for (t in 0 until timeSteps) {
+                val id = rawIds[t]
+                if (id == prev) continue
+                prev = id
+                if (id == padId) continue
+                if (topProbs[t] < SpeechGate.MIN_FRAME_CONFIDENCE) continue
+                filtered.add(id)
             }
 
             val tokens = mutableListOf<String>()

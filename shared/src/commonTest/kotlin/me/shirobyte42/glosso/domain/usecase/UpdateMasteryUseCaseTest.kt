@@ -2,6 +2,7 @@ package me.shirobyte42.glosso.domain.usecase
 
 import kotlinx.coroutines.test.runTest
 import me.shirobyte42.glosso.domain.model.PhonemeStat
+import me.shirobyte42.glosso.domain.model.ScoringConfig
 import me.shirobyte42.glosso.domain.repository.PreferenceRepository
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -58,12 +59,16 @@ class UpdateMasteryUseCaseTest {
         override fun isIpaVisible(): Boolean = TODO()
         override fun setIpaVisible(visible: Boolean) = TODO()
         override fun getIpaVisibleFlow() = TODO()
+        override fun isFeedbackSoundsEnabled(): Boolean = TODO()
+        override fun setFeedbackSoundsEnabled(enabled: Boolean) = TODO()
+        override fun getFeedbackSoundsEnabledFlow() = TODO()
         override fun getThemeMode(): Int = TODO()
         override fun setThemeMode(mode: Int) = TODO()
         override fun getTargetLanguage(): String = TODO()
         override fun setTargetLanguage(code: String) = TODO()
         override fun getTargetLanguageFlow() = TODO()
         override fun getUiLanguage(): String = TODO()
+        override fun getUiLanguageTag(): String = TODO()
         override fun setUiLanguage(code: String) = TODO()
         override fun isTranslationVisible(): Boolean = TODO()
         override fun setTranslationVisible(visible: Boolean) = TODO()
@@ -85,7 +90,7 @@ class UpdateMasteryUseCaseTest {
         val prefs = FakePreferenceRepository()
         val useCase = UpdateMasteryUseCase(prefs)
 
-        val result = useCase(score = 90, sentenceText = "hello world", category = 0, topic = "greetings")
+        val result = useCase(score = 90, mastered = true, sentenceText = "hello world", category = 0, topic = "greetings")
 
         assertTrue(result.isNewMastery)
         assertEquals(1, result.currentStreak)
@@ -100,19 +105,19 @@ class UpdateMasteryUseCaseTest {
         prefs.masteredSentences.add("hello world")
         val useCase = UpdateMasteryUseCase(prefs)
 
-        val result = useCase(score = 95, sentenceText = "hello world", category = 0)
+        val result = useCase(score = 95, mastered = true, sentenceText = "hello world", category = 0)
 
         assertFalse(result.isNewMastery)
         assertEquals(1, result.currentStreak)
     }
 
     @Test
-    fun `score below threshold resets combo`() = runTest {
+    fun `failed attempt resets combo`() = runTest {
         val prefs = FakePreferenceRepository()
         prefs.combo = 4
         val useCase = UpdateMasteryUseCase(prefs)
 
-        val result = useCase(score = 84, sentenceText = "hello world", category = 0)
+        val result = useCase(score = ScoringConfig.MASTERY_THRESHOLD - 1, mastered = false, sentenceText = "hello world", category = 0)
 
         assertFalse(result.isNewMastery)
         assertEquals(0, result.currentStreak)
@@ -121,11 +126,11 @@ class UpdateMasteryUseCaseTest {
     }
 
     @Test
-    fun `score exactly 85 counts as mastery`() = runTest {
+    fun `score exactly at the threshold counts as mastery`() = runTest {
         val prefs = FakePreferenceRepository()
         val useCase = UpdateMasteryUseCase(prefs)
 
-        val result = useCase(score = 85, sentenceText = "boundary", category = 0)
+        val result = useCase(score = ScoringConfig.MASTERY_THRESHOLD, mastered = true, sentenceText = "boundary", category = 0)
 
         assertTrue(result.isNewMastery)
         assertEquals(1, result.currentStreak)
@@ -136,8 +141,8 @@ class UpdateMasteryUseCaseTest {
         val prefs = FakePreferenceRepository()
         val useCase = UpdateMasteryUseCase(prefs)
 
-        useCase(score = 90, sentenceText = "one", category = 0)
-        val second = useCase(score = 90, sentenceText = "two", category = 0)
+        useCase(score = 90, mastered = true, sentenceText = "one", category = 0)
+        val second = useCase(score = 90, mastered = true, sentenceText = "two", category = 0)
 
         assertTrue(second.isNewMastery)
         assertEquals(2, second.currentStreak)
@@ -148,10 +153,24 @@ class UpdateMasteryUseCaseTest {
         val prefs = FakePreferenceRepository()
         val useCase = UpdateMasteryUseCase(prefs)
 
-        useCase(score = 90, sentenceText = "one", category = 0)
-        val failed = useCase(score = 10, sentenceText = "two", category = 0)
+        useCase(score = 90, mastered = true, sentenceText = "one", category = 0)
+        val failed = useCase(score = 10, mastered = false, sentenceText = "two", category = 0)
 
         assertFalse(failed.isNewMastery)
         assertEquals(0, failed.currentStreak)
+    }
+
+    @Test
+    fun `a high score alone does not grant mastery`() = runTest {
+        // The scorer decides, because only it can see completeness and per-word
+        // results. A perfect average with a destroyed word must not master.
+        val prefs = FakePreferenceRepository()
+        val useCase = UpdateMasteryUseCase(prefs)
+
+        val result = useCase(score = 100, mastered = false, sentenceText = "hello world", category = 0)
+
+        assertFalse(result.isNewMastery)
+        assertEquals(0, result.currentStreak)
+        assertTrue("hello world" !in prefs.masteredSentences)
     }
 }

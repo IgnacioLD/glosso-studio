@@ -4,12 +4,32 @@ import android.util.Log
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.roundToInt
+import me.shirobyte42.glosso.domain.model.MasteryLevel
+import me.shirobyte42.glosso.domain.model.ScoringConfig
 
 data class ScoringResult(
     val score: Int,
     val normalizedExpected: String,
     val normalizedActual: String,
-    val alignment: List<PhonemeMatch> = emptyList()
+    val alignment: List<PhonemeMatch> = emptyList(),
+    /** Quality of the sounds actually produced, ignoring anything skipped. 0..100 */
+    val accuracy: Int = 0,
+    /** Percent of the reference sounds the speaker actually produced. 0..100 */
+    val completeness: Int = 0,
+    /** One entry per reference word, in sentence order. */
+    val words: List<WordScore> = emptyList(),
+    /** The full mastery decision, not just the score band. */
+    val isMastery: Boolean = false,
+    /** The named result shown to the learner. */
+    val level: MasteryLevel = MasteryLevel.NOT_YET
+)
+
+/** Per-word result, so the UI can point at the word that needs work. */
+data class WordScore(
+    val index: Int,
+    val score: Int,
+    val phoneCount: Int,
+    val level: MasteryLevel = MasteryLevel.NOT_YET
 )
 
 data class PhonemeMatch(
@@ -303,7 +323,8 @@ object PhoneticComparator {
 
     fun calculateScoringResult(text: String, expected: String, actual: String, language: String = "en"): ScoringResult {
         val matrix = getMatrix(language)
-        val expectedList = getNormalizedPhoneList(expected)
+        val expectedWords = getNormalizedPhoneWords(expected)
+        val expectedList = expectedWords.flatten()
         val actualList = getNormalizedPhoneList(actual)
 
         Log.d(TAG, "=== calculateScoringResult [lang=$language text=$text] ===")
@@ -313,7 +334,11 @@ object PhoneticComparator {
         Log.d(TAG, "  actual   phones  : $actualList")
 
         if (expectedList.isEmpty()) {
-            return ScoringResult(if (actualList.isEmpty()) 100 else 0, "", "")
+            return if (actualList.isEmpty()) {
+                ScoringResult(100, "", "", level = MasteryLevel.PERFECT)
+            } else {
+                ScoringResult(0, "", "")
+            }
         }
 
         val n = expectedList.size
@@ -321,13 +346,66 @@ object PhoneticComparator {
         val result = alignSequence(expectedList, actualList, matrix)
         val alignment = result.matches
 
-        // Normalised edit distance over phonemes: substitutions, dropped
-        // phonemes and extra phonemes all reduce the score, and the length of
+        // Overall score: normalised edit distance over phonemes. Substitutions,
+        // dropped phonemes and extra phonemes all reduce it, and the length of
         // what the speaker actually produced matters.
         val denominator = max(n, m).toDouble().coerceAtLeast(1.0)
         val score = ((1.0 - result.cost / denominator) * 100)
             .roundToInt()
             .coerceIn(0, 100)
+
+        // Attribute every aligned reference phone to the word it came from, so
+        // the UI can point at the word that needs work instead of colouring a
+        // whole sentence from one global number.
+        val wordOfPhone = IntArray(n)
+        run {
+            var idx = 0
+            for (w in expectedWords.indices) {
+                repeat(expectedWords[w].size) { wordOfPhone[idx++] = w }
+            }
+        }
+        val creditsByWord = Array(expectedWords.size) { mutableListOf<Double>() }
+        val wordPerfect = BooleanArray(expectedWords.size) { true }
+        alignment.forEachIndexed { i, match ->
+            creditsByWord[wordOfPhone[i]].add(creditFor(match, matrix))
+            if (match.status != MatchStatus.PERFECT) wordPerfect[wordOfPhone[i]] = false
+        }
+        val wordScores = creditsByWord.mapIndexed { w, credits ->
+            val wordScore = if (credits.isEmpty()) 0 else (credits.average() * 100).roundToInt()
+            WordScore(
+                index = w,
+                score = wordScore,
+                phoneCount = expectedWords[w].size,
+                level = ScoringConfig.levelFor(
+                    wordScore,
+                    perfect = credits.isNotEmpty() && wordPerfect[w]
+                )
+            )
+        }
+
+        // Two independent axes so the feedback can say *why* it failed: bad
+        // sounds versus not saying the whole sentence.
+        val producedMatches = alignment.filter { it.actual != "-" }
+        val completeness = (producedMatches.size.toDouble() / n * 100)
+            .roundToInt()
+            .coerceIn(0, 100)
+        val accuracy = if (producedMatches.isEmpty()) {
+            0
+        } else {
+            (producedMatches.map { creditFor(it, matrix) }.average() * 100)
+                .roundToInt()
+                .coerceIn(0, 100)
+        }
+
+        // A flawless take: every reference sound matched exactly, with no close
+        // or missed phones anywhere. That deserves its own level, not just "high score".
+        val perfect = alignment.isNotEmpty() && alignment.all { it.status == MatchStatus.PERFECT }
+
+        val isMastery = ScoringConfig.qualifiesForMastery(
+            score = score,
+            completeness = completeness,
+            wordScores = wordScores.map { it.score }
+        )
 
         val normExpected = expectedList.joinToString("")
             .replace(Regex("[ˈˌ]"), "")
@@ -338,8 +416,20 @@ object PhoneticComparator {
             score = score,
             normalizedExpected = normExpected,
             normalizedActual = normActual,
-            alignment = alignment
+            alignment = alignment,
+            accuracy = accuracy,
+            completeness = completeness,
+            words = wordScores,
+            isMastery = isMastery,
+            level = ScoringConfig.sentenceLevel(score, isMastery, perfect)
         )
+    }
+
+    /** Credit earned by a single aligned reference phone, in 0..1. */
+    private fun creditFor(match: PhonemeMatch, matrix: Map<Set<String>, Double>): Double = when (match.status) {
+        MatchStatus.PERFECT -> 1.0
+        MatchStatus.CLOSE -> getSimilarity(match.expected, match.actual, matrix).coerceIn(0.0, 1.0)
+        MatchStatus.MISSED -> 0.0
     }
 
     /** Alignment plus the total edit cost it was derived from. */
@@ -590,7 +680,7 @@ object PhoneticComparator {
         return 8 // High cost for non-matching
     }
 
-    private fun getNormalizedPhoneList(ipa: String): List<String> {
+    private fun getNormalizedPhoneWords(ipa: String): List<List<String>> {
         // Reference IPA comes from espeak-ng (has stress marks, allophones like
         // ɐ/ɚ/ᵻ, and ZWJs in diphthongs). Runtime IPA comes from wav2vec2 —
         // same phoneme inventory but usually no stress and less consistent
@@ -604,16 +694,17 @@ object PhoneticComparator {
             .replace("\u00A0", " ")
 
         val wordGroups = folded.lowercase().split(" ").filter { it.isNotBlank() }
-        val result = mutableListOf<String>()
+        val words = mutableListOf<List<String>>()
 
         for (word in wordGroups) {
             val cleaned = word
                 .replace(Regex("[ˈˌ.?!()\\-]"), "")
                 .replace(Regex("[\u0300-\u0302\u0304-\u0360\u0362-\u036F]"), "")
                 .replace("\u00A0", "")
-            
+
             if (cleaned.isEmpty()) continue
-            
+
+            val phones = mutableListOf<String>()
             var i = 0
             while (i < cleaned.length) {
                 val c = cleaned[i]
@@ -640,17 +731,21 @@ object PhoneticComparator {
                 // A length mark belongs to the phone it follows (iː is one phone,
                 // a long vowel - not the vowel plus a separate "ː" segment).
                 if (next < cleaned.length && cleaned[next] == 'ː') {
-                    result.add(phone + "ː")
+                    phones.add(phone + "ː")
                     next++
                 } else {
-                    result.add(phone)
+                    phones.add(phone)
                 }
                 i = next
             }
+            if (phones.isNotEmpty()) words.add(phones)
         }
 
-        return result
+        return words
     }
+
+    private fun getNormalizedPhoneList(ipa: String): List<String> =
+        getNormalizedPhoneWords(ipa).flatten()
 
     private fun isTiedPair(c1: Char, c2: Char): Boolean {
         val s = "$c1$c2"

@@ -13,6 +13,10 @@
     <string name="settings_translation_label">Show Translation</string>
     <string name="settings_translation_desc">Display the meaning under each sentence</string>
 
+    <!-- Settings: reward sounds -->
+    <string name="settings_sounds_label">Feedback sounds</string>
+    <string name="settings_sounds_desc">Play a sound with each result</string>
+
     <!-- Settings: Legal -->
     <string name="settings_section_legal">LEGAL</string>
     <string name="settings_privacy_label">Privacy Policy</string>

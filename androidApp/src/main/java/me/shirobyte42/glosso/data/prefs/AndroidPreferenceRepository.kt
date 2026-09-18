@@ -19,7 +19,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class AndroidPreferenceRepository(
-    context: Context,
+    private val context: Context,
     private val masteredSentenceDao: MasteredSentenceDao,
     private val activityDayDao: ActivityDayDao,
     private val reviewDao: ReviewDao
@@ -223,6 +223,15 @@ class AndroidPreferenceRepository(
     }
     override fun getIpaVisibleFlow(): Flow<Boolean> = _ipaVisibleFlow.asStateFlow()
 
+    private val _feedbackSoundsFlow = MutableStateFlow(prefs.getBoolean("feedback_sounds", true))
+
+    override fun isFeedbackSoundsEnabled(): Boolean = prefs.getBoolean("feedback_sounds", true)
+    override fun setFeedbackSoundsEnabled(enabled: Boolean) {
+        prefs.edit().putBoolean("feedback_sounds", enabled).apply()
+        _feedbackSoundsFlow.value = enabled
+    }
+    override fun getFeedbackSoundsEnabledFlow(): Flow<Boolean> = _feedbackSoundsFlow.asStateFlow()
+
     override fun getThemeMode(): Int = prefs.getInt("theme_mode", 0)
     override fun setThemeMode(mode: Int) {
         prefs.edit().putInt("theme_mode", mode).apply()
@@ -240,7 +249,18 @@ class AndroidPreferenceRepository(
     }
     override fun getTargetLanguageFlow(): Flow<String> = _targetLanguageFlow.asStateFlow()
 
-    override fun getUiLanguage(): String = prefs.getString("ui_language", "en") ?: "en"
+    override fun getUiLanguageTag(): String = prefs.getString("ui_language", "") ?: ""
+
+    override fun getUiLanguage(): String {
+        val stored = getUiLanguageTag()
+        if (stored.isNotBlank()) return stored
+        // "Follow the system": resolve the real device language instead of
+        // assuming English, otherwise a Spanish phone gets English corrections.
+        val locales = context.resources.configuration.locales
+        val system = if (locales.isEmpty) "en" else locales[0].language
+        return system.ifBlank { "en" }
+    }
+
     override fun setUiLanguage(code: String) {
         prefs.edit().putString("ui_language", code).apply()
     }

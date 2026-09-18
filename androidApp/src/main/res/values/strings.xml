@@ -17,8 +17,8 @@
     <string name="home_no_streak">No streak yet</string>
     <string name="home_level_progress">%1$d / %2$d sentences mastered</string>
     <string name="home_download_required">Download Required</string>
-    <string name="home_initial_setup">Initial Setup</string>
-    <string name="home_setup_description">Glosso Studio needs to download the acoustic model (approx. 300 MB) to perform phonetic recognition.</string>
+    <string name="home_initial_setup">Enable scoring</string>
+    <string name="home_setup_description">Scoring uses the acoustic model (about 300 MB). You can keep practising without it - listen and repeat - and this just adds your score to every new take.</string>
     <string name="home_download_description">Glosso Studio requires a one-time download for the %1$s curriculum (approx. 50–100MB).</string>
     <string name="home_wifi_warning">WARNING: If you are using mobile data, significant costs may apply. We recommend using a Wi-Fi connection.</string>
     <string name="home_btn_setup">Set up now</string>

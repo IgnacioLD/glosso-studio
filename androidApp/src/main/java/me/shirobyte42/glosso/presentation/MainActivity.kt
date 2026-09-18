@@ -210,7 +210,10 @@ private fun GlossoAppShell() {
                     category = levelIndex,
                     topics = topics,
                     onNavigateBack = { navController.popBackStack() },
-                    onNavigateToSettings = { navigateToTab(TopLevelDestination.SETTINGS.route) }
+                    onNavigateToSettings = { navigateToTab(TopLevelDestination.SETTINGS.route) },
+                    // popBackStack (not navigateToTab): navigating to the HOME tab would
+                    // restore its saved back stack, landing right back on this Studio screen.
+                    onNavigateHome = { navController.popBackStack(TopLevelDestination.HOME.route, inclusive = false) }
                 )
             }
             composable(
@@ -222,7 +225,10 @@ private fun GlossoAppShell() {
                     category = levelIndex,
                     resume = true,
                     onNavigateBack = { navController.popBackStack() },
-                    onNavigateToSettings = { navigateToTab(TopLevelDestination.SETTINGS.route) }
+                    onNavigateToSettings = { navigateToTab(TopLevelDestination.SETTINGS.route) },
+                    // popBackStack (not navigateToTab): navigating to the HOME tab would
+                    // restore its saved back stack, landing right back on this Studio screen.
+                    onNavigateHome = { navController.popBackStack(TopLevelDestination.HOME.route, inclusive = false) }
                 )
             }
         }

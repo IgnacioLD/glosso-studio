@@ -18,11 +18,11 @@
     <string name="home_no_streak">Pas encore de série</string>
     <string name="home_level_progress">%1$d / %2$d phrases maîtrisées</string>
     <string name="home_download_required">Téléchargement requis</string>
-    <string name="home_initial_setup">Configuration initiale</string>
-    <string name="home_setup_description">Glosso Studio doit télécharger le modèle acoustique (environ 300 Mo) pour effectuer la reconnaissance phonétique.</string>
+    <string name="home_initial_setup">Activer la notation</string>
+    <string name="home_setup_description">La notation utilise le modèle acoustique (environ 300 Mo). Vous pouvez continuer à vous entraîner sans lui - écoutez et répétez - il ajoute simplement votre note à chaque nouvelle prise.</string>
     <string name="home_download_description">Glosso Studio nécessite un téléchargement unique pour le programme %1$s (environ 50–100 Mo).</string>
     <string name="home_wifi_warning">ATTENTION : si vous utilisez les données mobiles, des frais importants peuvent s\'appliquer. Nous recommandons une connexion Wi-Fi.</string>
-    <string name="home_btn_setup">Configurer maintenant</string>
+    <string name="home_btn_setup">Télécharger</string>
     <string name="home_btn_download">Télécharger</string>
     <string name="home_btn_cancel">Annuler</string>
     <string name="home_btn_retry">Réessayer</string>
@@ -441,4 +441,25 @@
     <string name="home_level_not_downloaded">Non téléchargé</string>
     <string name="studio_practice_hint">Écoutez la phrase, puis appuyez sur enregistrer et répétez-la.</string>
     <string name="home_level_setup">Configurer</string>
+    <string name="studio_feedback_focus_word">Concentrez-vous sur \"%1$s\"</string>
+
+    <!-- Notation désactivée (modèle acoustique absent) -->
+    <string name="home_scoring_off_title">Notation désactivée</string>
+    <string name="home_scoring_off_body">Écoutez et répétez dès maintenant. Téléchargez la reconnaissance (environ 300 Mo) quand vous voulez votre note.</string>
+    <string name="home_scoring_off_cta">Activer</string>
+    <string name="studio_scoring_off_title">Mode écouter et répéter</string>
+    <string name="studio_scoring_off_body">La notation n\'est pas encore configurée, vos prises ne sont donc pas évaluées. Votre enregistrement reste réécoutable pour comparer avec la référence.</string>
+    <string name="studio_scoring_off_cta">Activer la notation</string>
+    <string name="studio_browse_complete_title">Série terminée</string>
+    <string name="studio_browse_complete_body">Vous avez parcouru les %1$d phrases. Activez la notation pour commencer à les maîtriser.</string>
+
+    <!-- Niveaux de maîtrise (le résultat montré, jamais un pourcentage) -->
+    <string name="mastery_level_perfect">Parfait</string>
+    <string name="mastery_level_mastered">Maîtrisé</string>
+    <string name="mastery_level_almost">Presque</string>
+    <string name="mastery_level_rough">Approximatif</string>
+    <string name="mastery_level_not_yet">Pas encore</string>
+    <string name="studio_feedback_focus_word_level">Concentrez-vous sur \"%1$s\" (%2$s)</string>
+    <string name="settings_sounds_label">Sons de résultat</string>
+    <string name="settings_sounds_desc">Jouer un son à chaque résultat</string>
 </resources>

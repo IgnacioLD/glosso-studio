@@ -36,7 +36,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -50,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import me.shirobyte42.glosso.R
 import me.shirobyte42.glosso.domain.model.LetterFeedbackModel
+import me.shirobyte42.glosso.domain.model.MasteryLevel
 import me.shirobyte42.glosso.domain.model.MatchStatusModel
 import me.shirobyte42.glosso.presentation.theme.GlossoFeedbackClose
 import me.shirobyte42.glosso.presentation.theme.GlossoFeedbackMissed
@@ -98,7 +102,8 @@ private fun ClickableWord(
     style: TextStyle,
     enabled: Boolean,
     onClick: () -> Unit,
-    annotatedText: androidx.compose.ui.text.AnnotatedString? = null
+    annotatedText: androidx.compose.ui.text.AnnotatedString? = null,
+    underlineColor: Color? = null
 ) {
     var isHighlighted by remember { mutableStateOf(false) }
     LaunchedEffect(isHighlighted) {
@@ -108,10 +113,23 @@ private fun ClickableWord(
         }
     }
     val textDecoration = if (isHighlighted) TextDecoration.Underline else TextDecoration.None
-    val mod = if (enabled) Modifier.clickable {
+    // A quiet bar under the word carries the word's mastery level without
+    // competing with the per-phoneme colours inside the text itself.
+    val underline = if (underlineColor != null) Modifier.drawBehind {
+        val stroke = 3.dp.toPx()
+        val y = size.height - stroke / 2f
+        drawLine(
+            color = underlineColor,
+            start = Offset(0f, y),
+            end = Offset(size.width, y),
+            strokeWidth = stroke,
+            cap = StrokeCap.Round
+        )
+    } else Modifier
+    val mod = (if (enabled) Modifier.clickable {
         isHighlighted = true
         onClick()
-    } else Modifier
+    } else Modifier).then(underline)
     if (annotatedText != null) {
         Text(
             text = annotatedText,
@@ -187,13 +205,27 @@ fun ClickableSentenceText(
     feedback: List<LetterFeedbackModel>?,
     onWordClick: (String) -> Unit,
     style: TextStyle,
-    textAlign: TextAlign = TextAlign.Center
+    textAlign: TextAlign = TextAlign.Center,
+    wordLevels: List<MasteryLevel>? = null
 ) {
+    // Resolve the per-word underline colours up front: a composable call is not
+    // allowed inside the token loop below.
+    val wordUnderlines: List<Color?> = if (wordLevels == null) {
+        emptyList()
+    } else {
+        val resolved = ArrayList<Color?>(wordLevels.size)
+        for (level in wordLevels) {
+            resolved.add(if (level == MasteryLevel.PERFECT) null else masteryLevelColor(level))
+        }
+        resolved
+    }
+
     FlowRow(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = if (textAlign == TextAlign.Center) Arrangement.Center else Arrangement.Start
     ) {
         var charOffset = 0
+        var wordIndex = 0
         Regex("\\S+|\\s+").findAll(text).forEach { match ->
             val token = match.value
             val start = charOffset
@@ -221,6 +253,12 @@ fun ClickableSentenceText(
                 }
             } else null
 
+            var underline: Color? = null
+            if (isWord) {
+                underline = wordUnderlines.getOrNull(wordIndex)
+                wordIndex++
+            }
+
             val cleanForTts = token.filter { it.isLetter() }
             ClickableWord(
                 displayText = token,
@@ -228,7 +266,8 @@ fun ClickableSentenceText(
                 style = style,
                 enabled = isWord && cleanForTts.isNotEmpty(),
                 onClick = { onWordClick(cleanForTts) },
-                annotatedText = annotated
+                annotatedText = annotated,
+                underlineColor = underline
             )
         }
     }
