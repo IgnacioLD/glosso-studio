@@ -57,6 +57,14 @@ class StudioViewModel(
     private var lastAudioBase64: String? = null
 
     init {
+        viewModelScope.launch(Dispatchers.Default) {
+            // Building the session is heavy, so it runs here (background) rather
+            // than eagerly in the recognizer's constructor. This also covers paths
+            // where the Home preload did not run, e.g. after process death.
+            if (recognizer.modelState.value == ModelState.UNINITIALIZED) {
+                recognizer.initialize()
+            }
+        }
         viewModelScope.launch {
             recognizer.modelState.collect { state ->
                 _uiState.update { it.copy(isScoringAvailable = state == ModelState.READY) }
