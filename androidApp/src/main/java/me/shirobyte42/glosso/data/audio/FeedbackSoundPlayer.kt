@@ -22,6 +22,15 @@ class FeedbackSoundPlayer(
     private val TAG = "FeedbackSoundPlayer"
     private var player: MediaPlayer? = null
 
+    private companion object {
+        /**
+         * 0..1 linear playback volume. The chimes are mastered loud (near full
+         * scale); playing them at full volume is jarring right after a take, so
+         * keep them well under the voice playback level.
+         */
+        const val PLAYBACK_VOLUME = 0.35f
+    }
+
     fun play(level: MasteryLevel) {
         if (!prefs.isFeedbackSoundsEnabled()) return
         val resId = when (level) {
@@ -34,6 +43,7 @@ class FeedbackSoundPlayer(
         try {
             release()
             player = MediaPlayer.create(context, resId)?.apply {
+                setVolume(PLAYBACK_VOLUME, PLAYBACK_VOLUME)
                 setOnCompletionListener { mp ->
                     mp.release()
                     if (player === mp) player = null
