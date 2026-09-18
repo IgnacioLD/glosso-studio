@@ -41,27 +41,32 @@ fun ActivityHeatmap(
     val activeColor = MaterialTheme.colorScheme.tertiary
     val inactiveColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
 
-    Canvas(modifier = modifier.fillMaxWidth().height(112.dp)) {
+    BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
         val weekCount = cells.size
-        if (weekCount == 0) return@Canvas
-        val gap = 3.dp.toPx()
-        val cellSize = ((size.width - gap * (weekCount - 1)) / weekCount)
-            .coerceAtMost((size.height - gap * 6) / 7f)
-        val gridHeight = cellSize * 7 + gap * 6
-        val topOffset = (size.height - gridHeight) / 2f
-
-        cells.forEachIndexed { weekIndex, weekCells ->
-            weekCells.forEachIndexed dayLoop@{ dayIndex, cell ->
-                if (cell == null) return@dayLoop
-                drawRoundRect(
-                    color = if (cell.active) activeColor else inactiveColor,
-                    topLeft = Offset(
-                        x = weekIndex * (cellSize + gap),
-                        y = topOffset + dayIndex * (cellSize + gap)
-                    ),
-                    size = Size(cellSize, cellSize),
-                    cornerRadius = CornerRadius(cellSize * 0.28f)
-                )
+        if (weekCount > 0) {
+            val gap = 3.dp
+            // Drive the cell size from the available width so the calendar fills
+            // the card on every screen. Capping it by a fixed height left a band
+            // of dead space on the right, worst on tablets.
+            val cellSize = (maxWidth - gap * (weekCount - 1)) / weekCount
+            val gridHeight = cellSize * 7 + gap * 6
+            Canvas(modifier = Modifier.fillMaxWidth().height(gridHeight)) {
+                val gapPx = gap.toPx()
+                val cellPx = cellSize.toPx()
+                cells.forEachIndexed { weekIndex, weekCells ->
+                    weekCells.forEachIndexed dayLoop@{ dayIndex, cell ->
+                        if (cell == null) return@dayLoop
+                        drawRoundRect(
+                            color = if (cell.active) activeColor else inactiveColor,
+                            topLeft = Offset(
+                                x = weekIndex * (cellPx + gapPx),
+                                y = dayIndex * (cellPx + gapPx)
+                            ),
+                            size = Size(cellPx, cellPx),
+                            cornerRadius = CornerRadius(cellPx * 0.28f)
+                        )
+                    }
+                }
             }
         }
     }
