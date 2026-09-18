@@ -281,7 +281,6 @@ object PhoneticComparator {
         setOf("ɛ̃", "ɑ̃") to mapOf("en" to "IN (vin) is a nasal front vowel (like a nasal E). AN (banc) is a nasal back vowel (deeper and more open).", "es" to "IN (vin) es una vocal nasal anterior (como una E nasal). AN (banc) es una vocal nasal posterior (más grave y abierta).", "fr" to "IN (vin) est une voyelle nasale antérieure (comme un /ɛ/ nasalisé). AN (banc) est une voyelle nasale postérieure (plus profonde et plus ouverte).", "de" to "IN (vin) ist ein nasaler Vordervokal (wie ein nasales E). AN (banc) ist ein nasaler Hintervokal (tiefer und offener)."),
         setOf("ɛ̃", "œ̃") to mapOf("en" to "IN (vin) is unrounded; UN (brun) is rounded. In modern Parisian French these are often merged to IN.", "es" to "IN (vin) no lleva los labios redondeados; UN (brun) sí. En el francés parisino moderno suelen fusionarse en IN.", "fr" to "IN (vin) est non arrondi ; UN (brun) est arrondi. En français parisien moderne, ils se confondent souvent avec IN.", "de" to "IN (vin) ist ungerundet; UN (brun) ist gerundet. Im modernen Pariser Französisch werden sie oft zu IN verschmolzen."),
         setOf("ɲ", "n") to mapOf("en" to "GN (agneau) — press the middle of your tongue to the roof of your mouth. N is made with just the tongue tip.", "es" to "GN (agneau) — aprieta el medio de la lengua contra el paladar. La N se hace solo con la punta de la lengua.", "fr" to "GN (agneau) — pressez le milieu de la langue contre le palais. /n/ se fait juste avec la pointe de la langue.", "de" to "GN (agneau) — drücke den mittleren Teil der Zunge an den Gaumen. /n/ wird nur mit der Zungenspitze gebildet."),
-        setOf("ʒ", "ʃ") to mapOf("en" to "J (jour) buzzes in your throat. CH (chou) is silent — same mouth position, different voicing.", "es" to "La J (jour) zumba en la garganta. La CH (chou) no tiene voz — misma posición de la boca, distinto uso de la voz.", "fr" to "J (jour) bourdonne dans la gorge. CH (chou) est sourd — même position de bouche, voisement différent.", "de" to "J (jour) summt im Hals. CH (chou) ist stimmlos — gleiche Mundstellung, anderes Stimmverhalten."),
         setOf("β", "b") to mapOf("en" to "Spanish B/V between vowels (lobo) — lips don't fully close, air keeps flowing. At start of word or after M/N it's a full stop.", "es" to "La B/V española entre vocales (lobo) — los labios no se cierran del todo, el aire sigue fluyendo. Al inicio de palabra o tras M/N es una oclusiva plena.", "fr" to "Le B/V espagnol entre voyelles (lobo) — les lèvres ne se ferment pas complètement, l'air continue de passer. En début de mot ou après M/N, c'est une occlusion pleine.", "de" to "Spanisches B/V zwischen Vokalen (lobo) — Lippen schließen sich nicht ganz, Luft strömt weiter. Am Wortanfang oder nach M/N ist es ein voller Verschluss."),
         setOf("ð", "d") to mapOf("en" to "Spanish D between vowels (cada) is soft, like English TH in 'this'. At start of word it's a crisp full D.", "es" to "La D española entre vocales (cada) es suave, como la TH inglesa en 'this'. Al inicio de palabra es una D plena y firme.", "fr" to "Le D espagnol entre voyelles (cada) est doux, comme le TH anglais de 'this'. En début de mot, c'est un D franc et plein.", "de" to "Spanisches D zwischen Vokalen (cada) ist weich, wie das englische TH in 'this'. Am Wortanfang ein klares volles D."),
         setOf("ɣ", "ɡ") to mapOf("en" to "Spanish G between vowels (lago) is soft — the tongue doesn't fully touch. At start it's a full hard G (gato).", "es" to "La G española entre vocales (lago) es suave — la lengua no toca del todo. Al inicio es una G plena y dura (gato).", "fr" to "Le G espagnol entre voyelles (lago) est doux — la langue ne touche pas complètement. En début, c'est un G dur plein (gato).", "de" to "Spanisches G zwischen Vokalen (lago) ist weich — die Zunge berührt nicht ganz. Am Anfang ist es ein volles hartes G (gato)."),
@@ -304,9 +303,6 @@ object PhoneticComparator {
         setOf("ɛː", "eː") to mapOf("en" to "Ä long (Bär) is slightly lower and more open than E long (Beet). Drop your jaw a bit for Ä.", "es" to "Ä larga (Bär) es un poco más baja y abierta que E larga (Beet). Baja un poco la mandíbula para Ä.", "fr" to "Ä long (Bär) est un peu plus bas et plus ouvert que E long (Beet). Baissez un peu la mâchoire pour Ä.", "de" to "Langes Ä (Bär) ist etwas tiefer und offener als langes E (Beet). Kiefer für Ä etwas senken."),
         setOf("ə", "ɐ") to mapOf("en" to "Schwa (bitte) is a silent-E sound. Vocalic R (bitter) is slightly more open, like a softened UH.", "es" to "La schwa (bitte) es un sonido de E muda. La R vocálica (bitter) es algo más abierta, como una UH suavizada.", "fr" to "Le schwa /ə/ (bitte) est un E muet. Le R vocalisé /ɐ/ (bitter) est un peu plus ouvert, comme un /ʌ/ adouci.", "de" to "Schwa (bitte) ist ein stummer E-Laut. Vokalisches R (bitter) ist etwas offener, wie ein weiches /ɐ/."),
         setOf("a", "aː") to mapOf("en" to "Length matters in German! Stadt (short A, quick) vs. Staat (long A, held). Double the duration.", "es" to "¡La duración importa en alemán! Stadt (A corta, rápida) vs. Staat (A larga, sostenida). Duplica la duración.", "fr" to "La durée compte en allemand ! Stadt (A court, rapide) vs. Staat (A long, tenu). Doublez la durée.", "de" to "Länge ist im Deutschen wichtig! Stadt (kurzes A, schnell) vs. Staat (langes A, gehalten). Doppelte Dauer."),
-        setOf("ɪ", "iː") to mapOf("en" to "Short I (bitten) is relaxed, like English 'bit'. Long I (bieten) is tense and held, like English 'beat'.", "es" to "I corta (bitten) es relajada, como la inglesa 'bit'. I larga (bieten) es tensa y sostenida, como la inglesa 'beat'.", "fr" to "I court (bitten) est relâché, comme l'anglais 'bit'. I long (bieten) est tendu et tenu, comme l'anglais 'beat'.", "de" to "Kurzes I (bitten) ist entspannt, wie im englischen 'bit'. Langes I (bieten) ist gespannt und gehalten, wie 'beat'."),
-        setOf("ʊ", "uː") to mapOf("en" to "Short U (muss) is relaxed like English 'book'. Long U (Mus) is tense and held like English 'moose'.", "es" to "U corta (muss) es relajada como la inglesa 'book'. U larga (Mus) es tensa y sostenida como la inglesa 'moose'.", "fr" to "U court (muss) est relâché, comme l'anglais 'book'. U long (Mus) est tendu et tenu, comme l'anglais 'moose'.", "de" to "Kurzes U (muss) ist entspannt wie im englischen 'book'. Langes U (Mus) ist gespannt und gehalten wie 'moose'."),
-        setOf("aː", "a") to mapOf("en" to "Latin long A is held twice as long as short A. Length changes meaning: MĀLUM (apple) vs. MALUM (bad).", "es" to "La A larga del latín se sostiene el doble que la A corta. La duración cambia el significado: MĀLUM (manzana) vs. MALUM (malo).", "fr" to "Le A long latin se tient deux fois plus longtemps que le A court. La durée change le sens : MĀLUM (pomme) vs. MALUM (mauvais).", "de" to "Lateinisches langes A wird doppelt so lang gehalten wie kurzes A. Länge verändert die Bedeutung: MĀLUM (Apfel) vs. MALUM (schlecht)."),
         setOf("eː", "e") to mapOf("en" to "Latin long E is held twice as long as short E. Length contrasts real words — LĒGIT (reads) vs. LEGIT (gathers).", "es" to "La E larga del latín se sostiene el doble que la E corta. La duración distingue palabras reales — LĒGIT (lee) vs. LEGIT (recoge).", "fr" to "Le E long latin se tient deux fois plus longtemps que le E court. La durée distingue des mots réels — LĒGIT (lit) vs. LEGIT (rassemble).", "de" to "Lateinisches langes E wird doppelt so lang gehalten wie kurzes E. Länge unterscheidet echte Wörter — LĒGIT (liest) vs. LEGIT (sammelt)."),
         setOf("iː", "i") to mapOf("en" to "Latin long I is held twice as long as short I. Keep the tongue in the same position — just longer.", "es" to "La I larga del latín se sostiene el doble que la I corta. Mantén la lengua en la misma posición — solo más tiempo.", "fr" to "Le I long latin se tient deux fois plus longtemps que le I court. Gardez la langue au même endroit — juste plus longtemps.", "de" to "Lateinisches langes I wird doppelt so lang gehalten wie kurzes I. Zunge in gleicher Stellung — nur länger."),
         setOf("oː", "o") to mapOf("en" to "Latin long O is held twice as long as short O. Same mouth shape, double duration.", "es" to "La O larga del latín se sostiene el doble que la O corta. Misma forma de la boca, duración duplicada.", "fr" to "Le O long latin se tient deux fois plus longtemps que le O court. Même forme de bouche, durée doublée.", "de" to "Lateinisches langes O wird doppelt so lang gehalten wie kurzes O. Gleiche Mundform, doppelte Dauer."),
@@ -315,9 +311,47 @@ object PhoneticComparator {
         setOf("ɡʷ", "ɡ") to mapOf("en" to "GU before a vowel (lingua) is G with rounded lips — almost 'gw'. G alone has unrounded lips.", "es" to "GU antes de vocal (lingua) es G con labios redondeados — casi 'gw'. La G sola lleva los labios sin redondear.", "fr" to "GU devant une voyelle (lingua) est un /ɡ/ avec lèvres arrondies — presque 'gw'. /ɡ/ seul a les lèvres non arrondies.", "de" to "GU vor einem Vokal (lingua) ist /ɡ/ mit gerundeten Lippen — fast 'gw'. /ɡ/ allein hat ungerundete Lippen."),
     )
 
-    /** Returns a human-readable description if two phonemes form a known minimal pair. */
-    fun getMinimalPairDescription(expected: String, actual: String, uiLanguage: String = "en"): String? {
-        val entry = pairDescriptions[setOf(expected, actual)] ?: return null
+    /**
+     * Descriptions tied to the language being practised, keyed by target
+     * language and then by phoneme pair. The same sound contrast can belong to
+     * more than one language (/ɪ/ vs /iː/ is "bit/beat" in English and
+     * "bitten/bieten" in German), so the examples must follow the language the
+     * learner is practising or the hint teaches the wrong one. Lookups fall
+     * back to [pairDescriptions] when the target has no specific entry.
+     */
+    private val pairDescriptionsByTarget: Map<String, Map<Set<String>, Map<String, String>>> = mapOf(
+        "fr" to mapOf(
+            setOf("ʒ", "ʃ") to mapOf("en" to "J (jour) buzzes in your throat. CH (chou) is silent — same mouth position, different voicing.", "es" to "La J (jour) zumba en la garganta. La CH (chou) no tiene voz — misma posición de la boca, distinto uso de la voz.", "fr" to "J (jour) bourdonne dans la gorge. CH (chou) est sourd — même position de bouche, voisement différent.", "de" to "J (jour) summt im Hals. CH (chou) ist stimmlos — gleiche Mundstellung, anderes Stimmverhalten."),
+        ),
+        "de" to mapOf(
+            setOf("ɪ", "iː") to mapOf("en" to "Short I, as in German 'bitten', is relaxed, like English 'bit'. Long I, as in German 'bieten', is tense and held, like English 'beat'.", "es" to "La I corta, como en el alemán 'bitten', es relajada, como la inglesa 'bit'. La I larga, como en el alemán 'bieten', es tensa y sostenida, como la inglesa 'beat'.", "fr" to "Le I court, comme dans l'allemand 'bitten', est relâché, comme l'anglais 'bit'. Le I long, comme dans l'allemand 'bieten', est tendu et tenu, comme l'anglais 'beat'.", "de" to "Kurzes I (bitten) ist entspannt, wie im englischen 'bit'. Langes I (bieten) ist gespannt und gehalten, wie 'beat'."),
+            setOf("ʊ", "uː") to mapOf("en" to "Short U, as in German 'muss', is relaxed like English 'book'. Long U, as in German 'Mus', is tense and held like English 'moose'.", "es" to "La U corta, como en el alemán 'muss', es relajada como la inglesa 'book'. La U larga, como en el alemán 'Mus', es tensa y sostenida como la inglesa 'moose'.", "fr" to "Le U court, comme dans l'allemand 'muss', est relâché comme l'anglais 'book'. Le U long, comme dans l'allemand 'Mus', est tendu et tenu comme l'anglais 'moose'.", "de" to "Kurzes U (muss) ist entspannt wie im englischen 'book'. Langes U (Mus) ist gespannt und gehalten wie 'moose'."),
+        ),
+        "la" to mapOf(
+            setOf("aː", "a") to mapOf("en" to "Latin long A is held twice as long as short A. Length changes meaning: MĀLUM (apple) vs. MALUM (bad).", "es" to "La A larga del latín se sostiene el doble que la A corta. La duración cambia el significado: MĀLUM (manzana) vs. MALUM (malo).", "fr" to "Le A long latin se tient deux fois plus longtemps que le A court. La durée change le sens : MĀLUM (pomme) vs. MALUM (mauvais).", "de" to "Lateinisches langes A wird doppelt so lang gehalten wie kurzes A. Länge verändert die Bedeutung: MĀLUM (Apfel) vs. MALUM (schlecht)."),
+        ),
+    )
+
+    /** Maps a target-language code to the bucket used by [pairDescriptionsByTarget]. */
+    private fun targetLanguageKey(language: String): String = when (language) {
+        "fr", "es", "de", "la" -> language
+        else -> "en"
+    }
+
+    /**
+     * Returns a human-readable description if two phonemes form a known minimal
+     * pair, written in [uiLanguage] for learners of [targetLanguage].
+     */
+    fun getMinimalPairDescription(
+        expected: String,
+        actual: String,
+        uiLanguage: String = "en",
+        targetLanguage: String = "en",
+    ): String? {
+        val pair = setOf(expected, actual)
+        val entry = pairDescriptionsByTarget[targetLanguageKey(targetLanguage)]?.get(pair)
+            ?: pairDescriptions[pair]
+            ?: return null
         return entry[uiLanguage] ?: entry["en"]
     }
 
