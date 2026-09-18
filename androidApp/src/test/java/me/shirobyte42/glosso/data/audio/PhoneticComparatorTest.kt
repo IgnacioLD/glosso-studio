@@ -344,5 +344,33 @@ class PhoneticComparatorTest {
         assertEquals(en, fallback)
     }
 
+    @Test
+    fun `shared pair description follows the target language`() {
+        // /ɪ/ vs /iː/ is a real contrast in both English (bit/beat) and German
+        // (bitten/bieten): the hint must teach the language being practised.
+        val en = PhoneticComparator.getMinimalPairDescription("ɪ", "iː", "en", "en_GB")
+        val de = PhoneticComparator.getMinimalPairDescription("ɪ", "iː", "en", "de")
+        assertTrue("English hint should use English examples: $en", en!!.contains("sheep"))
+        assertTrue("German hint should use German examples: $de", de!!.contains("bitten"))
+        assertTrue("the two hints must differ", en != de)
+    }
+
+    @Test
+    fun `shared pair never leaks the wrong target language`() {
+        // Regression: the German entry used to shadow the English one because
+        // the pair map keyed equal Set values, so every learner got "bitten".
+        val en = PhoneticComparator.getMinimalPairDescription("ɪ", "iː", "en", "en_US")!!
+        assertFalse("English hint must not mention German words: $en", en.contains("bitten"))
+        assertFalse("English hint must not mention German words: $en", en.contains("bieten"))
+    }
+
+    @Test
+    fun `vowel length pair uses the language being practised`() {
+        val de = PhoneticComparator.getMinimalPairDescription("a", "aː", "en", "de")!!
+        val la = PhoneticComparator.getMinimalPairDescription("a", "aː", "en", "la")!!
+        assertTrue("German hint should use German examples: $de", de.contains("Stadt"))
+        assertTrue("Latin hint should use Latin examples: $la", la.contains("MĀLUM"))
+    }
+
     // endregion
 }

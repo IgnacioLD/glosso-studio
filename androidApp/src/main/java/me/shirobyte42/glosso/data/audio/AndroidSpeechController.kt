@@ -110,7 +110,7 @@ class AndroidSpeechController(
             for (m in mismatches) {
                 val pair = setOf(m.expected, m.actual)
                 if (!seen.add(pair)) continue
-                val curatedDesc = PhoneticComparator.getMinimalPairDescription(m.expected, m.actual, uiLang)
+                val curatedDesc = PhoneticComparator.getMinimalPairDescription(m.expected, m.actual, uiLang, language)
                 if (curatedDesc != null) {
                     curated += PairHint(m.expected, m.actual, curatedDesc)
                 } else {
