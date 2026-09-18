@@ -56,3 +56,6 @@ data/sentences_v11_*.db-shm
 data/sentences_v11_*.db-wal
 data/wav2vec2_espeak_cv_ft_int8.onnx
 data/espeak_vocab.json
+
+# Signed release builds (AAB/APK) are build artifacts, not versioned
+store/release/
