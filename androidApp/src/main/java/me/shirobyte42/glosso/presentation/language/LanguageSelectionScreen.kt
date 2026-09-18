@@ -38,13 +38,17 @@ fun LanguageSelectionScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .verticalScroll(rememberScrollState())
+            // Edge-to-edge: inset the content for the system bars (the background
+            // still draws behind them). A fixed top spacer broke under tall status
+            // bars and display cutouts.
+            .statusBarsPadding()
             .navigationBarsPadding()
+            .verticalScroll(rememberScrollState())
             .padding(horizontal = 20.dp),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
-        Spacer(modifier = Modifier.height(56.dp))
+        Spacer(modifier = Modifier.height(24.dp))
         Text(
             text = stringResource(R.string.lang_select_title),
             style = MaterialTheme.typography.displaySmall,
