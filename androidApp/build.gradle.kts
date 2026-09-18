@@ -15,7 +15,7 @@ android {
     namespace = "me.shirobyte42.glosso"
     compileSdk = 36
 
-    val baseVersionName = "2.3.1"
+    val baseVersionName = "2.3.2"
 
     val localProperties = Properties()
     val localPropertiesFile = rootProject.file("local.properties")
@@ -38,7 +38,7 @@ defaultConfig {
     applicationId = "me.shirobyte42.glosso"
     minSdk = 26
     targetSdk = 36
-    versionCode = 2211
+    versionCode = 2212
     versionName = baseVersionName
 }
 
