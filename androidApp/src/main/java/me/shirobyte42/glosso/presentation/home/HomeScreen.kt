@@ -58,6 +58,7 @@ import me.shirobyte42.glosso.data.local.DownloadErrorKind
 import me.shirobyte42.glosso.domain.model.SUPPORTED_LANGUAGES
 import me.shirobyte42.glosso.presentation.components.GlossoCard
 import me.shirobyte42.glosso.presentation.components.GlossoSectionLabel
+import me.shirobyte42.glosso.presentation.components.readableWidth
 
 private val LEVEL_CODES = listOf("A1", "A2", "B1", "B2", "C1", "C2")
 
@@ -284,6 +285,7 @@ fun HomeScreen(
 
         LazyColumn(
             modifier = Modifier
+                .readableWidth()
                 .fillMaxSize()
                 .padding(padding),
             contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 4.dp, bottom = 116.dp),

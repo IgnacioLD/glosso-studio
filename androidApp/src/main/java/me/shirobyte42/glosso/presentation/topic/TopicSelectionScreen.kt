@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.sp
 import org.koin.androidx.compose.koinViewModel
 import me.shirobyte42.glosso.R
 import me.shirobyte42.glosso.presentation.components.GlossoCard
+import me.shirobyte42.glosso.presentation.components.readableWidth
 import me.shirobyte42.glosso.presentation.studio.StudioViewModel
 import me.shirobyte42.glosso.presentation.util.TopicEmojiMap
 
@@ -164,6 +165,7 @@ fun TopicSelectionScreen(
     ) { padding ->
         LazyColumn(
             modifier = Modifier
+                .readableWidth()
                 .fillMaxSize()
                 .padding(padding),
             contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 8.dp, bottom = 16.dp),

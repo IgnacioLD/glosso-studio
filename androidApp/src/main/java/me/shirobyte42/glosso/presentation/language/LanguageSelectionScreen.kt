@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import me.shirobyte42.glosso.R
 import me.shirobyte42.glosso.domain.model.SUPPORTED_LANGUAGES
+import me.shirobyte42.glosso.presentation.components.readableWidth
 
 data class LanguageUiState(
     val languages: List<LanguageItem> = SUPPORTED_LANGUAGES.map { LanguageItem(it.code, it.displayName, it.flag) },
@@ -36,6 +37,7 @@ fun LanguageSelectionScreen(
 
     Column(
         modifier = Modifier
+            .readableWidth()
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             // Edge-to-edge: inset the content for the system bars (the background
