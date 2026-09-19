@@ -26,9 +26,10 @@ class FeedbackSoundPlayer(
         /**
          * 0..1 linear playback volume. The chimes are mastered loud (near full
          * scale); playing them at full volume is jarring right after a take, so
-         * keep them well under the voice playback level.
+         * keep them under the voice playback level. Tuned by ear: 0.35 read as
+         * too quiet next to the sentence playback, 0.5 sits with it.
          */
-        const val PLAYBACK_VOLUME = 0.35f
+        const val PLAYBACK_VOLUME = 0.5f
     }
 
     fun play(level: MasteryLevel) {
