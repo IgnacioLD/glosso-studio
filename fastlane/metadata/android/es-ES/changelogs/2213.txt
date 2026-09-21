@@ -1,0 +1,2 @@
+- Corregido un cierre inesperado al perderse la conexión durante una descarga
+- Los errores de descarga ahora muestran un mensaje claro en tu idioma

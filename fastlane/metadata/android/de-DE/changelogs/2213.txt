@@ -1,0 +1,2 @@
+- Absturz behoben, wenn die Verbindung während eines Downloads abbricht
+- Downloadfehler zeigen jetzt eine klare Meldung in deiner Sprache an

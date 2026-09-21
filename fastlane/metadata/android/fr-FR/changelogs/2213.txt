@@ -1,0 +1,2 @@
+- Correction d'un plantage en cas de perte de connexion pendant un téléchargement
+- Les erreurs de téléchargement affichent désormais un message clair dans votre langue
