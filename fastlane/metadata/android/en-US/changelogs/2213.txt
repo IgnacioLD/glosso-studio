@@ -1,0 +1,2 @@
+- Fix a crash when the connection drops while downloading content
+- Show a clear, localized message when a download fails
