@@ -11,7 +11,6 @@
 .gradle/
 **/build/
 gradlew.bat
-gradle/wrapper/gradle-wrapper.jar
 local.properties
 .idea/caches
 .idea/libraries
