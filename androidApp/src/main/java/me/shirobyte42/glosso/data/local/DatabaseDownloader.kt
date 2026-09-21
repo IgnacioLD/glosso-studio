@@ -124,8 +124,11 @@ class DatabaseDownloader(
             close()
         } catch (e: Exception) {
             Log.e(TAG, "Asset download failed", e)
+            // Report the failure through the Error emission and close normally.
+            // Closing with the exception would rethrow it into the collector,
+            // crashing the app on something as mundane as a dropped connection.
             trySend(DownloadProgress.Error(e.message ?: "Setup failed", classifyDownloadError(e)))
-            close(e)
+            close()
         }
         awaitClose { }
     }
@@ -205,8 +208,10 @@ class DatabaseDownloader(
             close()
         } catch (e: Exception) {
             Log.e(TAG, "Level download failed", e)
+            // Same as above: surface the error via the emission, never fail the
+            // flow, so a network hiccup cannot take the whole app down.
             trySend(DownloadProgress.Error(e.message ?: "Download failed", classifyDownloadError(e)))
-            close(e)
+            close()
         }
         awaitClose { }
     }
