@@ -1,13 +1,12 @@
 # Contributing to Glosso Studio
 
-Thanks for helping. Issues and merge requests go to the main repository on GitLab:
-https://gitlab.com/shirobyte421/glosso-studio. The GitHub repository is a read-only mirror.
+Thanks for helping. Issues and pull requests go to https://github.com/IgnacioLD/glosso-studio.
 
-## Before you open a merge request
+## Before you open a pull request
 
 - Build and lint the app: `./gradlew :androidApp:assembleFdroidDebug :androidApp:lintFdroidDebug`
 - Run the unit tests: `./gradlew :androidApp:testFdroidDebugUnitTest`
-- Keep changes focused: one fix or feature per merge request.
+- Keep changes focused: one fix or feature per pull request.
 - Commit messages follow `type(scope): description`, for example `fix(audio): stop the chime from clipping`.
 
 ## Things to know

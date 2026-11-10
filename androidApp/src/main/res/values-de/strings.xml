@@ -343,7 +343,7 @@
     <string name="about_team_title">Glosso Studio Team</string>
     <string name="about_team_subtitle">Sprachlernende, die die Tools bauen, die wir uns gewünscht hätten.</string>
     <string name="about_link_website">glossostudio.com</string>
-    <string name="about_link_gitlab">GitLab</string>
+    <string name="about_link_github">GitHub</string>
 
     <!-- ============ strings_misc.xml ============ -->
     <!-- Topic selection screen -->

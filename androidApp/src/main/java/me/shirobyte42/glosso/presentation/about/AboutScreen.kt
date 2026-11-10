@@ -164,12 +164,12 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
                         LinkChip(
                             label = stringResource(R.string.about_link_source_code),
                             icon = Icons.Default.OpenInNew,
-                            onClick = { uriHandler.openUri("https://gitlab.com/shirobyte421/glosso-studio") }
+                            onClick = { uriHandler.openUri("https://github.com/IgnacioLD/glosso-studio") }
                         )
                         LinkChip(
                             label = stringResource(R.string.about_link_report_issue),
                             icon = Icons.Default.BugReport,
-                            onClick = { uriHandler.openUri("https://gitlab.com/shirobyte421/glosso-studio/-/issues") }
+                            onClick = { uriHandler.openUri("https://github.com/IgnacioLD/glosso-studio/issues") }
                         )
                     }
                 }
@@ -283,9 +283,9 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
                             onClick = { uriHandler.openUri("https://glossostudio.com") }
                         )
                         LinkChip(
-                            label = stringResource(R.string.about_link_gitlab),
+                            label = stringResource(R.string.about_link_github),
                             icon = Icons.Default.Code,
-                            onClick = { uriHandler.openUri("https://gitlab.com/shirobyte421") }
+                            onClick = { uriHandler.openUri("https://github.com/IgnacioLD") }
                         )
                     }
                 }

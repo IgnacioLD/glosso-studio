@@ -22,7 +22,7 @@ Kotlin Multiplatform + Jetpack Compose Android app for offline pronunciation tra
 - **Room:** Two DB categories — a persistent `glosso_progress_db` (mastery, streaks, reviews) and per-level dynamic databases (`sentences_{level}.db`, downloaded on demand via `DatabaseDownloader`). The progress DB never wipes user data on upgrade: destructive fallback is limited to legacy pre-v11 schemas (`fallbackToDestructiveMigrationFrom(1..10)`); any future version bump needs a real `Migration` (schemas exported to `androidApp/schemas/` via KSP for `MigrationTestHelper`). The level DBs keep full destructive fallback (re-downloadable cache semantics).
 - **Model inference:** ONNX Runtime (`onnxruntime-android:1.24.3`). Model files (`wav2vec2_espeak_cv_ft_int8.onnx`, `espeak_vocab.json`) are *not* in git or the APK, downloaded at runtime from the GitLab package pinned by `dataVersion` in `AppModule.kt`.
 - **Product flavors:** `playstore` / `fdroid`. In-app review (`playstoreImplementation`) only compiled for playstore flavor.
-- **Version:** `versionCode = 2213`, `versionName = "2.3.3"`. Version tags trigger GitLab CI, which builds the fdroid release APK and uploads it to the generic package registry.
+- **Version:** `versionCode = 2213`, `versionName = "2.3.3"`. Releases are built locally and attached to GitHub releases.
 
 ## Important state / gotchas
 
@@ -36,4 +36,4 @@ Kotlin Multiplatform + Jetpack Compose Android app for offline pronunciation tra
 - Data directory contains per-language sentence DBs (`sentences_v11_{lang}_{level}.db`). These are not in the APK — downloaded on demand.
 - `UpdateMasteryUseCase` lives in the file `UpdateUserProgressUseCase.kt`.
 - No Git LFS and no committed build outputs: large files are downloaded at runtime or kept as CI artifacts.
-- Main repo is GitLab (`shirobyte421/glosso-studio`); GitHub `IgnacioLD/glosso-studio` is a mirror. CI is `.gitlab-ci.yml`, tags only.
+- The repo lives on GitHub (`IgnacioLD/glosso-studio`). The GitLab project `shirobyte421/glosso-studio` is kept only because installed apps download the model and sentence DBs from its package registry (`DatabaseDownloader`); do not delete it.

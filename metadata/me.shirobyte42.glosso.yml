@@ -4,13 +4,13 @@ Categories:
   - Science & Education
 License: AGPL-3.0-or-later
 AuthorName: ShiroByte42
-SourceCode: https://gitlab.com/shirobyte421/glosso-studio
-IssueTracker: https://gitlab.com/shirobyte421/glosso-studio/-/issues
+SourceCode: https://github.com/IgnacioLD/glosso-studio
+IssueTracker: https://github.com/IgnacioLD/glosso-studio/issues
 
 AutoName: Glosso
 
 RepoType: git
-Repo: https://gitlab.com/shirobyte421/glosso-studio.git
+Repo: https://github.com/IgnacioLD/glosso-studio.git
 
 Builds:
   - versionName: 2.2.8
