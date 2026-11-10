@@ -48,6 +48,7 @@ val appModule = module {
             client = get(),
             getPracticeLanguage = { prefs.getTargetLanguage() },
             getUiLanguage = { prefs.getUiLanguage() },
+            // Model and sentence DBs live in the GitLab package for this tag; bump only when that data is republished.
             dataVersion = "v2.2.6"
         )
     }

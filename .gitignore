@@ -10,7 +10,6 @@
 # --- Android / Gradle ---
 .gradle/
 **/build/
-gradlew.bat
 local.properties
 .idea/caches
 .idea/libraries
@@ -58,3 +57,6 @@ data/espeak_vocab.json
 
 # Signed release builds (AAB/APK) are build artifacts, not versioned
 store/release/
+
+# --- Local agent state ---
+.claude/

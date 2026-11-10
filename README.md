@@ -12,7 +12,6 @@ The application is designed to be fully functional offline once the initial asse
 - **ONNX Runtime:** Executes the acoustic model (`wav2vec2_espeak_cv_ft_int8.onnx`) directly on the device.
 - **Dynamic Asset Download:** To keep the APK size minimal, the acoustic model, vocabulary and per-language curriculum databases are downloaded on-demand from the GitLab generic package registry when first needed.
 - **Room Database:** Manages the repository of practice sentences and user progress.
-- **Git LFS:** Used for managing large binary assets in the repository.
 
 ### Mastery and Progress Tracking
 - **Curriculum Levels:** Six difficulty tiers (A1-C2) from Beginner to Mastery.
@@ -34,38 +33,47 @@ The application is designed to be fully functional offline once the initial asse
 - **Audio Processing:** 16 kHz PCM capture, raw waveform model input
 - **Serialization:** Kotlinx Serialization
 
-## Prerequisites
+## Getting the Code
 
-- **Git LFS:** Required to pull the large binary assets in the repository.
-- **Android Studio:** Hedgehog (2023.1.1) or later recommended.
-- **JDK:** Version 17.
+The main repository is on GitLab: https://gitlab.com/shirobyte421/glosso-studio (issues and merge requests go there).
+https://github.com/IgnacioLD/glosso-studio is a read-only mirror.
 
-## Setup and Installation
+## Building
 
-1. **Install Git LFS**
-   Ensure Git LFS is installed on your system before cloning:
-   ```bash
-   git lfs install
-   ```
+Requirements: Android Studio (or the Android SDK command-line tools) and JDK 17 or newer.
 
-2. **Clone the Repository**
-   ```bash
-   git clone git@github.com:IgnacioLD/glosso-studio.git
-   cd glosso-studio
-   git lfs pull
-   ```
+```bash
+git clone https://gitlab.com/shirobyte421/glosso-studio.git
+cd glosso-studio
+./gradlew :androidApp:assembleFdroidDebug
+```
 
-3. **Open in Android Studio**
-   Open the root directory as a project. Android Studio will automatically start the Gradle sync process and download necessary dependencies.
+The app has two product flavors: `fdroid` (no Google Play libraries) and `playstore` (adds the in-app review prompt).
+Debug builds need no signing setup. Release builds read the signing key from `local.properties`
+(`signing.storeFile`, `signing.storePass`, `signing.alias`, `signing.keyPass`) or the matching `SIGNING_*` environment variables.
 
-4. **Run the Application**
-   Select the `androidApp` configuration and run it on a physical device or emulator (API 26 or higher).
+The acoustic model (~300 MB), its vocabulary and the sentence databases are not in the repository. The app downloads them on first use
+from the GitLab package registry (version pinned by `dataVersion` in `androidApp/src/main/java/me/shirobyte42/glosso/di/AppModule.kt`).
+Run it on a device or emulator with API 26 or higher.
 
 ## Architecture Overview
 
 The project follows a clean architecture pattern within the Kotlin Multiplatform structure:
 - **`shared` module:** Contains the domain logic, repositories, and cross-platform use cases.
 - **`androidApp` module:** Contains the Compose UI, Android-specific data implementations (Room, Audio), and the ONNX integration.
+
+Known issues and planned work are listed in [docs/BACKLOG.md](docs/BACKLOG.md).
+
+## Contributing
+
+Bug reports and merge requests are welcome on GitLab. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Credits
+
+- [wav2vec2-lv-60-espeak-cv-ft](https://huggingface.co/onnx-community/wav2vec2-lv-60-espeak-cv-ft-ONNX) acoustic model (Apache-2.0)
+- [ai-pronunciation-trainer](https://github.com/Thiagohgl/ai-pronunciation-trainer) for the original pronunciation scoring approach (AGPL-3.0)
+- [Qwen3-TTS](https://github.com/QwenLM/Qwen3-TTS) for reference audio generation
+- [ONNX Runtime](https://github.com/microsoft/onnxruntime) and [Koin](https://insert-koin.io)
 
 ## License
 
@@ -75,4 +83,4 @@ This project is licensed under the **GNU Affero General Public License v3 (AGPLv
 
 Glosso Studio is designed to be compatible with F-Droid.
 - **Metadata:** Located in `fastlane/metadata/android`.
-- **Build Recipe:** The `me.shirobyte42.glosso.yml` file is provided as a reference for F-Droid inclusion.
+- **Build Recipe:** `metadata/me.shirobyte42.glosso.yml` is provided as a reference for F-Droid inclusion.

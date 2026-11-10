@@ -15,7 +15,6 @@ data class LanguageConfig(
     val code: String,
     val displayName: String,
     val flag: String,
-    val downloadRepo: String = "shirobyte421/glosso-studio",
     /** espeak-ng voice id used offline to phonemize sentence text. Not used at runtime. */
     val espeakPhonemizer: String,
     /** True when recognition accuracy is unvalidated (e.g., Latin is not in training data). */
