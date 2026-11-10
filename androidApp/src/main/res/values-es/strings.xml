@@ -361,7 +361,7 @@
     <string name="about_team_title">Equipo de Glosso Studio</string>
     <string name="about_team_subtitle">Aprendices de idiomas creando las herramientas que nos habría gustado tener.</string>
     <string name="about_link_website">glossostudio.com</string>
-    <string name="about_link_gitlab">GitLab</string>
+    <string name="about_link_github">GitHub</string>
 
     <!-- === strings_misc === -->
     <!-- Topic selection screen -->

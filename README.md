@@ -35,15 +35,15 @@ The application is designed to be fully functional offline once the initial asse
 
 ## Getting the Code
 
-The main repository is on GitLab: https://gitlab.com/shirobyte421/glosso-studio (issues and merge requests go there).
-https://github.com/IgnacioLD/glosso-studio is a read-only mirror.
+The repository lives on GitHub: https://github.com/IgnacioLD/glosso-studio (issues and pull requests go there).
+The old GitLab project only hosts the downloadable model and sentence databases.
 
 ## Building
 
 Requirements: Android Studio (or the Android SDK command-line tools) and JDK 17 or newer.
 
 ```bash
-git clone https://gitlab.com/shirobyte421/glosso-studio.git
+git clone https://github.com/IgnacioLD/glosso-studio.git
 cd glosso-studio
 ./gradlew :androidApp:assembleFdroidDebug
 ```
@@ -66,7 +66,7 @@ Known issues and planned work are listed in [docs/BACKLOG.md](docs/BACKLOG.md).
 
 ## Contributing
 
-Bug reports and merge requests are welcome on GitLab. See [CONTRIBUTING.md](CONTRIBUTING.md).
+Bug reports and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Credits
 
